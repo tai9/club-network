@@ -4,6 +4,9 @@ import { config } from "dotenv";
 import express from "express";
 import Redis from "ioredis";
 import { getDbConnection } from "./configs/db.config";
+import memberRouters from "./routers/member.router";
+import { authenticateToken } from "./middlewares/authentication";
+import publicRouters from "./routers/public.router";
 
 config();
 
@@ -30,9 +33,9 @@ app.use("/ping", (req, res) => {
   res.send("ok");
 });
 
-// app.use("/auth", authRouter);
+app.use("/", publicRouters);
 
-// app.use("/users", userRouters);
+app.use("/members", memberRouters);
 // app.use("/permissions", permissionRouters);
 // app.use("/roles", roleRouters);
 // app.use("/audit-logs", auditLogRouters);

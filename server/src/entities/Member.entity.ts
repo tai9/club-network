@@ -3,7 +3,12 @@ import { BaseEntity } from "./Base.entity";
 import { IMember } from "@/types/Member";
 import { Role } from ".";
 
-@Entity("members")
+@Entity({
+  name: "members",
+  orderBy: {
+    fullname: "ASC",
+  },
+})
 export class Member extends BaseEntity implements IMember {
   @Column({
     type: "varchar",
@@ -13,6 +18,7 @@ export class Member extends BaseEntity implements IMember {
 
   @Column({
     type: "varchar",
+    select: false,
   })
   password: string;
 
