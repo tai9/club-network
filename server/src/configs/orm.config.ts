@@ -1,3 +1,15 @@
+import {
+  Activity,
+  Comment,
+  Badge,
+  Level,
+  Member,
+  Permission,
+  PermissionCategory,
+  Role,
+  Post,
+  Reaction,
+} from "../entities";
 import "dotenv/config";
 import { DataSourceOptions } from "typeorm";
 
@@ -8,10 +20,21 @@ const dataSourceOptions: DataSourceOptions = {
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DATABASE,
-  synchronize: false,
+  synchronize: true,
   logging: false,
   ssl: process.env.NODE_ENV === "production",
-  entities: [],
+  entities: [
+    Member,
+    Permission,
+    PermissionCategory,
+    Role,
+    Activity,
+    Badge,
+    Comment,
+    Level,
+    Post,
+    Reaction,
+  ],
   extra: {
     connectionLimit: 20,
   },
