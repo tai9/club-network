@@ -7,6 +7,8 @@ import { getDbConnection } from "./configs/db.config";
 import memberRouters from "./routers/member.router";
 import { authenticateToken } from "./middlewares/authentication";
 import publicRouters from "./routers/public.router";
+import permissionRouters from "./routers/permission.router";
+import roleRouters from "./routers/role.router";
 
 config();
 
@@ -36,8 +38,8 @@ app.use("/ping", (req, res) => {
 app.use("/", publicRouters);
 
 app.use("/members", memberRouters);
-// app.use("/permissions", permissionRouters);
-// app.use("/roles", roleRouters);
+app.use("/permissions", authenticateToken, permissionRouters);
+app.use("/roles", authenticateToken, roleRouters);
 // app.use("/audit-logs", auditLogRouters);
 // app.use("/nfts", nftRouters);
 // app.use("/transactions", transactionRouters);

@@ -26,7 +26,7 @@ export const authenticateToken = (
 
       if (err) return res.sendStatus(constants.HTTP_STATUS_FORBIDDEN);
 
-      (req as any).member = { username: member.username };
+      (req as any).member = { id: member.id, username: member.username };
 
       next();
     }

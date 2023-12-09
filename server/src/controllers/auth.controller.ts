@@ -19,7 +19,10 @@ export const login = async (req: Request, res: Response) => {
         message: "Username or password invalid",
       });
     }
-    const accessToken = await generateAccessToken(member.username);
+    const accessToken = await generateAccessToken({
+      id: member.id,
+      username: member.username,
+    });
     return res.status(constants.HTTP_STATUS_OK).json({
       username,
       accessToken,
