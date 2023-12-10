@@ -10,7 +10,7 @@ export const MainLayout = ({ children }: LayoutProps) => {
     <Wrapper className={`${font.className}`}>
       <Header />
 
-      <main className="grow">{children}</main>
+      <Main className="grow">{children}</Main>
 
       <Footer />
     </Wrapper>
@@ -25,4 +25,12 @@ export const Wrapper = styled.div`
   .grow {
     flex-grow: 1;
   }
+`;
+
+export const Main = styled.main`
+  flex-grow: 1;
+
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
 `;
