@@ -12,6 +12,7 @@ import roleRouters from "./routers/role.router";
 import postRouters from "./routers/post.router";
 import commentRouters from "./routers/comment.router";
 import reactionRouters from "./routers/reaction.router";
+import activityRouters from "./routers/activity.router";
 
 config();
 
@@ -46,7 +47,7 @@ app.use("/roles", authenticateToken, roleRouters);
 app.use("/posts", authenticateToken, postRouters);
 app.use("/comments", authenticateToken, commentRouters);
 app.use("/reactions", authenticateToken, reactionRouters);
-// app.use("/activities",authenticateToken, activityRouters);
+app.use("/activities", authenticateToken, activityRouters);
 // app.use("/levels",authenticateToken, levelRouters);
 // app.use("/badges", authenticateToken,badgeRouters);
 

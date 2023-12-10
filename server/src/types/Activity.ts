@@ -1,6 +1,6 @@
 import { IBaseEntity } from "./common";
 
-export type ActivityType = "LOGIN" | "LOGOUT";
+export type ActivityType = "LOGIN" | "LOGOUT" | "COMMENT";
 
 export type ActivityStatus = "SUCCESS" | "FAIL";
 

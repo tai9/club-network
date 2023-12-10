@@ -9,7 +9,6 @@ import { IComment } from "@/types/Comment";
     createdAt: "DESC",
   },
 })
-@Index(["memberId", "postId"], { unique: true })
 export class Comment extends BaseEntity implements IComment {
   @Column({
     type: "varchar",

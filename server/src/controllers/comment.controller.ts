@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { constants } from "http2";
 import { Comment, Member } from "../entities";
 import commentService from "../services/comment.service";
-// import auditService from "../services/audit.service";
+import activityService from "../services/activity.service";
 
 const createComment = async (req: Request, res: Response) => {
   const member = (req as any)?.member as Member;
@@ -13,23 +13,23 @@ const createComment = async (req: Request, res: Response) => {
     comment.memberId = member?.id;
 
     const commentCreated = await commentService.createComment(comment);
-    // await auditService.createAuditLog({
-    //   type: "ROLE",
-    //   status: "SUCCESS",
-    //   description: "Create comment",
-    //   data: JSON.stringify(commentCreated),
-    //   createdBy: user?.id,
-    // });
+    await activityService.createActivity({
+      type: "COMMENT",
+      status: "SUCCESS",
+      description: "Create comment",
+      data: JSON.stringify(commentCreated),
+      createdBy: member?.id,
+    });
     return res.status(constants.HTTP_STATUS_OK).json(commentCreated);
   } catch (error) {
     console.log(error);
-    // await auditService.createAuditLog({
-    //   type: "ROLE",
-    //   status: "FAIL",
-    //   description: "Create comment",
-    //   data: JSON.stringify(error),
-    //   createdBy: user?.id,
-    // });
+    await activityService.createActivity({
+      type: "COMMENT",
+      status: "FAIL",
+      description: "Create comment",
+      data: JSON.stringify(error),
+      createdBy: member?.id,
+    });
     res.status(constants.HTTP_STATUS_BAD_REQUEST).json(error);
   }
 };
