@@ -9,6 +9,8 @@ import { authenticateToken } from "./middlewares/authentication";
 import publicRouters from "./routers/public.router";
 import permissionRouters from "./routers/permission.router";
 import roleRouters from "./routers/role.router";
+import postRouters from "./routers/post.router";
+import commentRouters from "./routers/comment.router";
 
 config();
 
@@ -40,6 +42,8 @@ app.use("/", publicRouters);
 app.use("/members", memberRouters);
 app.use("/permissions", authenticateToken, permissionRouters);
 app.use("/roles", authenticateToken, roleRouters);
+app.use("/posts", authenticateToken, postRouters);
+app.use("/comments", authenticateToken, commentRouters);
 // app.use("/audit-logs", auditLogRouters);
 // app.use("/nfts", nftRouters);
 // app.use("/transactions", transactionRouters);
