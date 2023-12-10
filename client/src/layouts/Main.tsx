@@ -2,18 +2,27 @@ import Footer from "@/components/common/Footer";
 import Header from "@/components/common/Header";
 import { LayoutProps } from "@/types/common";
 import { Space_Grotesk } from "next/font/google";
+import styled from "styled-components";
 
 const font = Space_Grotesk({ subsets: ["latin"] });
 export const MainLayout = ({ children }: LayoutProps) => {
   return (
-    <div
-      className={`relative flex flex-col grow min-h-screen ${font.className}`}
-    >
+    <Wrapper className={`${font.className}`}>
       <Header />
 
       <main className="grow">{children}</main>
 
       <Footer />
-    </div>
+    </Wrapper>
   );
 };
+
+export const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  .grow {
+    flex-grow: 1;
+  }
+`;

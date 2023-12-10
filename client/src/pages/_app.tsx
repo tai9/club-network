@@ -4,6 +4,7 @@ import theme from "@/theme/themeConfig";
 import { AppPropsWithLayout } from "@/types/common";
 import { ConfigProvider } from "antd";
 import Head from "next/head";
+import { ThemeProvider } from "styled-components";
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const Layout = Component.Layout ?? MainLayout;
@@ -15,9 +16,11 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <ConfigProvider theme={theme}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <ThemeProvider theme={{ antd: theme.token }}>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </ThemeProvider>
       </ConfigProvider>
     </>
   );
