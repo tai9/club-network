@@ -22,14 +22,16 @@ export class Badge extends BaseEntity implements IBadge {
 
   @Column({
     type: "boolean",
+    nullable: true,
+    default: false,
   })
   status: boolean;
 
   @ManyToOne(() => Member, (user) => user.id)
-  @JoinColumn({ name: "createdBy" })
+  @JoinColumn({ name: "memberId" })
   @Column({
     type: "varchar",
     nullable: true,
   })
-  createdBy: number;
+  memberId: number;
 }

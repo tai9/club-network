@@ -13,6 +13,7 @@ import postRouters from "./routers/post.router";
 import commentRouters from "./routers/comment.router";
 import reactionRouters from "./routers/reaction.router";
 import activityRouters from "./routers/activity.router";
+import badgeRouters from "./routers/badge.router";
 
 config();
 
@@ -49,7 +50,7 @@ app.use("/comments", authenticateToken, commentRouters);
 app.use("/reactions", authenticateToken, reactionRouters);
 app.use("/activities", authenticateToken, activityRouters);
 // app.use("/levels",authenticateToken, levelRouters);
-// app.use("/badges", authenticateToken,badgeRouters);
+app.use("/badges", authenticateToken, badgeRouters);
 
 // connect DB
 getDbConnection();
