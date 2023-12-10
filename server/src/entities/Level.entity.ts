@@ -22,6 +22,8 @@ export class Level extends BaseEntity implements ILevel {
 
   @Column({
     type: "boolean",
+    nullable: true,
+    default: false,
   })
   status: boolean;
 
