@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
-export const HighlightText = styled.span`
-  font-size: 20px;
+export const HighlightText = styled.span<{ fontSize?: number }>`
+  font-size: ${(props) => props.fontSize || "inherit"};
   font-weight: 700;
   background: -webkit-linear-gradient(
     90deg,

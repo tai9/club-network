@@ -9,8 +9,8 @@ const PostsSection = () => {
     <PostsSectionWrapper>
       <Flex gap={16}>
         <Button type="primary">My Feed</Button>
-        <Button>My Posts</Button>
-        <Button>Discover</Button>
+        <Button type="text">My Posts</Button>
+        <Button type="text">Discover</Button>
       </Flex>
       <PostStatus />
       <Post />

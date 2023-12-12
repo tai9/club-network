@@ -4,4 +4,5 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
+  color: ${(p) => p.theme.antd.colorPrimary};
 `;

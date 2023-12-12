@@ -5,6 +5,7 @@ import {
 } from "@ant-design/icons";
 import { Avatar, Button, Flex, Tag } from "antd";
 import { ProfileInfoWrapper, ProfileName } from "./styled";
+import { HighlightText } from "../common/styled";
 
 const ProfileInfo = () => {
   return (
@@ -21,13 +22,12 @@ const ProfileInfo = () => {
             <Tag
               style={{
                 borderColor: "#a0fe7f",
-                color: "#a0fe7f",
                 borderRadius: 8,
                 fontWeight: 500,
                 fontSize: 12,
               }}
             >
-              LVL 0
+              <HighlightText>LVL 0</HighlightText>
             </Tag>
           </Flex>
           <div>bio</div>

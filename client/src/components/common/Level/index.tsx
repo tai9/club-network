@@ -12,7 +12,7 @@ type Props = {
 const Level = ({ value, percent }: Props) => {
   return (
     <Flex vertical gap={8}>
-      <HighlightText>Level {value}</HighlightText>
+      <HighlightText fontSize={20}>Level {value}</HighlightText>
       <Progress percent={percent} strokeColor={twoColors} />
     </Flex>
   );
