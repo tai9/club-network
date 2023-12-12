@@ -1,11 +1,12 @@
+import NewFeed from "@/components/home/NewFeed";
 import ProfileInfo from "@/components/home/ProfileInfo";
 import { MainLayout } from "@/layouts";
-import { Button, Checkbox, Input } from "antd";
 
 const HomePage = () => {
   return (
     <div>
       <ProfileInfo />
+      <NewFeed />
     </div>
   );
 };

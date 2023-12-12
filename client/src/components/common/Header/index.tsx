@@ -13,6 +13,7 @@ import { BellOutlined, RedditOutlined, UserOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { HighlightText } from "../styled";
 import ClickOutSide from "../ClickOutSide";
+import CustomAvatar from "../CustomAvatar";
 
 export default function Header() {
   const [openAcount, setOpenAcount] = useState(false);
@@ -32,13 +33,7 @@ export default function Header() {
         <div className="pointer">
           <Avatar size={48} icon={<BellOutlined />} />
         </div>
-        <div className="pointer">
-          <Avatar
-            onClick={() => setOpenAcount(true)}
-            size={48}
-            icon={<UserOutlined />}
-          />
-        </div>
+        <CustomAvatar onClick={() => setOpenAcount(true)} />
       </AccountLayout>
 
       <AccountWrapper
