@@ -84,3 +84,42 @@ export const AccountWrapper = styled.div`
   top: 0;
   z-index: 9999;
 `;
+
+export const NotificationWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 8px;
+
+  .heading {
+    font-size: 18px;
+    line-height: 120%;
+    font-weight: 700;
+  }
+
+  .read {
+    font-weight: 700;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .noti-list {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    .noti-item:not(:last-child) {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    max-height: 400px;
+    overflow: auto;
+  }
+
+  .noti-item {
+    padding: 8px 96px 8px 24px;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+      cursor: pointer;
+      border-radius: 12px;
+    }
+  }
+`;

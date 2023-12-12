@@ -1,4 +1,11 @@
+import { RedditOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Input } from "antd";
+import Link from "next/link";
+import { useState } from "react";
+import ClickOutSide from "../ClickOutSide";
+import CustomAvatar from "../CustomAvatar";
+import { HighlightText } from "../styled";
+import Notification from "./Notification";
 import {
   AccountFooter,
   AccountHeading,
@@ -9,12 +16,6 @@ import {
   HeaderRoutes,
   Wrapper,
 } from "./styled";
-import { BellOutlined, RedditOutlined, UserOutlined } from "@ant-design/icons";
-import { useState } from "react";
-import { HighlightText } from "../styled";
-import ClickOutSide from "../ClickOutSide";
-import CustomAvatar from "../CustomAvatar";
-import Link from "next/link";
 
 export default function Header() {
   const [openAcount, setOpenAcount] = useState(false);
@@ -31,9 +32,7 @@ export default function Header() {
 
       <AccountLayout>
         <Input size="large" placeholder="Search on Club" />
-        <div className="pointer">
-          <Avatar size={48} icon={<BellOutlined />} />
-        </div>
+        <Notification />
         <CustomAvatar onClick={() => setOpenAcount(true)} />
       </AccountLayout>
 
