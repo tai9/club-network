@@ -14,6 +14,7 @@ import { useState } from "react";
 import { HighlightText } from "../styled";
 import ClickOutSide from "../ClickOutSide";
 import CustomAvatar from "../CustomAvatar";
+import Link from "next/link";
 
 export default function Header() {
   const [openAcount, setOpenAcount] = useState(false);
@@ -24,7 +25,7 @@ export default function Header() {
     <Wrapper>
       <HeaderRoutes>
         <RedditOutlined />
-        <span>Members</span>
+        <Link href={"/all-profiles"}>Members</Link>
         <span>Explore</span>
       </HeaderRoutes>
 

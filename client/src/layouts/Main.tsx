@@ -1,13 +1,14 @@
 import Footer from "@/components/common/Footer";
 import Header from "@/components/common/Header";
 import { LayoutProps } from "@/types/common";
-import { Space_Grotesk } from "next/font/google";
+import { Space_Grotesk, Space_Mono } from "next/font/google";
 import styled from "styled-components";
 
-const font = Space_Grotesk({ subsets: ["latin"] });
+const SpaceGroteskFont = Space_Grotesk({ subsets: ["latin"] });
+
 export const MainLayout = ({ children }: LayoutProps) => {
   return (
-    <Wrapper className={`${font.className}`}>
+    <Wrapper className={`${SpaceGroteskFont.className}`}>
       <Header />
 
       <Main className="grow">{children}</Main>
