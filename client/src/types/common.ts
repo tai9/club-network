@@ -19,3 +19,8 @@ export interface IBaseEntity {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type DataWithPagination<T> = {
+  count: number;
+  data: T[];
+};

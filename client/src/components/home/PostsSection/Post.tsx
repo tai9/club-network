@@ -8,8 +8,14 @@ import {
   MessageOutlined,
   MoreOutlined,
 } from "@ant-design/icons";
+import { IPost } from "@/types/Post";
+import moment from "moment";
 
-const Post = () => {
+type Props = {
+  data: IPost;
+};
+
+const Post = ({ data }: Props) => {
   return (
     <PostWrapper vertical gap={16} className="post">
       <Flex justify="space-between" align="flex-start">
@@ -50,9 +56,11 @@ const Post = () => {
         </Dropdown>
       </Flex>
 
-      <div>content</div>
+      <div>{data.content}</div>
 
-      <div className="time">just now</div>
+      <div className="time">
+        {moment(data.createdAt).startOf("second").fromNow()}
+      </div>
 
       <Flex gap={24}>
         <Flex gap={4}>
