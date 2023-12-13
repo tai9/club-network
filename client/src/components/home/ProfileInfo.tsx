@@ -6,8 +6,10 @@ import {
 import { Avatar, Button, Flex, Tag } from "antd";
 import { ProfileInfoWrapper, ProfileName } from "./styled";
 import { HighlightText } from "../common/styled";
+import useMember from "@/hooks/useMember";
 
 const ProfileInfo = () => {
+  const { data: memberData } = useMember();
   return (
     <ProfileInfoWrapper>
       <Flex gap={12} align="center">
@@ -17,7 +19,9 @@ const ProfileInfo = () => {
         <Flex vertical gap={10}>
           <Flex align="baseline" gap={8}>
             <div>
-              <ProfileName>zgfok.c.wam</ProfileName>
+              <ProfileName>
+                {memberData?.data.fullname || memberData?.data.username}
+              </ProfileName>
             </div>
             <Tag
               style={{
@@ -30,7 +34,7 @@ const ProfileInfo = () => {
               <HighlightText>LVL 0</HighlightText>
             </Tag>
           </Flex>
-          <div>bio</div>
+          <div>{memberData?.data.bio || "---"}</div>
         </Flex>
       </Flex>
       <Flex gap="small">

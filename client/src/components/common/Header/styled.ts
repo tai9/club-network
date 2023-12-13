@@ -65,6 +65,10 @@ export const AccountFooter = styled.div`
   gap: 12px;
   width: 100%;
   padding: 16px;
+
+  div {
+    cursor: pointer;
+  }
 `;
 
 export const AccountInfo = styled.div`
