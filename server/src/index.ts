@@ -15,6 +15,7 @@ import reactionRouters from "./routers/reaction.router";
 import activityRouters from "./routers/activity.router";
 import badgeRouters from "./routers/badge.router";
 import levelRouters from "./routers/level.router";
+import meRouters from "./routers/me.router";
 
 config();
 
@@ -43,7 +44,8 @@ app.use("/ping", (req, res) => {
 
 app.use("/", publicRouters);
 
-app.use("/members", memberRouters);
+app.use("/me", authenticateToken, meRouters);
+app.use("/members", authenticateToken, memberRouters);
 app.use("/permissions", authenticateToken, permissionRouters);
 app.use("/roles", authenticateToken, roleRouters);
 app.use("/posts", authenticateToken, postRouters);
