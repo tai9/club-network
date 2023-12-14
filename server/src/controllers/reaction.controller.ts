@@ -46,10 +46,15 @@ const getReactions = async (req: Request, res: Response) => {
 
 const deleteReaction = async (req: Request, res: Response) => {
   try {
-    const id = +req.params.id;
-    // const user = req?.session.user as User;
+    const postId = +req.params.id;
+    const type = req.body.type;
+    const member = (req as any)?.member as Member;
     try {
-      const { affected } = await reactionService.deleteReaction(id);
+      const { affected } = await reactionService.deleteReaction({
+        postId,
+        memberId: member.id,
+        type,
+      });
       if (affected === 0) {
         throw new Error("Reaction not found");
       }
@@ -60,7 +65,7 @@ const deleteReaction = async (req: Request, res: Response) => {
       //   data: JSON.stringify({ reactionId: id }),
       //   createdBy: user?.id,
       // });
-      return res.status(constants.HTTP_STATUS_OK).json({ id });
+      return res.status(constants.HTTP_STATUS_OK).json({ postId });
     } catch (error: any) {
       console.log(error);
       // await auditService.createAuditLog({

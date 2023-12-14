@@ -14,12 +14,14 @@ import {
   MessageOutlined,
   MoreOutlined,
 } from "@ant-design/icons";
-import { Dropdown, Flex, Modal, message } from "antd";
+import { Button, Divider, Dropdown, Flex, Input, Modal, message } from "antd";
 import moment from "moment";
 import { Content, MoreLink, PostWrapper } from "./styled";
 import { useQuery } from "react-query";
 import reactionsController from "@/controllers/reactionController";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { formatLastTime } from "@/utils/formatTime";
+import commentController from "@/controllers/commentController";
 
 type Props = {
   data: IPost;
@@ -30,7 +32,10 @@ const Post = ({ data }: Props) => {
   const isOwner = memberData?.data.id === data.createdBy.id;
   const { refetch } = usePosts();
 
-  const reactionQuery = useQuery(["post_detail"], () =>
+  const [commentValue, setCommentValue] = useState("");
+  const [toggleComments, setToggleComments] = useState(false);
+
+  const reactionQuery = useQuery(["post_detail", data.id], () =>
     reactionsController.getOfPost(data.id)
   );
   const likeCount = useMemo(
@@ -46,11 +51,29 @@ const Post = ({ data }: Props) => {
 
   const { setOpenPostModal, setPostContent, setPost } = useClubNetwork();
 
+  const handleLike = async () => {
+    try {
+      if (isLiked) {
+        await reactionsController.delete(data.id, "LIKE");
+      } else {
+        await reactionsController.create({
+          type: "LIKE",
+          postId: data.id,
+        });
+      }
+      await refetch();
+      await reactionQuery.refetch();
+    } catch (err) {
+      message.error("Something went wrong!");
+    }
+  };
+
   const handleEdit = () => {
     setPostContent(data.content);
     setPost(data);
     setOpenPostModal(true);
   };
+
   const handleDelete = () => {
     Modal.confirm({
       title: "Delete post",
@@ -69,6 +92,28 @@ const Post = ({ data }: Props) => {
         }
       },
     });
+  };
+
+  const handleComment = async () => {
+    try {
+      await commentController.create({
+        postId: data.id,
+        content: commentValue,
+      });
+      setCommentValue("");
+      await refetch();
+    } catch (err) {
+      message.error("Something went wrong!");
+    }
+  };
+
+  const handleDeleteComment = async (commentId: number) => {
+    try {
+      await commentController.delete(commentId);
+      await refetch();
+    } catch (err) {
+      message.error("Something went wrong!");
+    }
   };
 
   const renderItems = () => {
@@ -154,20 +199,65 @@ const Post = ({ data }: Props) => {
 
       <Content>{data.content}</Content>
 
-      <div className="time">
-        {moment(data.createdAt).startOf("second").fromNow()}
-      </div>
+      <div className="time">{formatLastTime(data.createdAt)}</div>
 
       <Flex gap={24}>
-        <Flex gap={4}>
+        <Flex gap={4} onClick={handleLike}>
           {isLiked ? <HeartFilled /> : <HeartOutlined />}
-          <span>{likeCount}</span>
+          <span>{likeCount || 0}</span>
         </Flex>
-        <Flex gap={4}>
+        <Flex gap={4} onClick={() => setToggleComments((prev) => !prev)}>
           <MessageOutlined />
-          <span>0</span>
+          <span>{data.comments.length || 0}</span>
         </Flex>
       </Flex>
+
+      {toggleComments ? (
+        <>
+          <Divider style={{ margin: 0 }} />
+
+          <Flex gap={16} vertical>
+            {data.comments.map((c) => (
+              <Flex gap={12} key={c.id}>
+                <CustomAvatar size="default" />
+                <Flex gap={4} vertical>
+                  <Flex gap={8} align="center">
+                    <div className="name">
+                      {c.createdBy.fullname || c.createdBy.username}
+                    </div>
+                    <div className="time">{formatLastTime(c.createdAt)}</div>
+                    {c.memberId === memberData?.data.id && (
+                      <DeleteOutlined
+                        onClick={() => handleDeleteComment(c.id)}
+                      />
+                    )}
+                  </Flex>
+                  <div
+                    style={{
+                      whiteSpace: "pre-wrap",
+                    }}
+                  >
+                    {c.content}
+                  </div>
+                </Flex>
+              </Flex>
+            ))}
+
+            <Flex align="center" gap={12}>
+              <CustomAvatar size="default" />
+              <Input.TextArea
+                placeholder="Leave a comment"
+                value={commentValue}
+                autoSize
+                onChange={(e) => setCommentValue(e.target.value)}
+              />
+              <Button onClick={handleComment}>Reply</Button>
+            </Flex>
+          </Flex>
+        </>
+      ) : (
+        <></>
+      )}
     </PostWrapper>
   );
 };

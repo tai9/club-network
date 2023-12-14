@@ -50,11 +50,13 @@ const getReactionById = async (id: number) => {
   }
 };
 
-const deleteReaction = async (id: number) => {
+const deleteReaction = async (payload: {
+  postId: number;
+  memberId: number;
+  type: string;
+}) => {
   try {
-    return await reactionRepository.delete({
-      id,
-    });
+    return await reactionRepository.delete(payload);
   } catch (err) {
     throw err;
   }

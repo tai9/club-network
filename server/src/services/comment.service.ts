@@ -5,7 +5,9 @@ const commentRepository = AppDataSource.getRepository(Comment);
 
 const getComments = async () => {
   try {
-    const [data, count] = await commentRepository.findAndCount();
+    const [data, count] = await commentRepository.findAndCount({
+      relations: ["createdBy"],
+    });
     return { data, count };
   } catch (err) {
     throw err;

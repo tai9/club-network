@@ -12,6 +12,11 @@ const reactionsController = {
       `/reactions/${postId}/post`
     );
   },
+  delete(postId: number, type: string) {
+    return axiosClient.post(`/reactions/${postId}/post`, {
+      type,
+    });
+  },
 };
 
 export default reactionsController;

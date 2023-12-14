@@ -6,7 +6,7 @@ import { IComment } from "@/types/Comment";
 @Entity({
   name: "comments",
   orderBy: {
-    createdAt: "DESC",
+    createdAt: "ASC",
   },
 })
 export class Comment extends BaseEntity implements IComment {
@@ -28,4 +28,8 @@ export class Comment extends BaseEntity implements IComment {
     type: "int",
   })
   postId: number;
+
+  @ManyToOne(() => Member, (member) => member.id)
+  @JoinColumn({ name: "createdBy" })
+  createdBy: Member;
 }

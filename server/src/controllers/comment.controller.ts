@@ -11,6 +11,7 @@ const createComment = async (req: Request, res: Response) => {
     comment.postId = req.body.postId;
     comment.content = req.body.content;
     comment.memberId = member?.id;
+    comment.createdBy = member;
 
     const commentCreated = await commentService.createComment(comment);
     await activityService.createActivity({

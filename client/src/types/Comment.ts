@@ -1,3 +1,4 @@
+import { IMember } from "./Member";
 import { IBaseEntity } from "./common";
 
 export interface IComment extends IBaseEntity {
@@ -5,4 +6,5 @@ export interface IComment extends IBaseEntity {
   content: string;
   memberId: number;
   postId: number;
+  createdBy: IMember;
 }

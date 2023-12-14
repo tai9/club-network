@@ -5,7 +5,7 @@ const reactionRouters = express.Router();
 
 reactionRouters.post("/", reactionController.createReaction);
 reactionRouters.get("/", reactionController.getReactions);
-reactionRouters.delete("/:id", reactionController.deleteReaction);
+reactionRouters.post("/:id/post", reactionController.deleteReaction);
 reactionRouters.put("/:id", reactionController.updateReaction);
 reactionRouters.get("/:id/post", reactionController.getReactionsOfPost);
 
