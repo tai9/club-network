@@ -8,6 +8,7 @@ import {
   DeleteOutlined,
   EditOutlined,
   ExclamationCircleFilled,
+  HeartFilled,
   HeartOutlined,
   LinkOutlined,
   MessageOutlined,
@@ -16,6 +17,9 @@ import {
 import { Dropdown, Flex, Modal, message } from "antd";
 import moment from "moment";
 import { Content, MoreLink, PostWrapper } from "./styled";
+import { useQuery } from "react-query";
+import reactionsController from "@/controllers/reactionController";
+import { useMemo } from "react";
 
 type Props = {
   data: IPost;
@@ -23,17 +27,24 @@ type Props = {
 
 const Post = ({ data }: Props) => {
   const { data: memberData } = useMember();
-  const isOwner = memberData?.data.id === data.createdBy;
-  console.log(memberData?.data, isOwner);
+  const isOwner = memberData?.data.id === data.createdBy.id;
   const { refetch } = usePosts();
 
-  const {
-    openPostModal,
-    setOpenPostModal,
-    postContent,
-    setPostContent,
-    setPost,
-  } = useClubNetwork();
+  const reactionQuery = useQuery(["post_detail"], () =>
+    reactionsController.getOfPost(data.id)
+  );
+  const likeCount = useMemo(
+    () => reactionQuery.data?.data.find((x) => x.type === "LIKE")?.count,
+    [reactionQuery.data]
+  );
+  const isLiked = useMemo(
+    () =>
+      data.reactions.findIndex((x) => x.memberId === memberData?.data.id) !==
+      -1,
+    [data.reactions, memberData?.data.id]
+  );
+
+  const { setOpenPostModal, setPostContent, setPost } = useClubNetwork();
 
   const handleEdit = () => {
     setPostContent(data.content);
@@ -119,7 +130,9 @@ const Post = ({ data }: Props) => {
         <Flex gap={16} align="center">
           <CustomAvatar />
           <Flex vertical gap={4}>
-            <div className="name">Tailor Nguyen</div>
+            <div className="name">
+              {data.createdBy.fullname || data.createdBy.username}
+            </div>
             <div className="role">CN</div>
           </Flex>
         </Flex>
@@ -147,8 +160,8 @@ const Post = ({ data }: Props) => {
 
       <Flex gap={24}>
         <Flex gap={4}>
-          <HeartOutlined />
-          <span>0</span>
+          {isLiked ? <HeartFilled /> : <HeartOutlined />}
+          <span>{likeCount}</span>
         </Flex>
         <Flex gap={4}>
           <MessageOutlined />

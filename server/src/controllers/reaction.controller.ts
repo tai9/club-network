@@ -91,9 +91,21 @@ const updateReaction = async (req: Request, res: Response) => {
   }
 };
 
+const getReactionsOfPost = async (req: Request, res: Response) => {
+  try {
+    const id = +req.params.id;
+    const reactions = await reactionService.getReactionsOfPost(id);
+    return res.status(constants.HTTP_STATUS_OK).json(reactions);
+  } catch (error) {
+    console.log(error);
+    res.status(constants.HTTP_STATUS_BAD_REQUEST).json(error);
+  }
+};
+
 export default {
   createReaction,
   getReactions,
   deleteReaction,
   updateReaction,
+  getReactionsOfPost,
 };

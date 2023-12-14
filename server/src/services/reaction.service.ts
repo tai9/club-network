@@ -12,6 +12,18 @@ const getReactions = async () => {
   }
 };
 
+const getReactionsOfPost = async (postId: number) => {
+  try {
+    const count = await reactionRepository.query(
+      `select type, COUNT(*) from reactions WHERE "postId" = $1 GROUP by type`,
+      [postId]
+    );
+    return count;
+  } catch (err) {
+    throw err;
+  }
+};
+
 const createReaction = async (reaction: Reaction) => {
   try {
     return await reactionRepository.save(reaction);
@@ -54,4 +66,5 @@ export default {
   getReactionById,
   deleteReaction,
   updateReaction,
+  getReactionsOfPost,
 };

@@ -5,7 +5,9 @@ const postRepository = AppDataSource.getRepository(Post);
 
 const getPosts = async () => {
   try {
-    const [data, count] = await postRepository.findAndCount();
+    const [data, count] = await postRepository.findAndCount({
+      relations: ["createdBy", "comments", "reactions"],
+    });
     return { data, count };
   } catch (err) {
     throw err;

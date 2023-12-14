@@ -22,8 +22,6 @@ export const authenticateToken = (
     token,
     process.env.TOKEN_SECRET as string,
     async (err: any, member: any) => {
-      console.log(err);
-
       if (err) return res.sendStatus(constants.HTTP_STATUS_FORBIDDEN);
 
       (req as any).member = { id: member.id, username: member.username };

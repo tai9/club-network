@@ -44,11 +44,12 @@ app.use("/ping", (req, res) => {
 
 app.use("/", publicRouters);
 
+app.use("/members", memberRouters);
+app.use("/posts", postRouters);
+
 app.use("/me", authenticateToken, meRouters);
-app.use("/members", authenticateToken, memberRouters);
 app.use("/permissions", authenticateToken, permissionRouters);
 app.use("/roles", authenticateToken, roleRouters);
-app.use("/posts", postRouters);
 app.use("/comments", authenticateToken, commentRouters);
 app.use("/reactions", authenticateToken, reactionRouters);
 app.use("/activities", authenticateToken, activityRouters);

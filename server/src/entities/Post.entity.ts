@@ -1,6 +1,6 @@
 import { IPost } from "@/types/Post";
-import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
-import { BaseEntity, Member } from ".";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
+import { BaseEntity, Member, Comment, Reaction } from ".";
 
 @Entity({
   name: "posts",
@@ -34,9 +34,13 @@ export class Post extends BaseEntity implements IPost {
 
   @ManyToOne(() => Member, (user) => user.id)
   @JoinColumn({ name: "createdBy" })
-  @Column({
-    type: "varchar",
-    nullable: true,
-  })
-  createdBy: number;
+  createdBy: Member;
+
+  @OneToMany(() => Comment, (c) => c.postId)
+  @JoinColumn({ name: "comments" })
+  comments: Comment[];
+
+  @OneToMany(() => Reaction, (c) => c.postId)
+  @JoinColumn({ name: "reactions" })
+  reactions: Reaction[];
 }

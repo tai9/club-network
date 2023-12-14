@@ -8,7 +8,7 @@ import { BaseEntity, Member, Post } from ".";
     createdAt: "DESC",
   },
 })
-@Index(["type", "postId"], { unique: true })
+@Index(["type", "postId", "memberId"], { unique: true })
 export class Reaction extends BaseEntity implements IReaction {
   @Column({
     type: "varchar",

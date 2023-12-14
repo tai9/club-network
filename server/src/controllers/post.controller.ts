@@ -12,7 +12,7 @@ const createPost = async (req: Request, res: Response) => {
     post.content = req.body.content;
     post.status = req.body.status;
     post.media = req.body.media;
-    post.createdBy = member?.id;
+    post.createdBy = member;
 
     const postCreated = await postService.createPost(post);
     // await auditService.createAuditLog({

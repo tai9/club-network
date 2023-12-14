@@ -15,7 +15,7 @@ const createMember = async (req: Request, res: Response) => {
     member.fbLink = req.body.fbLink;
     member.insLink = req.body.insLink;
     member.twitterLink = req.body.twitterLink;
-    member.username = generateRandomUsername();
+    member.username = req.body.username || generateRandomUsername();
     member.password = await hash(req.body.password, 10);
     const memberCreated = await memberService.createMember(member);
     return res.status(constants.HTTP_STATUS_OK).json(memberCreated);

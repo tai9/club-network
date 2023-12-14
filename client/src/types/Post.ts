@@ -1,3 +1,6 @@
+import { IComment } from "./Comment";
+import { IMember } from "./Member";
+import { IReaction } from "./Reaction";
 import { IBaseEntity } from "./common";
 
 export interface IPost extends IBaseEntity {
@@ -5,5 +8,7 @@ export interface IPost extends IBaseEntity {
   content: string;
   media?: string;
   status?: string;
-  createdBy: number;
+  createdBy: IMember;
+  reactions: IReaction[];
+  comments: IComment[];
 }
