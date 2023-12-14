@@ -1,3 +1,5 @@
+import axiosClient from "@/configs/axiosClient";
+import useMember from "@/hooks/useMember";
 import { RedditOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Input } from "antd";
 import Link from "next/link";
@@ -16,11 +18,6 @@ import {
   HeaderRoutes,
   Wrapper,
 } from "./styled";
-import axios from "axios";
-import { useQuery } from "react-query";
-import axiosClient from "@/configs/axiosClient";
-import { IMember } from "@/types/Member";
-import useMember from "@/hooks/useMember";
 
 export default function Header() {
   const [openAcount, setOpenAcount] = useState(false);
@@ -29,7 +26,6 @@ export default function Header() {
   };
 
   const { data } = useMember();
-  console.log("userData", data);
 
   const handleSignIn = async () => {
     const res = await axiosClient.post("/login", {

@@ -83,10 +83,11 @@ const deletePost = async (req: Request, res: Response) => {
 
 const updatePost = async (req: Request, res: Response) => {
   try {
-    // const id = +req.params.id;
-    // const post = new Post();
-    // const posts = await postService.deletePost(id);
-    return res.status(constants.HTTP_STATUS_OK).json({});
+    const id = +req.params.id;
+    const post = await postService.getPostById(id);
+    post.content = req.body.content;
+    await postService.updatePost(post);
+    return res.status(constants.HTTP_STATUS_OK).json(post);
   } catch (error) {
     console.log(error);
     res.status(constants.HTTP_STATUS_BAD_REQUEST).json(error);

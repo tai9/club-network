@@ -62,3 +62,7 @@ export const MoreLink = styled(Flex)`
     text-decoration: underline;
   }
 `;
+
+export const Content = styled.div`
+  white-space: pre-wrap;
+`;

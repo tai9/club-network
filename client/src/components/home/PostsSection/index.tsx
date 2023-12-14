@@ -1,13 +1,12 @@
-import React from "react";
-import { PostsSectionWrapper } from "./styled";
-import { Button, Flex } from "antd";
-import PostStatus from "./PostStatus";
-import Post from "./Post";
 import usePosts from "@/hooks/usePosts";
+import { Button, Flex } from "antd";
+import Post from "./Post";
+import PostStatus from "./PostStatus";
+import { PostsSectionWrapper } from "./styled";
 
 const PostsSection = () => {
   const { data: postData } = usePosts();
-  console.log(postData, "😀");
+
   return (
     <PostsSectionWrapper>
       <Flex gap={16}>
@@ -16,9 +15,11 @@ const PostsSection = () => {
         <Button type="text">Discover</Button>
       </Flex>
       <PostStatus />
-      {postData?.data.data.map((post) => (
-        <Post key={post.id} data={post} />
-      ))}
+      <Flex gap={16} vertical>
+        {postData?.data.data.map((post) => (
+          <Post key={post.id} data={post} />
+        ))}
+      </Flex>
     </PostsSectionWrapper>
   );
 };

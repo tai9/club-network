@@ -22,6 +22,7 @@ const createPost = async (post: Post) => {
 
 const updatePost = async (post: Post) => {
   try {
+    post.updatedAt = new Date();
     return await postRepository.update(post.id, {
       ...post,
     });

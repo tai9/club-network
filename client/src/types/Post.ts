@@ -5,4 +5,5 @@ export interface IPost extends IBaseEntity {
   content: string;
   media?: string;
   status?: string;
+  createdBy: number;
 }

@@ -1,20 +1,16 @@
+import AppModals from "@/components/common/AppModals";
+import queryClient from "@/configs/queryClient";
 import { AuthContextProvider } from "@/contexts/AuthContext";
+import { ClubNetworkProvider } from "@/hooks/useClubNetwork";
 import { MainLayout } from "@/layouts";
 import "@/styles/globals.css";
 import theme from "@/theme/themeConfig";
-import { ConfigProvider } from "antd";
-import Head from "next/head";
-import { ThemeProvider } from "styled-components";
-import { SessionProvider } from "next-auth/react";
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from "react-query";
 import { AppPropsWithLayout } from "@/types/common";
-import queryClient from "@/configs/queryClient";
+import { ConfigProvider } from "antd";
+import { SessionProvider } from "next-auth/react";
+import Head from "next/head";
+import { QueryClientProvider } from "react-query";
+import { ThemeProvider } from "styled-components";
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const Layout = Component.Layout ?? MainLayout;
@@ -30,9 +26,12 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
           <ThemeProvider theme={{ antd: theme.token }}>
             <AuthContextProvider>
               <SessionProvider session={pageProps.session}>
-                <Layout>
-                  <Component {...pageProps} />
-                </Layout>
+                <ClubNetworkProvider>
+                  <Layout>
+                    <Component {...pageProps} />
+                  </Layout>
+                  <AppModals />
+                </ClubNetworkProvider>
               </SessionProvider>
             </AuthContextProvider>
           </ThemeProvider>
