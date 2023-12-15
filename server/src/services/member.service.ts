@@ -13,21 +13,7 @@ const createMember = async (member: Member) => {
 
 const getMembers = async () => {
   try {
-    const [data, count] = await AppDataSource.manager.findAndCount(Member, {
-      select: [
-        "username",
-        "fullname",
-        "bio",
-        "twitterLink",
-        "createdAt",
-        "email",
-        "fbLink",
-        "id",
-        "insLink",
-        "roles",
-        "updatedAt",
-      ],
-    });
+    const [data, count] = await AppDataSource.manager.findAndCount(Member);
     return { data, count };
   } catch (err) {
     throw err;
@@ -40,6 +26,18 @@ const getMemberByUsername = async (username: string) => {
       .createQueryBuilder("member")
       .where("member.username=:username", { username })
       .addSelect("member.password")
+      .getOne();
+  } catch (err) {
+    throw err;
+  }
+};
+
+const getMemberExp = async (username: string) => {
+  try {
+    return await memberRepository
+      .createQueryBuilder("member")
+      .select("member.exp")
+      .where("member.username=:username", { username })
       .getOne();
   } catch (err) {
     throw err;
@@ -61,4 +59,5 @@ export default {
   getMembers,
   getMemberByUsername,
   deleteMember,
+  getMemberExp,
 };

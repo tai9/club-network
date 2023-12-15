@@ -1,7 +1,7 @@
-import { Column, Entity, JoinColumn, OneToMany } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 import { BaseEntity } from "./Base.entity";
 import { IMember } from "@/types/Member";
-import { Role } from ".";
+import { Level, Role } from ".";
 
 @Entity({
   name: "members",
@@ -57,6 +57,12 @@ export class Member extends BaseEntity implements IMember {
     nullable: true,
   })
   insLink: string;
+
+  @Column({
+    type: "int",
+    default: 0,
+  })
+  exp: number;
 
   @OneToMany(() => Role, (role) => role.createdBy)
   @JoinColumn()

@@ -5,9 +5,12 @@ import { CalendarOutlined, TwitterOutlined } from "@ant-design/icons";
 import Level from "@/components/common/Level";
 import moment from "moment";
 import useMember from "@/hooks/useMember";
+import { useMyLevel } from "@/hooks/useLevels";
 
 const MemberInfo = () => {
   const { data: memberData } = useMember();
+  const { data: levelData } = useMyLevel();
+
   return (
     <Wrapper>
       <Flex vertical gap={12}>
@@ -22,7 +25,7 @@ const MemberInfo = () => {
           <div>Twitter</div>
         </Flex>
       </Flex>
-      <Level percent={90} value={2} />
+      <Level exp={levelData?.exp || 0} />
     </Wrapper>
   );
 };

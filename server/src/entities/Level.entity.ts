@@ -5,7 +5,7 @@ import { BaseEntity } from ".";
 @Entity({
   name: "levels",
   orderBy: {
-    createdAt: "DESC",
+    targetPoint: "ASC",
   },
 })
 export class Level extends BaseEntity implements ILevel {

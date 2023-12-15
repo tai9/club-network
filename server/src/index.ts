@@ -46,6 +46,7 @@ app.use("/", publicRouters);
 
 app.use("/members", memberRouters);
 app.use("/posts", postRouters);
+app.use("/levels", levelRouters);
 
 app.use("/me", authenticateToken, meRouters);
 app.use("/permissions", authenticateToken, permissionRouters);
@@ -53,7 +54,6 @@ app.use("/roles", authenticateToken, roleRouters);
 app.use("/comments", authenticateToken, commentRouters);
 app.use("/reactions", authenticateToken, reactionRouters);
 app.use("/activities", authenticateToken, activityRouters);
-app.use("/levels", authenticateToken, levelRouters);
 app.use("/badges", authenticateToken, badgeRouters);
 
 // connect DB

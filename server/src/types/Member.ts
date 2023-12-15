@@ -9,4 +9,5 @@ export interface IMember extends IBaseEntity {
   fbLink?: string;
   twitterLink?: string;
   insLink?: string;
+  exp: number;
 }
