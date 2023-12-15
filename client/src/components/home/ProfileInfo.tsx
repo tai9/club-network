@@ -18,11 +18,12 @@ const ProfileInfo = () => {
         </div>
         <Flex vertical gap={10}>
           <Flex align="baseline" gap={8}>
-            <div>
+            <Flex vertical>
               <ProfileName>
                 {memberData?.data.fullname || memberData?.data.username}
               </ProfileName>
-            </div>
+              <div>{memberData?.data.username}</div>
+            </Flex>
             <Tag
               style={{
                 borderColor: "#a0fe7f",

@@ -1,4 +1,4 @@
-import { IBaseEntity } from "./common";
+import { IBaseEntity, ReactionType } from "./common";
 
 export interface IMember extends IBaseEntity {
   username: string;
@@ -10,4 +10,9 @@ export interface IMember extends IBaseEntity {
   twitterLink?: string;
   insLink?: string;
   exp: number;
+  reactionCount?: {
+    type: ReactionType;
+    count: string;
+  }[];
+  postCount?: number;
 }

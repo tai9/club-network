@@ -20,7 +20,9 @@ const ProfileCard = ({ member }: Props) => {
       <CustomAvatar />
       <Flex vertical gap={4}>
         <Flex align="center" gap={4}>
-          <div>{member.fullname || member.username}</div>
+          <Tooltip title={member.fullname ? member.username : null}>
+            <div>{member.fullname || member.username}</div>
+          </Tooltip>
           <Tooltip title={`${currentLevel?.description}: ${member.exp} XP`}>
             <Tag
               style={{
@@ -33,16 +35,27 @@ const ProfileCard = ({ member }: Props) => {
         </Flex>
         <div className="role">CN</div>
         <Flex gap={12}>
-          <Tooltip title="10 member's reactions" placement="bottom">
+          <Tooltip
+            title={`${
+              member.reactionCount?.find((x) => x.type === "LIKE")?.count || 0
+            } member's reactions`}
+            placement="bottom"
+          >
             <Flex gap={4}>
               <HeartOutlined />
-              <span>10</span>
+              <span>
+                {member.reactionCount?.find((x) => x.type === "LIKE")?.count ||
+                  0}
+              </span>
             </Flex>
           </Tooltip>
-          <Tooltip title="9 member's posts" placement="bottom">
+          <Tooltip
+            title={`${member.postCount || 0} member's posts`}
+            placement="bottom"
+          >
             <Flex gap={4}>
               <MessageOutlined />
-              <span>9</span>
+              <span>{member.postCount || 0}</span>
             </Flex>
           </Tooltip>
         </Flex>

@@ -29,7 +29,7 @@ export default function Header() {
 
   const handleSignIn = async () => {
     const res = await axiosClient.post("/login", {
-      username: "tailor",
+      username: "tailor2",
       password: "12345",
     });
     localStorage.setItem("username", res.data.username);
