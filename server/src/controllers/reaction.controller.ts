@@ -1,6 +1,7 @@
+import memberService from "@/services/member.service";
 import { Request, Response } from "express";
 import { constants } from "http2";
-import { Reaction, Member } from "../entities";
+import { Member, Reaction } from "../entities";
 import reactionService from "../services/reaction.service";
 // import auditService from "../services/audit.service";
 
@@ -11,6 +12,8 @@ const createReaction = async (req: Request, res: Response) => {
     reaction.postId = req.body.postId;
     reaction.type = req.body.type;
     reaction.memberId = member?.id;
+
+    await memberService.updateExp(member.id, req.body.type);
 
     const reactionCreated = await reactionService.createReaction(reaction);
     // await auditService.createAuditLog({

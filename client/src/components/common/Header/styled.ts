@@ -19,7 +19,7 @@ export const HeaderRoutes = styled.div`
   font-size: 17px;
   line-height: 140%;
 
-  span:hover {
+  a:hover {
     color: ${(props) => props.theme.antd.colorPrimary};
     cursor: pointer;
   }

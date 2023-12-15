@@ -25,7 +25,11 @@ const Level = ({ exp }: Props) => {
     <Flex vertical gap={8}>
       <HighlightText fontSize={20}>{currentLevel?.name}</HighlightText>
       <Tooltip title={`${currentLevel?.description}: ${exp} XP`}>
-        <Progress percent={percent} strokeColor={twoColors} status="active" />
+        <Progress
+          percent={+percent.toFixed(2)}
+          strokeColor={twoColors}
+          status="active"
+        />
       </Tooltip>
     </Flex>
   );

@@ -3,6 +3,7 @@ import { constants } from "http2";
 import { Comment, Member } from "../entities";
 import commentService from "../services/comment.service";
 import activityService from "../services/activity.service";
+import memberService from "@/services/member.service";
 
 const createComment = async (req: Request, res: Response) => {
   const member = (req as any)?.member as Member;
@@ -14,6 +15,7 @@ const createComment = async (req: Request, res: Response) => {
     comment.createdBy = member;
 
     const commentCreated = await commentService.createComment(comment);
+    await memberService.updateExp(member.id, "COMMENT");
     await activityService.createActivity({
       type: "COMMENT",
       status: "SUCCESS",

@@ -1,3 +1,4 @@
+import { EReactionPoint, ReactionType } from "@/types/common";
 import { AppDataSource } from "../configs/db.config";
 import { Member } from "../entities";
 
@@ -54,10 +55,45 @@ const deleteMember = async (id: number) => {
   }
 };
 
+const updateMember = async (member: Member) => {
+  try {
+    return await memberRepository.update(member.id, member);
+  } catch (err) {
+    throw err;
+  }
+};
+
+const updateExp = async (id: number, reactionType: ReactionType) => {
+  try {
+    const member = await memberRepository.findOneByOrFail({ id });
+    let exp = member.exp || 0;
+    switch (reactionType) {
+      case "LIKE":
+        exp = exp + EReactionPoint.LIKE;
+        break;
+      case "COMMENT":
+        exp = exp + EReactionPoint.COMMENT;
+        break;
+      case "POST":
+        exp = exp + EReactionPoint.POST;
+        break;
+
+      default:
+        break;
+    }
+    member.exp = exp;
+    return await memberRepository.update(member.id, member);
+  } catch (err) {
+    throw err;
+  }
+};
+
 export default {
   createMember,
   getMembers,
   getMemberByUsername,
   deleteMember,
   getMemberExp,
+  updateMember,
+  updateExp,
 };

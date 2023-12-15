@@ -22,6 +22,7 @@ import reactionsController from "@/controllers/reactionController";
 import { useMemo, useState } from "react";
 import { formatLastTime } from "@/utils/formatTime";
 import commentController from "@/controllers/commentController";
+import { useMyLevel } from "@/hooks/useLevels";
 
 type Props = {
   data: IPost;
@@ -31,6 +32,7 @@ const Post = ({ data }: Props) => {
   const { data: memberData } = useMember();
   const isOwner = memberData?.data.id === data.createdBy.id;
   const { refetch } = usePosts();
+  const { refetch: refetchMyLevel } = useMyLevel();
 
   const [commentValue, setCommentValue] = useState("");
   const [toggleComments, setToggleComments] = useState(false);
@@ -63,6 +65,7 @@ const Post = ({ data }: Props) => {
       }
       await refetch();
       await reactionQuery.refetch();
+      await refetchMyLevel();
     } catch (err) {
       message.error("Something went wrong!");
     }
@@ -102,6 +105,7 @@ const Post = ({ data }: Props) => {
       });
       setCommentValue("");
       await refetch();
+      await refetchMyLevel();
     } catch (err) {
       message.error("Something went wrong!");
     }

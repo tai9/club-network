@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { constants } from "http2";
 import { Post, Member } from "../entities";
 import postService from "../services/post.service";
+import memberService from "@/services/member.service";
 // import auditService from "../services/audit.service";
 
 const createPost = async (req: Request, res: Response) => {
@@ -15,6 +16,7 @@ const createPost = async (req: Request, res: Response) => {
     post.createdBy = member;
 
     const postCreated = await postService.createPost(post);
+    await memberService.updateExp(member.id, "POST");
     // await auditService.createAuditLog({
     //   type: "ROLE",
     //   status: "SUCCESS",
