@@ -43,9 +43,7 @@ const getPostById = async (id: number) => {
 
 const deletePost = async (id: number) => {
   try {
-    return await postRepository.delete({
-      id,
-    });
+    return await postRepository.softDelete({ id });
   } catch (err) {
     throw err;
   }

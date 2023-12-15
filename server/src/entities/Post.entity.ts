@@ -1,6 +1,13 @@
 import { IPost } from "@/types/Post";
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
-import { BaseEntity, Member, Comment, Reaction } from ".";
+import {
+  Column,
+  DeleteDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+} from "typeorm";
+import { BaseEntity, Comment, Member, Reaction } from ".";
 
 @Entity({
   name: "posts",
@@ -32,15 +39,16 @@ export class Post extends BaseEntity implements IPost {
   })
   status: string;
 
+  @DeleteDateColumn()
+  deletedAt: Date;
+
   @ManyToOne(() => Member, (user) => user.id)
   @JoinColumn({ name: "createdBy" })
   createdBy: Member;
 
   @OneToMany(() => Comment, (c) => c.postId)
-  @JoinColumn({ name: "comments" })
   comments: Comment[];
 
   @OneToMany(() => Reaction, (c) => c.postId)
-  @JoinColumn({ name: "reactions" })
   reactions: Reaction[];
 }

@@ -22,8 +22,9 @@ export class Reaction extends BaseEntity implements IReaction {
   })
   memberId: number;
 
-  @ManyToOne(() => Post, (post) => post.id)
-  @JoinColumn({ name: "postId" })
+  @ManyToOne(() => Post, (post) => post.id, {
+    onDelete: "CASCADE",
+  })
   @Column({
     type: "int",
   })
