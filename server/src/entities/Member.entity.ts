@@ -1,7 +1,7 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
-import { BaseEntity } from "./Base.entity";
 import { IMember } from "@/types/Member";
-import { Level, Role } from ".";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
+import { Role } from ".";
+import { BaseEntity } from "./Base.entity";
 
 @Entity({
   name: "members",
@@ -67,4 +67,8 @@ export class Member extends BaseEntity implements IMember {
   @OneToMany(() => Role, (role) => role.createdBy)
   @JoinColumn()
   roles: Role[];
+
+  @ManyToOne(() => Role, (role) => role.id)
+  @JoinColumn()
+  role: Role;
 }

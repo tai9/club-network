@@ -43,7 +43,14 @@ const getMembers = async () => {
     //     reactions."memberId"
     // ) AS reactionsGr ON reactionsGr."memberId" = members.id;`);
     //   const count = await memberRepository.count();
-    const [data, count] = await AppDataSource.manager.findAndCount(Member);
+    const [data, count] = await AppDataSource.manager.findAndCount(Member, {
+      relations: ["role"],
+      order: {
+        role: {
+          grade: "DESC",
+        },
+      },
+    });
     for (const member of data) {
       const m = member as IMember;
       const reactionCount = await AppDataSource.manager.query(
@@ -51,7 +58,7 @@ const getMembers = async () => {
         [member.id]
       );
       const postCount = await AppDataSource.manager.countBy(Post, {
-        createdBy: m,
+        createdBy: m.id,
       });
       m.reactionCount = reactionCount;
       m.postCount = postCount;

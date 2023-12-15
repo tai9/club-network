@@ -182,7 +182,7 @@ const Post = ({ data }: Props) => {
             <div className="name">
               {data.createdBy.fullname || data.createdBy.username}
             </div>
-            <div className="role">CN</div>
+            <div className="role">{data.createdBy.role?.description}</div>
           </Flex>
         </Flex>
         <Dropdown

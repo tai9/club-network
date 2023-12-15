@@ -8,6 +8,7 @@ import {
   OneToMany,
 } from "typeorm";
 import { BaseEntity, Comment, Member, Reaction } from ".";
+import { IMember } from "@/types/Member";
 
 @Entity({
   name: "posts",
@@ -44,7 +45,7 @@ export class Post extends BaseEntity implements IPost {
 
   @ManyToOne(() => Member, (user) => user.id)
   @JoinColumn({ name: "createdBy" })
-  createdBy: Member;
+  createdBy: number;
 
   @OneToMany(() => Comment, (c) => c.postId)
   comments: Comment[];

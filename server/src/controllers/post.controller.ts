@@ -13,7 +13,7 @@ const createPost = async (req: Request, res: Response) => {
     post.content = req.body.content;
     post.status = req.body.status;
     post.media = req.body.media;
-    post.createdBy = member;
+    post.createdBy = member.id;
 
     const postCreated = await postService.createPost(post);
     await memberService.updateExp(member.id, "POST");

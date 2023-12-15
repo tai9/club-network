@@ -1,3 +1,4 @@
+import { IRole } from "./Role";
 import { IBaseEntity, ReactionType } from "./common";
 
 export interface IMember extends IBaseEntity {
@@ -15,4 +16,6 @@ export interface IMember extends IBaseEntity {
     count: string;
   }[];
   postCount?: number;
+  role?: IRole;
+  roles?: IRole[];
 }

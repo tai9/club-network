@@ -22,8 +22,15 @@ export class Role extends BaseEntity implements IRole {
 
   @Column({
     type: "boolean",
+    default: true,
   })
   status: boolean;
+
+  @Column({
+    type: "int",
+    default: 0,
+  })
+  grade: number;
 
   @ManyToOne(() => Member, (user) => user.id)
   @JoinColumn({ name: "createdBy" })

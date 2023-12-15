@@ -33,7 +33,7 @@ const ProfileCard = ({ member }: Props) => {
             </Tag>
           </Tooltip>
         </Flex>
-        <div className="role">CN</div>
+        <div className="role">{member.role?.description}</div>
         <Flex gap={12}>
           <Tooltip
             title={`${
