@@ -31,7 +31,7 @@ type Props = {
 
 const Post = ({ data }: Props) => {
   const { data: memberData } = useMember();
-  const isOwner = memberData?.data.id === data.createdBy.id;
+  const isOwner = memberData?.id === data.createdBy.id;
   const { refetch } = usePosts();
   const { refetch: refetchMyLevel } = useMemberExp();
 
@@ -46,10 +46,8 @@ const Post = ({ data }: Props) => {
     [reactionQuery.data]
   );
   const isLiked = useMemo(
-    () =>
-      data.reactions.findIndex((x) => x.memberId === memberData?.data.id) !==
-      -1,
-    [data.reactions, memberData?.data.id]
+    () => data.reactions.findIndex((x) => x.memberId === memberData?.id) !== -1,
+    [data.reactions, memberData?.id]
   );
 
   const { setOpenPostModal, setPostContent, setPost } = useClubNetwork();
@@ -231,7 +229,7 @@ const Post = ({ data }: Props) => {
                       {c.createdBy.fullname || c.createdBy.username}
                     </div>
                     <div className="time">{formatLastTime(c.createdAt)}</div>
-                    {c.memberId === memberData?.data.id && (
+                    {c.memberId === memberData?.id && (
                       <DeleteOutlined
                         onClick={() => handleDeleteComment(c.id)}
                       />

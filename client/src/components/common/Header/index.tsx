@@ -76,7 +76,7 @@ export default function Header() {
           <ClickOutSide onClickOutside={handleClose}>
             <AccountInfo>
               <AccountHeading>
-                <div>{data.data.fullname || data.data.username}</div>
+                <div>{data.fullname || data.username}</div>
                 <div>
                   <Avatar
                     onClick={() => setOpenAcount(true)}

@@ -1,17 +1,21 @@
 import axiosClient from "@/configs/axiosClient";
+import { IGetPostsParams, IPost } from "@/types/Post";
+import { DataWithPagination } from "@/types/common";
+
+const prefix = "posts";
 
 const postController = {
-  getAll() {
-    return axiosClient.get(`/posts`);
+  getAll(params?: IGetPostsParams) {
+    return axiosClient.get<DataWithPagination<IPost>>(`/${prefix}`, { params });
   },
   create(data: any) {
-    return axiosClient.post(`/posts`, data);
+    return axiosClient.post(`/${prefix}`, data);
   },
   update(id: number, data: any) {
-    return axiosClient.put(`/posts/${id}`, data);
+    return axiosClient.put(`/${prefix}/${id}`, data);
   },
   delete(id: number) {
-    return axiosClient.delete(`/posts/${id}`);
+    return axiosClient.delete(`/${prefix}/${id}`);
   },
 };
 

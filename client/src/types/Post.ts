@@ -12,3 +12,7 @@ export interface IPost extends IBaseEntity {
   reactions: IReaction[];
   comments: IComment[];
 }
+
+export interface IGetPostsParams {
+  memberId?: number;
+}

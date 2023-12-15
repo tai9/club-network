@@ -1,12 +1,13 @@
 import axiosClient from "@/configs/axiosClient";
+import postController from "@/controllers/postController";
 import { POST_DATA } from "@/queryKeys";
-import { IPost } from "@/types/Post";
+import { IGetPostsParams, IPost } from "@/types/Post";
 import { DataWithPagination } from "@/types/common";
 import { useQuery } from "react-query";
 
-const usePosts = () => {
-  return useQuery(POST_DATA, () => {
-    return axiosClient.get<DataWithPagination<IPost>>("/posts");
+const usePosts = (params?: IGetPostsParams) => {
+  return useQuery(["posts", params], () => {
+    return postController.getAll(params);
   });
 };
 

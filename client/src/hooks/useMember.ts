@@ -6,8 +6,9 @@ import { useParams } from "next/navigation";
 import { useQuery } from "react-query";
 
 export const useMember = () => {
-  return useQuery(MEMBER_DATA, () => {
-    return axiosClient.get<IMember>("/me");
+  return useQuery("member-me", async () => {
+    const res = await axiosClient.get<IMember>("/me");
+    return res.data;
   });
 };
 
