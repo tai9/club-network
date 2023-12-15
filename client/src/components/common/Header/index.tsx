@@ -17,6 +17,7 @@ import {
   HeaderRoutes,
   Wrapper,
 } from "./styled";
+import { deleteCookie, setCookie } from "cookies-next";
 import { useMember } from "@/hooks/useMember";
 import { useLevels } from "@/hooks/useLevels";
 import { ILevel } from "@/types/Level";
@@ -36,14 +37,18 @@ export default function Header() {
       username: "tailor2",
       password: "12345",
     });
+    console.log(res);
+
+    setCookie("memberId", res.data.id);
     localStorage.setItem("username", res.data.username);
     localStorage.setItem("accessToken", res.data.accessToken);
-    window.location.reload();
+    // window.location.reload();
   };
 
   const handleSignOut = () => {
     localStorage.removeItem("username");
     localStorage.removeItem("accessToken");
+    deleteCookie("memberId");
     window.location.reload();
   };
 
@@ -92,7 +97,7 @@ export default function Header() {
 
               <AccountLevel>
                 <div>
-                  <HighlightText>{currentLevel.name}</HighlightText>
+                  <HighlightText>{currentLevel?.name}</HighlightText>
                 </div>
                 <div className="xp">{data.exp} XP</div>
               </AccountLevel>

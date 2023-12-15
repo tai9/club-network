@@ -39,7 +39,7 @@ const ProfileInfo = () => {
                 fontSize: 12,
               }}
             >
-              <HighlightText>{currentLevel.name}</HighlightText>
+              <HighlightText>{currentLevel?.name}</HighlightText>
             </Tag>
           </Flex>
           <div>{memberData?.bio || "---"}</div>

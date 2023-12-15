@@ -26,6 +26,7 @@ export const login = async (req: Request, res: Response) => {
     return res.status(constants.HTTP_STATUS_OK).json({
       username,
       accessToken,
+      id: member.id,
     });
   } catch (error) {
     console.log(error);
