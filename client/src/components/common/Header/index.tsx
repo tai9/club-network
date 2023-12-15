@@ -2,7 +2,7 @@ import axiosClient from "@/configs/axiosClient";
 import { RedditOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Input } from "antd";
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import ClickOutSide from "../ClickOutSide";
 import CustomAvatar from "../CustomAvatar";
 import { HighlightText } from "../styled";
@@ -18,6 +18,8 @@ import {
   Wrapper,
 } from "./styled";
 import { useMember } from "@/hooks/useMember";
+import { useLevels } from "@/hooks/useLevels";
+import { ILevel } from "@/types/Level";
 
 export default function Header() {
   const [openAcount, setOpenAcount] = useState(false);
@@ -26,6 +28,8 @@ export default function Header() {
   };
 
   const { data } = useMember();
+  const { data: myExp } = useLevels(data?.exp);
+  const currentLevel = useMemo(() => myExp as ILevel, [myExp]);
 
   const handleSignIn = async () => {
     const res = await axiosClient.post("/login", {
@@ -88,13 +92,13 @@ export default function Header() {
 
               <AccountLevel>
                 <div>
-                  <HighlightText>Level 0</HighlightText>
+                  <HighlightText>{currentLevel.name}</HighlightText>
                 </div>
-                <div className="xp">3 XP</div>
+                <div className="xp">{data.exp} XP</div>
               </AccountLevel>
 
               <AccountFooter>
-                <div>Profile</div>
+                <Link href={`/member/${data?.id}`}>Profile</Link>
                 <div>Account</div>
                 <div>Help</div>
                 <div onClick={handleSignOut}>Sign out</div>

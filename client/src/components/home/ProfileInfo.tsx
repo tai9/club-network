@@ -8,10 +8,15 @@ import { Avatar, Button, Flex, Tag } from "antd";
 import { useParams } from "next/navigation";
 import { HighlightText } from "../common/styled";
 import { ProfileInfoWrapper, ProfileName } from "./styled";
+import { useLevels } from "@/hooks/useLevels";
+import { useMemo } from "react";
+import { ILevel } from "@/types/Level";
 
 const ProfileInfo = () => {
   const { id } = useParams();
   const { data: memberData } = useMemberById(+id);
+  const { data: myExp } = useLevels(memberData?.exp);
+  const currentLevel = useMemo(() => myExp as ILevel, [myExp]);
   return (
     <ProfileInfoWrapper>
       <Flex gap={12} align="center">
@@ -34,7 +39,7 @@ const ProfileInfo = () => {
                 fontSize: 12,
               }}
             >
-              <HighlightText>LVL 0</HighlightText>
+              <HighlightText>{currentLevel.name}</HighlightText>
             </Tag>
           </Flex>
           <div>{memberData?.bio || "---"}</div>
