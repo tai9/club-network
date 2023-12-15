@@ -4,7 +4,7 @@ import { Flex, Progress } from "antd";
 import { CalendarOutlined, TwitterOutlined } from "@ant-design/icons";
 import Level from "@/components/common/Level";
 import moment from "moment";
-import useMember from "@/hooks/useMember";
+import { useMember } from "@/hooks/useMember";
 import { useMyLevel } from "@/hooks/useLevels";
 
 const MemberInfo = () => {

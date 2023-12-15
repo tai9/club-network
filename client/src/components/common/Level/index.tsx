@@ -2,6 +2,7 @@ import { Flex, Progress, Tooltip } from "antd";
 import React, { useMemo } from "react";
 import { HighlightText } from "../styled";
 import { useLevels } from "@/hooks/useLevels";
+import { ILevel } from "@/types/Level";
 
 const twoColors = { "0%": "#108ee9", "100%": "#87d068" };
 
@@ -10,12 +11,9 @@ type Props = {
 };
 
 const Level = ({ exp }: Props) => {
-  const { data } = useLevels();
+  const { data } = useLevels(exp);
+  const currentLevel = useMemo(() => data as ILevel, [data]);
 
-  const currentLevel = useMemo(
-    () => data?.data.find((x) => exp <= x.targetPoint),
-    [data?.data, exp]
-  );
   const percent = useMemo(
     () => (currentLevel ? (exp * 100) / currentLevel?.targetPoint : 0),
     [currentLevel, exp]

@@ -6,7 +6,7 @@ import {
 import { Avatar, Button, Flex, Tag } from "antd";
 import { ProfileInfoWrapper, ProfileName } from "./styled";
 import { HighlightText } from "../common/styled";
-import useMember from "@/hooks/useMember";
+import { useMember } from "@/hooks/useMember";
 
 const ProfileInfo = () => {
   const { data: memberData } = useMember();

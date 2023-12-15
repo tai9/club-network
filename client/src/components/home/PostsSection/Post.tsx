@@ -1,7 +1,7 @@
 import CustomAvatar from "@/components/common/CustomAvatar";
 import postController from "@/controllers/postController";
 import useClubNetwork from "@/hooks/useClubNetwork";
-import useMember from "@/hooks/useMember";
+import { useMember } from "@/hooks/useMember";
 import usePosts from "@/hooks/usePosts";
 import { IPost } from "@/types/Post";
 import {

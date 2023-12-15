@@ -9,9 +9,13 @@ export const useMyLevel = () => {
   });
 };
 
-export const useLevels = () => {
-  return useQuery("levels", async () => {
+export const useLevels = (exp?: number) => {
+  return useQuery(["levels", exp], async () => {
     const res = await levelController.getAll();
-    return res.data;
+    const level =
+      typeof exp !== "undefined"
+        ? res?.data.data.find((x) => exp <= x.targetPoint)
+        : undefined;
+    return typeof exp !== "undefined" ? level : res.data;
   });
 };
