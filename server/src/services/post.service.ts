@@ -1,9 +1,12 @@
+import { IGetPostsParams } from "@/types/Post";
 import { AppDataSource } from "../configs/db.config";
 import { Post } from "../entities";
 
 const postRepository = AppDataSource.getRepository(Post);
 
-const getPosts = async () => {
+const getPosts = async (params?: IGetPostsParams) => {
+  console.log(params);
+
   try {
     const [data, count] = await postRepository.findAndCount({
       relations: [
@@ -13,7 +16,13 @@ const getPosts = async () => {
         "comments.createdBy",
         "reactions",
       ],
+      where: {
+        createdBy: {
+          id: params?.memberId,
+        },
+      },
     });
+
     return { data, count };
   } catch (err) {
     throw err;

@@ -3,6 +3,7 @@ import { constants } from "http2";
 import { Post, Member } from "../entities";
 import postService from "../services/post.service";
 import memberService from "@/services/member.service";
+import { IGetPostsParams } from "@/types/Post";
 // import auditService from "../services/audit.service";
 
 const createPost = async (req: Request, res: Response) => {
@@ -13,7 +14,7 @@ const createPost = async (req: Request, res: Response) => {
     post.content = req.body.content;
     post.status = req.body.status;
     post.media = req.body.media;
-    post.createdBy = member.id;
+    post.createdBy = member;
 
     const postCreated = await postService.createPost(post);
     await memberService.updateExp(member.id, "POST");
@@ -38,9 +39,12 @@ const createPost = async (req: Request, res: Response) => {
   }
 };
 
-const getPosts = async (req: Request, res: Response) => {
+const getPosts = async (
+  req: Request<any, any, any, IGetPostsParams>,
+  res: Response
+) => {
   try {
-    const posts = await postService.getPosts();
+    const posts = await postService.getPosts(req.query);
     return res.status(constants.HTTP_STATUS_OK).json(posts);
   } catch (error) {
     console.log(error);

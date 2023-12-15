@@ -58,7 +58,9 @@ const getMembers = async () => {
         [member.id]
       );
       const postCount = await AppDataSource.manager.countBy(Post, {
-        createdBy: m.id,
+        createdBy: {
+          id: m.id,
+        },
       });
       m.reactionCount = reactionCount;
       m.postCount = postCount;
@@ -81,12 +83,22 @@ const getMemberByUsername = async (username: string) => {
   }
 };
 
-const getMemberExp = async (username: string) => {
+const getMemberById = async (id: number) => {
+  try {
+    return await memberRepository.findOneBy({
+      id,
+    });
+  } catch (err) {
+    throw err;
+  }
+};
+
+const getMemberExp = async (id: number) => {
   try {
     return await memberRepository
       .createQueryBuilder("member")
       .select("member.exp")
-      .where("member.username=:username", { username })
+      .where("member.id=:id", { id })
       .getOne();
   } catch (err) {
     throw err;
@@ -144,4 +156,5 @@ export default {
   getMemberExp,
   updateMember,
   updateExp,
+  getMemberById,
 };

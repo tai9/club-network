@@ -35,6 +35,28 @@ const getMembers = async (req: Request, res: Response) => {
   }
 };
 
+const getMember = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const member = await memberService.getMemberById(+id);
+    return res.status(constants.HTTP_STATUS_OK).json(member);
+  } catch (error) {
+    console.log(error);
+    res.status(constants.HTTP_STATUS_BAD_REQUEST).json(error);
+  }
+};
+
+const getMemberExp = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const info = await memberService.getMemberExp(+id);
+    return res.status(constants.HTTP_STATUS_OK).json(info);
+  } catch (error) {
+    console.log(error);
+    res.status(constants.HTTP_STATUS_BAD_REQUEST).json(error);
+  }
+};
+
 const deleteMember = async (req: Request, res: Response) => {
   try {
     const id = +req.params.id;
@@ -67,4 +89,6 @@ export default {
   createMember,
   getMembers,
   deleteMember,
+  getMember,
+  getMemberExp,
 };

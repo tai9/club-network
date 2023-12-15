@@ -4,12 +4,13 @@ import { Flex, Progress } from "antd";
 import { CalendarOutlined, TwitterOutlined } from "@ant-design/icons";
 import Level from "@/components/common/Level";
 import moment from "moment";
-import { useMember } from "@/hooks/useMember";
-import { useMyLevel } from "@/hooks/useLevels";
+import { useMemberExp, useMemberById } from "@/hooks/useMember";
+import { useParams } from "next/navigation";
 
 const MemberInfo = () => {
-  const { data: memberData } = useMember();
-  const { data: levelData } = useMyLevel();
+  const { id } = useParams();
+  const { data: memberData } = useMemberById(+id);
+  const { data: levelData } = useMemberExp();
 
   return (
     <Wrapper>
@@ -17,7 +18,7 @@ const MemberInfo = () => {
         <Flex gap={8}>
           <CalendarOutlined />
           <div>
-            Member since {moment(memberData?.data.createdAt).format("MMM YYYY")}
+            Member since {moment(memberData?.createdAt).format("MMM YYYY")}
           </div>
         </Flex>
         <Flex gap={8}>

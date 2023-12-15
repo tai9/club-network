@@ -1,15 +1,17 @@
+import { useMemberById } from "@/hooks/useMember";
 import {
   EditOutlined,
   ShareAltOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { Avatar, Button, Flex, Tag } from "antd";
-import { ProfileInfoWrapper, ProfileName } from "./styled";
+import { useParams } from "next/navigation";
 import { HighlightText } from "../common/styled";
-import { useMember } from "@/hooks/useMember";
+import { ProfileInfoWrapper, ProfileName } from "./styled";
 
 const ProfileInfo = () => {
-  const { data: memberData } = useMember();
+  const { id } = useParams();
+  const { data: memberData } = useMemberById(+id);
   return (
     <ProfileInfoWrapper>
       <Flex gap={12} align="center">
@@ -20,9 +22,9 @@ const ProfileInfo = () => {
           <Flex align="baseline" gap={8}>
             <Flex vertical>
               <ProfileName>
-                {memberData?.data.fullname || memberData?.data.username}
+                {memberData?.fullname || memberData?.username}
               </ProfileName>
-              <div>{memberData?.data.username}</div>
+              <div>{memberData?.username}</div>
             </Flex>
             <Tag
               style={{
@@ -35,7 +37,7 @@ const ProfileInfo = () => {
               <HighlightText>LVL 0</HighlightText>
             </Tag>
           </Flex>
-          <div>{memberData?.data.bio || "---"}</div>
+          <div>{memberData?.bio || "---"}</div>
         </Flex>
       </Flex>
       <Flex gap="small">

@@ -45,7 +45,7 @@ export class Post extends BaseEntity implements IPost {
 
   @ManyToOne(() => Member, (user) => user.id)
   @JoinColumn({ name: "createdBy" })
-  createdBy: number;
+  createdBy: Member;
 
   @OneToMany(() => Comment, (c) => c.postId)
   comments: Comment[];

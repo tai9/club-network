@@ -22,7 +22,8 @@ import reactionsController from "@/controllers/reactionController";
 import { useMemo, useState } from "react";
 import { formatLastTime } from "@/utils/formatTime";
 import commentController from "@/controllers/commentController";
-import { useMyLevel } from "@/hooks/useLevels";
+import { useMemberExp } from "@/hooks/useMember";
+import { useParams } from "next/navigation";
 
 type Props = {
   data: IPost;
@@ -32,7 +33,7 @@ const Post = ({ data }: Props) => {
   const { data: memberData } = useMember();
   const isOwner = memberData?.data.id === data.createdBy.id;
   const { refetch } = usePosts();
-  const { refetch: refetchMyLevel } = useMyLevel();
+  const { refetch: refetchMyLevel } = useMemberExp();
 
   const [commentValue, setCommentValue] = useState("");
   const [toggleComments, setToggleComments] = useState(false);

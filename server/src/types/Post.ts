@@ -6,3 +6,7 @@ export interface IPost extends IBaseEntity {
   media?: string;
   status?: string;
 }
+
+export interface IGetPostsParams {
+  memberId: number;
+}
