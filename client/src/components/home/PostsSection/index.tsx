@@ -1,25 +1,19 @@
+import { useMember } from "@/hooks/useMember";
 import usePosts from "@/hooks/usePosts";
 import { Button, Empty, Flex } from "antd";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import Post from "./Post";
 import PostStatus from "./PostStatus";
 import { PostsSectionWrapper } from "./styled";
-import { useEffect, useState } from "react";
-import { IGetPostsParams } from "@/types/Post";
-import { useMember } from "@/hooks/useMember";
-import { useParams } from "next/navigation";
-import { useRouter } from "next/router";
 
 const PostsSection = () => {
   const router = useRouter();
-  const params = useParams();
   const id = router.query?.id as string;
   const { data: memberData } = useMember();
   const isMember = memberData?.id === +id;
 
-  const [postParams, setPostParams] = useState<IGetPostsParams>({
-    myself: false,
-  });
-  const { data: postData } = usePosts(postParams);
+  const { data: postData, refetch: postsRefetch } = usePosts();
   const [feedType, setFeedType] = useState<"new" | "own" | "discover">("own");
 
   useEffect(() => {
@@ -29,17 +23,43 @@ const PostsSection = () => {
   }, [isMember]);
 
   useEffect(() => {
-    console.log(router.query);
-
     if (router.query?.type === "me") {
       setFeedType("own");
     } else {
       setFeedType("new");
     }
   }, [router.query]);
+
   useEffect(() => {
-    console.log(params);
-  }, [params]);
+    let idleTimer: any;
+
+    const handleIdle = () => {
+      // Set a timer to refetch data after 5 seconds of idle time
+      idleTimer = setTimeout(() => {
+        postsRefetch();
+      }, 5000);
+    };
+
+    const resetIdleTimer = () => {
+      // Reset the idle timer when there is any user activity
+      clearTimeout(idleTimer);
+      handleIdle();
+    };
+
+    // Set up event listeners for user activity
+    document.addEventListener("mousemove", resetIdleTimer);
+    document.addEventListener("keydown", resetIdleTimer);
+
+    // Initial setup
+    handleIdle();
+
+    // Clean up event listeners on component unmount
+    return () => {
+      document.removeEventListener("mousemove", resetIdleTimer);
+      document.removeEventListener("keydown", resetIdleTimer);
+      clearTimeout(idleTimer);
+    };
+  }, [postsRefetch]);
 
   const handleFilterMyPosts = () => {
     router.query.type = "me";
@@ -53,7 +73,6 @@ const PostsSection = () => {
 
   const handleFilterDiscover = () => {
     setFeedType("discover");
-    setPostParams({ myself: false });
   };
 
   const getBtnType = (type: "new" | "own" | "discover") => {
