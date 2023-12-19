@@ -23,10 +23,13 @@ export const login = async (req: Request, res: Response) => {
       id: member.id,
       username: member.username,
     });
+    member.loginCount = member.loginCount + 1;
+    await memberService.updateMember(member);
     return res.status(constants.HTTP_STATUS_OK).json({
       username,
       accessToken,
       id: member.id,
+      loginCount: member.loginCount,
     });
   } catch (error) {
     console.log(error);

@@ -64,6 +64,12 @@ export class Member extends BaseEntity implements IMember {
   })
   exp: number;
 
+  @Column({
+    type: "int",
+    default: 0,
+  })
+  loginCount: number;
+
   @OneToMany(() => Role, (role) => role.createdBy)
   @JoinColumn()
   roles: Role[];

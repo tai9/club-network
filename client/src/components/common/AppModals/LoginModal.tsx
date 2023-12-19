@@ -1,19 +1,8 @@
-import postController from "@/controllers/postController";
-import useClubNetwork from "@/hooks/useClubNetwork";
-import usePosts from "@/hooks/usePosts";
-import React, { useState } from "react";
-import {
-  Button,
-  Checkbox,
-  Modal,
-  Input,
-  Form,
-  Typography,
-  message,
-} from "antd";
 import axiosClient from "@/configs/axiosClient";
-import { setCookie } from "cookies-next";
+import useClubNetwork from "@/hooks/useClubNetwork";
 import { useMember } from "@/hooks/useMember";
+import { Button, Form, Input, Modal, Typography, message } from "antd";
+import { setCookie } from "cookies-next";
 
 type FieldType = {
   username?: string;
@@ -30,6 +19,11 @@ const LoginModal = () => {
         username: values.username,
         password: values.password,
       });
+
+      if (res.data.loginCount === 1) {
+        message.success("Welcome to our club 🚀");
+      }
+
       setCookie("memberId", res.data.id);
       localStorage.setItem("username", res.data.username);
       localStorage.setItem("accessToken", res.data.accessToken);

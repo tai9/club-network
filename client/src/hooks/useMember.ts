@@ -4,6 +4,7 @@ import { MEMBER_DATA } from "@/queryKeys";
 import { IMember } from "@/types/Member";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
+import { message } from "antd";
 
 export const useMember = () => {
   return useQuery({

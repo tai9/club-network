@@ -11,6 +11,7 @@ export interface IMember extends IBaseEntity {
   twitterLink?: string;
   insLink?: string;
   exp: number;
+  loginCount: number;
   reactionCount?: {
     type: ReactionType;
     count: string;
