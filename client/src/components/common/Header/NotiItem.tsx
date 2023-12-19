@@ -1,22 +1,36 @@
-import { Flex } from "antd";
+import { Badge, Flex } from "antd";
 import React from "react";
 import CustomAvatar from "../CustomAvatar";
+import { INotification } from "@/types/Notification";
+import { formatLastTime } from "@/utils/formatTime";
 
-const NotiItem = () => {
+type Props = {
+  notification: INotification;
+  onClick?: () => void;
+};
+
+const NotiItem = ({ notification, onClick }: Props) => {
   return (
-    <Flex className="noti-item" align="center" gap={8}>
+    <Flex className="noti-item" align="center" gap={8} onClick={onClick}>
       <CustomAvatar />
-      <Flex vertical>
-        <div>
-          <b>Tailor </b> like your <b>post</b>
-        </div>
+      <Flex
+        vertical
+        style={{
+          flexGrow: 1,
+        }}
+      >
+        <div
+          dangerouslySetInnerHTML={{
+            __html: notification.title,
+          }}
+        />
         <i
           style={{
             fontSize: 13,
             color: "#ccc6bd",
           }}
         >
-          Hi there
+          {notification.description}
         </i>
         <div
           style={{
@@ -24,9 +38,19 @@ const NotiItem = () => {
             color: "#ccc6bd",
           }}
         >
-          4 days ago
+          {formatLastTime(notification.createdAt)}
         </div>
       </Flex>
+
+      {!notification.isRead && (
+        <Badge
+          style={{
+            paddingLeft: 48,
+          }}
+          color="#ffffffd9"
+          status="default"
+        />
+      )}
     </Flex>
   );
 };

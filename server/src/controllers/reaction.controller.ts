@@ -28,7 +28,7 @@ const createReaction = async (req: Request, res: Response) => {
     //   createdBy: user?.id,
     // });
     await notificationService.createNotification({
-      title: `${member.username} liked your post`,
+      title: `<b>${member.username}</b> like your <b>post</b>`,
       description: post.content,
       createdBy: post.createdBy,
       type: "POST",

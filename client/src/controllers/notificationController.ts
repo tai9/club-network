@@ -9,7 +9,7 @@ const notificationController = {
     return axiosClient.get<DataWithPagination<INotification>>(`/${prefix}`);
   },
   count(isRead?: boolean) {
-    return axiosClient.get<{ count: number }>(`/${prefix}`, {
+    return axiosClient.get<{ count: number }>(`/${prefix}/count`, {
       params: { isRead },
     });
   },

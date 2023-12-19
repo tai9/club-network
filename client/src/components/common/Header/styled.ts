@@ -118,7 +118,8 @@ export const NotificationWrapper = styled.div`
   }
 
   .noti-item {
-    padding: 8px 96px 8px 24px;
+    padding: 8px 32px 8px 24px;
+    min-width: 310px;
 
     &:hover {
       background-color: rgba(255, 255, 255, 0.05);

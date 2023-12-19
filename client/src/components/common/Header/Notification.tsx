@@ -1,16 +1,27 @@
-import useClubNetwork from "@/hooks/useClubNetwork";
-import { BellOutlined } from "@ant-design/icons";
-import { Avatar, Badge, Empty, Flex, Popconfirm } from "antd";
-import NotiItem from "./NotiItem";
-import { NotificationWrapper } from "./styled";
+import notificationController from "@/controllers/notificationController";
 import {
   useNotificationCount,
   useNotifications,
 } from "@/hooks/useNotifications";
+import { BellOutlined } from "@ant-design/icons";
+import { Avatar, Badge, Empty, Flex, Popconfirm } from "antd";
+import NotiItem from "./NotiItem";
+import { NotificationWrapper } from "./styled";
 
 const Notification = () => {
-  const { data: countData, refetch: countRefetch } = useNotificationCount();
-  const { data } = useNotifications();
+  const { data: countData, refetch: countRefetch } =
+    useNotificationCount(false);
+  const { data, refetch } = useNotifications();
+
+  const handleReadNotification = async (id: number) => {
+    try {
+      await notificationController.read(id);
+      await refetch();
+      await countRefetch();
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <Popconfirm
       title={null}
@@ -26,7 +37,11 @@ const Notification = () => {
           ) : (
             <Flex className="noti-list" vertical>
               {data?.data.map((noti) => (
-                <NotiItem key={noti.id} />
+                <NotiItem
+                  key={noti.id}
+                  notification={noti}
+                  onClick={() => handleReadNotification(noti.id)}
+                />
               ))}
             </Flex>
           )}

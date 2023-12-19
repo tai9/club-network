@@ -21,9 +21,7 @@ const getNotifications = async (memberId: number) => {
 const getNotificationCount = async (memberId: number, isRead?: boolean) => {
   try {
     const count = await notificationRepository.countBy({
-      createdBy: {
-        id: memberId,
-      },
+      createdBy: memberId as any,
       isRead,
     });
     return count;
