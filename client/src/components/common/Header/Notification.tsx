@@ -22,6 +22,17 @@ const Notification = () => {
       console.log(err);
     }
   };
+
+  const handleReadAllNoti = async () => {
+    try {
+      await notificationController.readAll();
+      await refetch();
+      await countRefetch();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <Popconfirm
       title={null}
@@ -30,7 +41,9 @@ const Notification = () => {
         <NotificationWrapper>
           <Flex justify="space-between" align="center">
             <div className="heading">Notifications</div>
-            <div className="read">Mark as all read</div>
+            <div className="read" onClick={handleReadAllNoti}>
+              Mark as all read
+            </div>
           </Flex>
           {data?.count === 0 ? (
             <Empty />
@@ -40,7 +53,9 @@ const Notification = () => {
                 <NotiItem
                   key={noti.id}
                   notification={noti}
-                  onClick={() => handleReadNotification(noti.id)}
+                  onClick={() =>
+                    !noti.isRead && handleReadNotification(noti.id)
+                  }
                 />
               ))}
             </Flex>
