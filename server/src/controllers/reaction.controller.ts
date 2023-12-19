@@ -6,6 +6,7 @@ import reactionService from "../services/reaction.service";
 import { io } from "..";
 import postService from "@/services/post.service";
 import notificationService from "@/services/notification.service";
+import { ESocketEventName } from "@/types/common";
 // import auditService from "../services/audit.service";
 
 const createReaction = async (req: Request, res: Response) => {
@@ -34,7 +35,7 @@ const createReaction = async (req: Request, res: Response) => {
       type: "POST",
     });
     io.to(`user-${post.createdBy.username}`).emit(
-      "N_POST_CREATED",
+      ESocketEventName.NOTIFICATION,
       `user-${post.createdBy.username}`
     );
     return res.status(constants.HTTP_STATUS_OK).json(reactionCreated);

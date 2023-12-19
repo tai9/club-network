@@ -32,3 +32,7 @@ export enum EReactionPoint {
   COMMENT = 3,
   POST = 5,
 }
+
+export enum ESocketEventName {
+  "NOTIFICATION" = "NOTIFICATION",
+}

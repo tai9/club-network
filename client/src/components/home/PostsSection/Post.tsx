@@ -17,7 +17,7 @@ import {
 import { Button, Divider, Dropdown, Flex, Input, Modal, message } from "antd";
 import moment from "moment";
 import { Content, MoreLink, PostWrapper } from "./styled";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import reactionsController from "@/controllers/reactionController";
 import { useMemo, useState } from "react";
 import { formatLastTime } from "@/utils/formatTime";
@@ -38,9 +38,10 @@ const Post = ({ data }: Props) => {
   const [commentValue, setCommentValue] = useState("");
   const [toggleComments, setToggleComments] = useState(false);
 
-  const reactionQuery = useQuery(["post_detail", data.id], () =>
-    reactionsController.getOfPost(data.id)
-  );
+  const reactionQuery = useQuery({
+    queryKey: ["post_detail", data.id],
+    queryFn: () => reactionsController.getOfPost(data.id),
+  });
   const likeCount = useMemo(
     () => reactionQuery.data?.data.find((x) => x.type === "LIKE")?.count,
     [reactionQuery.data]

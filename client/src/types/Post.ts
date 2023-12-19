@@ -14,5 +14,5 @@ export interface IPost extends IBaseEntity {
 }
 
 export interface IGetPostsParams {
-  memberId?: number;
+  myself?: boolean;
 }

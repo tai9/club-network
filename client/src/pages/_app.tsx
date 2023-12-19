@@ -9,8 +9,9 @@ import { AppPropsWithLayout } from "@/types/common";
 import { ConfigProvider } from "antd";
 import { SessionProvider } from "next-auth/react";
 import Head from "next/head";
-import { QueryClientProvider } from "react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "styled-components";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const Layout = Component.Layout ?? MainLayout;
@@ -36,6 +37,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
             </AuthContextProvider>
           </ThemeProvider>
         </ConfigProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </>
   );

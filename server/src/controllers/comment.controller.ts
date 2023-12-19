@@ -4,6 +4,10 @@ import { Comment, Member } from "../entities";
 import commentService from "../services/comment.service";
 import activityService from "../services/activity.service";
 import memberService from "@/services/member.service";
+import notificationService from "@/services/notification.service";
+import { io } from "..";
+import postService from "@/services/post.service";
+import { ESocketEventName } from "@/types/common";
 
 const createComment = async (req: Request, res: Response) => {
   const member = (req as any)?.member as Member;
@@ -23,6 +27,20 @@ const createComment = async (req: Request, res: Response) => {
       data: JSON.stringify(commentCreated),
       createdBy: member?.id,
     });
+
+    // noti
+    const post = await postService.getPostById(commentCreated.postId);
+    await notificationService.createNotification({
+      title: `<b>${member.username}</b> comment on your <b>post</b>`,
+      description: commentCreated.content,
+      createdBy: post.createdBy,
+      type: "POST",
+    });
+    io.to(`user-${post.createdBy.username}`).emit(
+      ESocketEventName.NOTIFICATION,
+      `user-${post.createdBy.username}`
+    );
+
     return res.status(constants.HTTP_STATUS_OK).json(commentCreated);
   } catch (error) {
     console.log(error);

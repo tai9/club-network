@@ -1,11 +1,11 @@
 import axiosClient from "@/configs/axiosClient";
-import { IGetPostsParams, IPost } from "@/types/Post";
+import { IPost } from "@/types/Post";
 import { DataWithPagination } from "@/types/common";
 
 const prefix = "posts";
 
 const postController = {
-  getAll(params?: IGetPostsParams) {
+  getAll(params?: any) {
     return axiosClient.get<DataWithPagination<IPost>>(`/${prefix}`, { params });
   },
   create(data: any) {

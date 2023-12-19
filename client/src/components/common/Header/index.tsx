@@ -40,6 +40,7 @@ export default function Header() {
   const handleSignOut = async () => {
     localStorage.removeItem("username");
     localStorage.removeItem("accessToken");
+    localStorage.memberId("accessToken");
     deleteCookie("memberId");
     window.location.reload();
   };

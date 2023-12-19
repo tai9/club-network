@@ -7,15 +7,17 @@ import { useEffect, useState } from "react";
 import { IGetPostsParams } from "@/types/Post";
 import { useMember } from "@/hooks/useMember";
 import { useParams } from "next/navigation";
+import { useRouter } from "next/router";
 
 const PostsSection = () => {
+  const router = useRouter();
   const params = useParams();
-  const id = params?.id as string;
+  const id = router.query?.id as string;
   const { data: memberData } = useMember();
   const isMember = memberData?.id === +id;
 
   const [postParams, setPostParams] = useState<IGetPostsParams>({
-    memberId: +id,
+    myself: false,
   });
   const { data: postData } = usePosts(postParams);
   const [feedType, setFeedType] = useState<"new" | "own" | "discover">("own");
@@ -26,21 +28,32 @@ const PostsSection = () => {
     }
   }, [isMember]);
 
+  useEffect(() => {
+    console.log(router.query);
+
+    if (router.query?.type === "me") {
+      setFeedType("own");
+    } else {
+      setFeedType("new");
+    }
+  }, [router.query]);
+  useEffect(() => {
+    console.log(params);
+  }, [params]);
+
   const handleFilterMyPosts = () => {
-    setFeedType("own");
-    setPostParams({
-      memberId: memberData?.id,
-    });
+    router.query.type = "me";
+    router.push(router);
   };
 
   const handleFilterNewFeed = () => {
-    setFeedType("new");
-    setPostParams({ memberId: undefined });
+    delete router.query.type;
+    router.push(router);
   };
 
   const handleFilterDiscover = () => {
     setFeedType("discover");
-    setPostParams({ memberId: undefined });
+    setPostParams({ myself: false });
   };
 
   const getBtnType = (type: "new" | "own" | "discover") => {

@@ -33,6 +33,7 @@ const LoginModal = () => {
       setCookie("memberId", res.data.id);
       localStorage.setItem("username", res.data.username);
       localStorage.setItem("accessToken", res.data.accessToken);
+      localStorage.setItem("memberId", res.data.id);
       // window.location.reload();
       await refetch();
       onCancel();

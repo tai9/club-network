@@ -2,6 +2,7 @@ import { IPost } from "@/types/Post";
 import { useState, createContext, useEffect, useContext } from "react";
 import { io } from "socket.io-client";
 import { useNotificationCount, useNotifications } from "./useNotifications";
+import { ESocketEventName } from "@/types/common";
 
 const usePostContext = () => {
   const { refetch } = useNotifications();
@@ -34,8 +35,7 @@ const usePostContext = () => {
     s.on("users", (value) => {
       console.log("users online now: 😑", value);
     });
-    s.on("N_POST_CREATED", async (value) => {
-      console.log("N_POST_CREATED: ⏮️", value);
+    s.on(ESocketEventName.NOTIFICATION, async (value) => {
       await countRefetch();
       await refetch();
     });
