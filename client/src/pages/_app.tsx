@@ -29,8 +29,8 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
                 <ClubNetworkProvider>
                   <Layout>
                     <Component {...pageProps} />
+                    <AppModals />
                   </Layout>
-                  <AppModals />
                 </ClubNetworkProvider>
               </SessionProvider>
             </AuthContextProvider>

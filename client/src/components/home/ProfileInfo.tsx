@@ -13,7 +13,8 @@ import { useMemo } from "react";
 import { ILevel } from "@/types/Level";
 
 const ProfileInfo = () => {
-  const { id } = useParams();
+  const params = useParams();
+  const id = (params?.id as string) || "";
   const { data: memberData } = useMemberById(+id);
   const { data: myExp } = useLevels(memberData?.exp);
   const currentLevel = useMemo(() => myExp as ILevel, [myExp]);

@@ -1,12 +1,12 @@
 import postController from "@/controllers/postController";
-import useAppContext from "@/hooks/useClubNetwork";
+import useClubNetwork from "@/hooks/useClubNetwork";
 import usePosts from "@/hooks/usePosts";
 import { Input, Modal, message } from "antd";
 import React, { useState } from "react";
 
 const PostModal = () => {
   const { openPostModal, setOpenPostModal, postContent, setPostContent, post } =
-    useAppContext();
+    useClubNetwork();
   const { refetch } = usePosts();
 
   const onCancel = () => {

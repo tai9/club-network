@@ -5,8 +5,6 @@ import { Post } from "../entities";
 const postRepository = AppDataSource.getRepository(Post);
 
 const getPosts = async (params?: IGetPostsParams) => {
-  console.log(params);
-
   try {
     const [data, count] = await postRepository.findAndCount({
       relations: [
@@ -50,7 +48,12 @@ const updatePost = async (post: Post) => {
 
 const getPostById = async (id: number) => {
   try {
-    return await postRepository.findOneBy({ id });
+    return await postRepository.findOne({
+      where: {
+        id,
+      },
+      relations: ["createdBy"],
+    });
   } catch (err) {
     throw err;
   }

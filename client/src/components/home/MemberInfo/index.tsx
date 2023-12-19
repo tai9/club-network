@@ -8,7 +8,8 @@ import { useMemberExp, useMemberById } from "@/hooks/useMember";
 import { useParams } from "next/navigation";
 
 const MemberInfo = () => {
-  const { id } = useParams();
+  const params = useParams();
+  const id = params?.id as string;
   const { data: memberData } = useMemberById(+id);
   const { data: levelData } = useMemberExp();
 

@@ -3,6 +3,8 @@ import { Request, Response } from "express";
 import { constants } from "http2";
 import { Member, Reaction } from "../entities";
 import reactionService from "../services/reaction.service";
+import { io } from "..";
+import postService from "@/services/post.service";
 // import auditService from "../services/audit.service";
 
 const createReaction = async (req: Request, res: Response) => {
@@ -16,6 +18,7 @@ const createReaction = async (req: Request, res: Response) => {
     await memberService.updateExp(member.id, req.body.type);
 
     const reactionCreated = await reactionService.createReaction(reaction);
+    const post = await postService.getPostById(reactionCreated.postId);
     // await auditService.createAuditLog({
     //   type: "ROLE",
     //   status: "SUCCESS",
@@ -23,6 +26,10 @@ const createReaction = async (req: Request, res: Response) => {
     //   data: JSON.stringify(reactionCreated),
     //   createdBy: user?.id,
     // });
+    io.to(`user-${post.createdBy.username}`).emit(
+      "N_POST_CREATED",
+      `user-${post.createdBy.username}`
+    );
     return res.status(constants.HTTP_STATUS_OK).json(reactionCreated);
   } catch (error) {
     console.log(error);

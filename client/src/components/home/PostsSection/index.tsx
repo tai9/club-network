@@ -9,9 +9,10 @@ import { useMember } from "@/hooks/useMember";
 import { useParams } from "next/navigation";
 
 const PostsSection = () => {
-  const { id } = useParams();
+  const params = useParams();
+  const id = params?.id as string;
   const { data: memberData } = useMember();
-  const isMember = memberData?.id === +(id as string);
+  const isMember = memberData?.id === +id;
 
   const [postParams, setPostParams] = useState<IGetPostsParams>({
     memberId: +id,

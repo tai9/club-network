@@ -1,6 +1,10 @@
-import axiosClient from "@/configs/axiosClient";
+import useClubNetwork from "@/hooks/useClubNetwork";
+import { useLevels } from "@/hooks/useLevels";
+import { useMember } from "@/hooks/useMember";
+import { ILevel } from "@/types/Level";
 import { RedditOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Input } from "antd";
+import { deleteCookie } from "cookies-next";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import ClickOutSide from "../ClickOutSide";
@@ -17,12 +21,10 @@ import {
   HeaderRoutes,
   Wrapper,
 } from "./styled";
-import { deleteCookie, setCookie } from "cookies-next";
-import { useMember } from "@/hooks/useMember";
-import { useLevels } from "@/hooks/useLevels";
-import { ILevel } from "@/types/Level";
 
 export default function Header() {
+  const { openLoginModal, notificationCount, setOpenLoginModal } =
+    useClubNetwork();
   const [openAcount, setOpenAcount] = useState(false);
   const handleClose = () => {
     setOpenAcount(false);
@@ -33,19 +35,10 @@ export default function Header() {
   const currentLevel = useMemo(() => myExp as ILevel, [myExp]);
 
   const handleSignIn = async () => {
-    const res = await axiosClient.post("/login", {
-      username: "tailor2",
-      password: "12345",
-    });
-    console.log(res);
-
-    setCookie("memberId", res.data.id);
-    localStorage.setItem("username", res.data.username);
-    localStorage.setItem("accessToken", res.data.accessToken);
-    // window.location.reload();
+    setOpenLoginModal(true);
   };
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
     localStorage.removeItem("username");
     localStorage.removeItem("accessToken");
     deleteCookie("memberId");

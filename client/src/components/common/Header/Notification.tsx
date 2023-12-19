@@ -1,11 +1,11 @@
-import React from "react";
-import { NotificationWrapper } from "./styled";
-import { Avatar, Badge, Flex, Popconfirm } from "antd";
+import useClubNetwork from "@/hooks/useClubNetwork";
 import { BellOutlined } from "@ant-design/icons";
-import CustomAvatar from "../CustomAvatar";
+import { Avatar, Badge, Flex, Popconfirm } from "antd";
 import NotiItem from "./NotiItem";
+import { NotificationWrapper } from "./styled";
 
 const Notification = () => {
+  const { notificationCount } = useClubNetwork();
   return (
     <Popconfirm
       title={null}
@@ -33,7 +33,7 @@ const Notification = () => {
       }}
       showCancel={false}
     >
-      <Badge color="#f7c842" count={1000} overflowCount={99}>
+      <Badge color="#f7c842" count={notificationCount} overflowCount={99}>
         <div className="pointer">
           <Avatar size={48} icon={<BellOutlined />} />
         </div>

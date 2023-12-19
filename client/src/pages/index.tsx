@@ -8,18 +8,57 @@ import {
   getAuth,
 } from "firebase/auth";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const auth = getAuth(firebase_app);
 
 const HomePage = () => {
-  const email = "159iker@gmail.com";
-  const password = "123456";
-  const { data } = useSession();
-  console.log(data, "🔫");
+  // const email = "159iker@gmail.com";
+  // const password = "123456";
+  // const { data } = useSession();
+  // const [isConnected, setIsConnected] = useState(socket.connected);
+  // const [fooEvents, setFooEvents] = useState<any>([]);
+
+  // useEffect(() => {
+  //   function onConnect() {
+  //     console.log("connect");
+
+  //     setIsConnected(true);
+  //   }
+
+  //   function onDisconnect() {
+  //     setIsConnected(false);
+  //   }
+
+  //   function onFooEvent(value: any) {
+  //     console.log(value, "🔫");
+
+  //     setFooEvents((previous: any) => [...previous, value]);
+  //   }
+
+  //   socket.on("connect", onConnect);
+  //   socket.on("disconnect", onDisconnect);
+  //   socket.on("NOTI", onFooEvent);
+
+  //   return () => {
+  //     socket.off("connect", onConnect);
+  //     socket.off("disconnect", onDisconnect);
+  //     socket.off("NOTI", onFooEvent);
+  //   };
+  // }, []);
 
   return (
     <div>
-      <button onClick={() => signIn()}>Sign in</button>
+      <button
+        onClick={async () => {
+          const s = await axios.get("/club-network-api/test-ws");
+          console.log(s, "😀");
+        }}
+      >
+        Connect
+      </button>
+      {/* <button onClick={() => signIn()}>Sign in</button>
       <button onClick={() => signOut()}>Sign out</button>
       <button
         onClick={async () => {
@@ -54,7 +93,7 @@ const HomePage = () => {
         login
       </button>
       <ProfileInfo />
-      <NewFeed />
+      <NewFeed /> */}
     </div>
   );
 };

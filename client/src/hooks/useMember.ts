@@ -27,7 +27,8 @@ export const useMembers = () => {
 };
 
 export const useMemberExp = (memberId?: number) => {
-  const { id } = useParams();
+  const params = useParams();
+  const id = params?.id as string;
   const memberExpId = memberId || id;
   return useQuery(["member-exp", memberExpId], async () => {
     const res = await memberController.getExp(+memberExpId);

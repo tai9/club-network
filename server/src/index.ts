@@ -16,6 +16,8 @@ import activityRouters from "./routers/activity.router";
 import badgeRouters from "./routers/badge.router";
 import levelRouters from "./routers/level.router";
 import meRouters from "./routers/me.router";
+import { createServer } from "node:http";
+import { initSocketServer } from "./configs/socket.config";
 
 config();
 
@@ -33,6 +35,8 @@ const redisStore = new RedisStore({
 
 const app = express();
 const PORT = process.env.PORT || 8000;
+const server = createServer(app);
+export const io = initSocketServer(server);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -62,3 +66,36 @@ getDbConnection();
 app.listen(PORT, () => {
   console.log(`Server listening on port http://localhost:${PORT}`);
 });
+io.listen(3009);
+io.on("connection", (socket) => {
+  const username = socket.handshake.auth.username;
+  const users = getUsersOnline();
+  socket.emit("users", users);
+  console.log("a user connected", username);
+
+  // Join the user to a specific room based on their ID
+  socket.join(`user-${username}`);
+});
+
+io.use((socket, next) => {
+  const username = socket.handshake.auth.username;
+  if (!username) {
+    return next(new Error("invalid username"));
+  }
+  // socket.username = username;
+  next();
+});
+
+const getUsersOnline = () => {
+  const users = [];
+  for (let [id, socket] of io.of("/").sockets) {
+    // if (userws !== "tailor2" && socket.handshake.auth.userws === "tailor2") {
+    //   io.to(id).emit("NOTI_RECEIVE", `Hello from, ${userws}`);
+    // }
+    users.push({
+      userID: id,
+      username: socket.handshake.auth.username,
+    });
+  }
+  return users;
+};
