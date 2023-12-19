@@ -6,7 +6,7 @@ import { ESocketEventName } from "@/types/common";
 
 const usePostContext = () => {
   const { refetch } = useNotifications();
-  const { refetch: countRefetch } = useNotificationCount();
+  const { refetch: countRefetch } = useNotificationCount(false);
 
   const [openPostModal, setOpenPostModal] = useState(false);
   const [postContent, setPostContent] = useState("");
@@ -36,6 +36,7 @@ const usePostContext = () => {
       console.log("users online now: 😑", value);
     });
     s.on(ESocketEventName.NOTIFICATION, async (value) => {
+      console.log("WS: ", ESocketEventName.NOTIFICATION);
       await countRefetch();
       await refetch();
     });

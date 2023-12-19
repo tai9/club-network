@@ -13,7 +13,7 @@ export const useNotifications = () => {
 
 export const useNotificationCount = (isRead?: boolean) => {
   return useQuery({
-    queryKey: ["notification_count", isRead],
+    queryKey: ["notification_count", { isRead }],
     queryFn: async () => {
       const res = await notificationController.count(isRead);
       return res.data;
