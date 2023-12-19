@@ -30,16 +30,18 @@ const createComment = async (req: Request, res: Response) => {
 
     // noti
     const post = await postService.getPostById(commentCreated.postId);
-    await notificationService.createNotification({
-      title: `<b>${member.username}</b> comment on your <b>post</b>`,
-      description: commentCreated.content,
-      createdBy: post.createdBy,
-      type: "POST",
-    });
-    io.to(`user-${post.createdBy.username}`).emit(
-      ESocketEventName.NOTIFICATION,
-      `user-${post.createdBy.username}`
-    );
+    if (post.createdBy.id !== commentCreated.createdBy.id) {
+      await notificationService.createNotification({
+        title: `<b>${member.username}</b> comment on your <b>post</b>`,
+        description: commentCreated.content,
+        createdBy: post.createdBy,
+        type: "POST",
+      });
+      io.to(`user-${post.createdBy.username}`).emit(
+        ESocketEventName.NOTIFICATION,
+        `user-${post.createdBy.username}`
+      );
+    }
 
     return res.status(constants.HTTP_STATUS_OK).json(commentCreated);
   } catch (error) {

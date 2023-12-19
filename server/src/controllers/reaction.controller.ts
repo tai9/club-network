@@ -20,7 +20,6 @@ const createReaction = async (req: Request, res: Response) => {
     await memberService.updateExp(member.id, req.body.type);
 
     const reactionCreated = await reactionService.createReaction(reaction);
-    const post = await postService.getPostById(reactionCreated.postId);
     // await auditService.createAuditLog({
     //   type: "ROLE",
     //   status: "SUCCESS",
@@ -28,16 +27,19 @@ const createReaction = async (req: Request, res: Response) => {
     //   data: JSON.stringify(reactionCreated),
     //   createdBy: user?.id,
     // });
-    await notificationService.createNotification({
-      title: `<b>${member.username}</b> like your <b>post</b>`,
-      description: post.content,
-      createdBy: post.createdBy,
-      type: "POST",
-    });
-    io.to(`user-${post.createdBy.username}`).emit(
-      ESocketEventName.NOTIFICATION,
-      `user-${post.createdBy.username}`
-    );
+    const post = await postService.getPostById(reactionCreated.postId);
+    if (post.createdBy.id !== reactionCreated.memberId) {
+      await notificationService.createNotification({
+        title: `<b>${member.username}</b> like your <b>post</b>`,
+        description: post.content,
+        createdBy: post.createdBy,
+        type: "POST",
+      });
+      io.to(`user-${post.createdBy.username}`).emit(
+        ESocketEventName.NOTIFICATION,
+        `user-${post.createdBy.username}`
+      );
+    }
     return res.status(constants.HTTP_STATUS_OK).json(reactionCreated);
   } catch (error) {
     console.log(error);
