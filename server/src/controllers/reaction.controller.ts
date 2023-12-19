@@ -5,6 +5,7 @@ import { Member, Reaction } from "../entities";
 import reactionService from "../services/reaction.service";
 import { io } from "..";
 import postService from "@/services/post.service";
+import notificationService from "@/services/notification.service";
 // import auditService from "../services/audit.service";
 
 const createReaction = async (req: Request, res: Response) => {
@@ -26,6 +27,12 @@ const createReaction = async (req: Request, res: Response) => {
     //   data: JSON.stringify(reactionCreated),
     //   createdBy: user?.id,
     // });
+    await notificationService.createNotification({
+      title: `${member.username} liked your post`,
+      description: post.content,
+      createdBy: post.createdBy,
+      type: "POST",
+    });
     io.to(`user-${post.createdBy.username}`).emit(
       "N_POST_CREATED",
       `user-${post.createdBy.username}`

@@ -9,6 +9,7 @@ import {
   Role,
   Post,
   Reaction,
+  Notification,
 } from "../entities";
 import "dotenv/config";
 import { DataSourceOptions } from "typeorm";
@@ -21,7 +22,7 @@ const dataSourceOptions: DataSourceOptions = {
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DATABASE,
   synchronize: false,
-  logging: false,
+  logging: true,
   ssl: process.env.NODE_ENV === "production",
   entities: [
     Member,
@@ -34,6 +35,7 @@ const dataSourceOptions: DataSourceOptions = {
     Level,
     Post,
     Reaction,
+    Notification,
   ],
   extra: {
     connectionLimit: 20,

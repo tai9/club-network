@@ -10,3 +10,4 @@ export * from "./Activity.entity";
 export * from "./Post.entity";
 export * from "./Comment.entity";
 export * from "./Reaction.entity";
+export * from "./Notification.entity";

@@ -23,8 +23,7 @@ import {
 } from "./styled";
 
 export default function Header() {
-  const { openLoginModal, notificationCount, setOpenLoginModal } =
-    useClubNetwork();
+  const { openLoginModal, setOpenLoginModal } = useClubNetwork();
   const [openAcount, setOpenAcount] = useState(false);
   const handleClose = () => {
     setOpenAcount(false);

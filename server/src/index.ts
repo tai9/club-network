@@ -18,6 +18,7 @@ import levelRouters from "./routers/level.router";
 import meRouters from "./routers/me.router";
 import { createServer } from "node:http";
 import { initSocketServer } from "./configs/socket.config";
+import notificationRouters from "./routers/notification.router";
 
 config();
 
@@ -59,6 +60,7 @@ app.use("/comments", authenticateToken, commentRouters);
 app.use("/reactions", authenticateToken, reactionRouters);
 app.use("/activities", authenticateToken, activityRouters);
 app.use("/badges", authenticateToken, badgeRouters);
+app.use("/notifications", authenticateToken, notificationRouters);
 
 // connect DB
 getDbConnection();

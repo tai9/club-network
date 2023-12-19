@@ -1,14 +1,17 @@
 import { IPost } from "@/types/Post";
 import { useState, createContext, useEffect, useContext } from "react";
 import { io } from "socket.io-client";
+import { useNotificationCount, useNotifications } from "./useNotifications";
 
 const usePostContext = () => {
+  const { refetch } = useNotifications();
+  const { refetch: countRefetch } = useNotificationCount();
+
   const [openPostModal, setOpenPostModal] = useState(false);
   const [postContent, setPostContent] = useState("");
   const [post, setPost] = useState<IPost>();
   const [socket, setSocket] = useState<any>();
   const [openLoginModal, setOpenLoginModal] = useState(false);
-  const [notificationCount, setNotificationCount] = useState(0);
 
   useEffect(() => {
     const URL =
@@ -31,9 +34,10 @@ const usePostContext = () => {
     s.on("users", (value) => {
       console.log("users online now: 😑", value);
     });
-    s.on("N_POST_CREATED", (value) => {
+    s.on("N_POST_CREATED", async (value) => {
       console.log("N_POST_CREATED: ⏮️", value);
-      setNotificationCount(100);
+      await countRefetch();
+      await refetch();
     });
 
     return () => {
@@ -50,7 +54,7 @@ const usePostContext = () => {
     setPost,
     openLoginModal,
     setOpenLoginModal,
-    notificationCount,
+
     socket,
   };
 };
