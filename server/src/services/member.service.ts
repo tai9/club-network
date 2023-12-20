@@ -1,7 +1,10 @@
 import { IMember } from "@/types/Member";
-import { EReactionPoint, ReactionType } from "@/types/common";
+import { EReactionPoint, ESocketEventName, ReactionType } from "@/types/common";
 import { AppDataSource } from "../configs/db.config";
 import { Member, Post } from "../entities";
+import levelService from "./level.service";
+import { io } from "..";
+import notificationService from "./notification.service";
 
 const memberRepository = AppDataSource.getRepository(Member);
 
@@ -140,6 +143,24 @@ const updateExp = async (id: number, reactionType: ReactionType) => {
 
       default:
         break;
+    }
+    const { data } = await levelService.getLevels();
+    const currentLevel = data.find((x) => x.targetPoint >= member.exp);
+    if (exp > currentLevel.targetPoint) {
+      const nextLevel = data.find((x) => x.targetPoint >= exp);
+      await notificationService.createNotification({
+        type: "LEVEL",
+        title: `Your level is up to <b>${nextLevel.name}</b>`,
+        createdBy: member,
+      });
+      io.to(`user-${member.username}`).emit(
+        ESocketEventName.NOTIFICATION,
+        `user-${member.username}`
+      );
+      io.to(`user-${member.username}`).emit(
+        ESocketEventName.LEVEL_UP,
+        `Your level is up to ${nextLevel.name}`
+      );
     }
     member.exp = exp;
     return await memberRepository.update(member.id, member);

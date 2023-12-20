@@ -35,4 +35,5 @@ export enum EReactionPoint {
 
 export enum ESocketEventName {
   "NOTIFICATION" = "NOTIFICATION",
+  "LEVEL_UP" = "LEVEL_UP",
 }

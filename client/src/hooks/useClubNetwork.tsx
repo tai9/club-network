@@ -3,6 +3,7 @@ import { useState, createContext, useEffect, useContext } from "react";
 import { io } from "socket.io-client";
 import { useNotificationCount, useNotifications } from "./useNotifications";
 import { ESocketEventName } from "@/types/common";
+import { message } from "antd";
 
 const usePostContext = () => {
   const { refetch } = useNotifications();
@@ -39,6 +40,12 @@ const usePostContext = () => {
       console.log("WS: ", ESocketEventName.NOTIFICATION);
       await countRefetch();
       await refetch();
+    });
+
+    // Level up
+    s.on(ESocketEventName.LEVEL_UP, async (value) => {
+      console.log("WS: ", ESocketEventName.LEVEL_UP, value);
+      message.success(value);
     });
 
     return () => {
