@@ -64,7 +64,10 @@ export default function Header() {
         ) : (
           <>
             <Notification />
-            <CustomAvatar onClick={() => setOpenAcount(true)} />
+            <CustomAvatar
+              username={data.username}
+              onClick={() => setOpenAcount(true)}
+            />
           </>
         )}
       </AccountLayout>
@@ -80,10 +83,10 @@ export default function Header() {
               <AccountHeading>
                 <div>{data.fullname || data.username}</div>
                 <div>
-                  <Avatar
+                  <CustomAvatar
                     onClick={() => setOpenAcount(true)}
                     size={48}
-                    icon={<UserOutlined />}
+                    username={data.username}
                   />
                 </div>
               </AccountHeading>

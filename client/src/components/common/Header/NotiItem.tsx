@@ -12,7 +12,7 @@ type Props = {
 const NotiItem = ({ notification, onClick }: Props) => {
   return (
     <Flex className="noti-item" align="center" gap={8} onClick={onClick}>
-      <CustomAvatar />
+      <CustomAvatar username={notification.createdBy.username} />
       <Flex
         vertical
         style={{

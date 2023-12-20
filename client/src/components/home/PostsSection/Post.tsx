@@ -177,7 +177,7 @@ const Post = ({ data }: Props) => {
     <PostWrapper vertical gap={16} className="post">
       <Flex justify="space-between" align="flex-start">
         <Flex gap={16} align="center">
-          <CustomAvatar />
+          <CustomAvatar username={data.createdBy.username} />
           <Flex vertical gap={4}>
             <div className="name">
               {data.createdBy.fullname || data.createdBy.username}
@@ -223,7 +223,7 @@ const Post = ({ data }: Props) => {
           <Flex gap={16} vertical>
             {data.comments.map((c) => (
               <Flex gap={12} key={c.id}>
-                <CustomAvatar size="default" />
+                <CustomAvatar username={c.createdBy.username} size="default" />
                 <Flex gap={4} vertical>
                   <Flex gap={8} align="center">
                     <div className="name">
@@ -248,7 +248,7 @@ const Post = ({ data }: Props) => {
             ))}
 
             <Flex align="center" gap={12}>
-              <CustomAvatar size="default" />
+              <CustomAvatar username={memberData?.username} size="default" />
               <Input.TextArea
                 placeholder="Leave a comment"
                 value={commentValue}
