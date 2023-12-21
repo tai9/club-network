@@ -7,6 +7,7 @@ postRouters.get("/", postController.getPosts);
 
 postRouters.use(authenticateToken);
 postRouters.post("/", postController.createPost);
+postRouters.get("/:id", postController.getPost);
 postRouters.delete("/:id", postController.deletePost);
 postRouters.put("/:id", postController.updatePost);
 

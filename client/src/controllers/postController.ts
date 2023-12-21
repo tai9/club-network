@@ -8,6 +8,9 @@ const postController = {
   getAll(params?: any) {
     return axiosClient.get<DataWithPagination<IPost>>(`/${prefix}`, { params });
   },
+  get(id: number) {
+    return axiosClient.get<IPost>(`/${prefix}/${id}`);
+  },
   create(data: any) {
     return axiosClient.post(`/${prefix}`, data);
   },

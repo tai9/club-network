@@ -1,7 +1,17 @@
+import NewFeed from "@/components/home/NewFeed";
+import ProfileInfo from "@/components/home/ProfileInfo";
+import { MainLayout } from "@/layouts";
 import React from "react";
 
-const PostDetail = () => {
-  return <div>PostDetail</div>;
+const PostDetailPage = () => {
+  return (
+    <div>
+      <ProfileInfo />
+      <NewFeed />
+    </div>
+  );
 };
 
-export default PostDetail;
+PostDetailPage.Layout = MainLayout;
+
+export default PostDetailPage;

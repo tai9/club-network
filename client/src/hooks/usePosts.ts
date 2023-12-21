@@ -24,4 +24,15 @@ const usePosts = () => {
   });
 };
 
+export const usePost = (postId: number) => {
+  return useQuery({
+    queryKey: ["posts", { postId }],
+    queryFn: async () => {
+      const res = await postController.get(postId);
+      return res.data;
+    },
+    enabled: !!postId,
+  });
+};
+
 export default usePosts;

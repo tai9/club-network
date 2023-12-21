@@ -1,5 +1,5 @@
 import { useMember } from "@/hooks/useMember";
-import usePosts from "@/hooks/usePosts";
+import usePosts, { usePost } from "@/hooks/usePosts";
 import { Button, Empty, Flex } from "antd";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -10,8 +10,12 @@ import { PostsSectionWrapper } from "./styled";
 const PostsSection = () => {
   const router = useRouter();
   const id = router.query?.id as string;
+  const postId = router.query?.postId as string;
   const { data: memberData } = useMember();
   const isMember = memberData?.id === +id;
+  const isDetail = !!postId;
+
+  const { data: postDetail } = usePost(+postId);
 
   const { data: postData, refetch: postsRefetch } = usePosts();
   const [feedType, setFeedType] = useState<"new" | "own" | "discover">("own");
@@ -79,9 +83,29 @@ const PostsSection = () => {
     return type === feedType ? "primary" : "text";
   };
 
+  const renderPostsSection = () => {
+    if (isDetail) {
+      return postDetail ? (
+        <Post data={postDetail} />
+      ) : (
+        <Empty description="Post not found!" />
+      );
+    }
+
+    return (
+      <Flex gap={16} vertical>
+        {postData?.data.count !== 0 ? (
+          postData?.data.data.map((post) => <Post key={post.id} data={post} />)
+        ) : (
+          <Empty description="No Posts" />
+        )}
+      </Flex>
+    );
+  };
+
   return (
     <PostsSectionWrapper>
-      {isMember && (
+      {isMember && !isDetail && (
         <>
           <Flex gap={16}>
             <Button type={getBtnType("new")} onClick={handleFilterNewFeed}>
@@ -100,13 +124,7 @@ const PostsSection = () => {
           <PostStatus />
         </>
       )}
-      <Flex gap={16} vertical>
-        {postData?.data.count !== 0 ? (
-          postData?.data.data.map((post) => <Post key={post.id} data={post} />)
-        ) : (
-          <Empty description="No Posts" />
-        )}
-      </Flex>
+      {renderPostsSection()}
     </PostsSectionWrapper>
   );
 };

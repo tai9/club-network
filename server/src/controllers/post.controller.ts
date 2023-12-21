@@ -100,9 +100,21 @@ const updatePost = async (req: Request, res: Response) => {
   }
 };
 
+const getPost = async (req: Request, res: Response) => {
+  try {
+    const id = +req.params.id;
+    const post = await postService.getPostById(id);
+    return res.status(constants.HTTP_STATUS_OK).json(post);
+  } catch (error) {
+    console.log(error);
+    res.status(constants.HTTP_STATUS_BAD_REQUEST).json(error);
+  }
+};
+
 export default {
   createPost,
   getPosts,
   deletePost,
   updatePost,
+  getPost,
 };

@@ -52,7 +52,13 @@ const getPostById = async (id: number) => {
       where: {
         id,
       },
-      relations: ["createdBy"],
+      relations: [
+        "createdBy",
+        "createdBy.role",
+        "comments",
+        "comments.createdBy",
+        "reactions",
+      ],
     });
   } catch (err) {
     throw err;

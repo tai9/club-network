@@ -1,29 +1,28 @@
 import CustomAvatar from "@/components/common/CustomAvatar";
+import commentController from "@/controllers/commentController";
 import postController from "@/controllers/postController";
+import reactionsController from "@/controllers/reactionController";
 import useClubNetwork from "@/hooks/useClubNetwork";
-import { useMember } from "@/hooks/useMember";
-import usePosts from "@/hooks/usePosts";
+import { useMember, useMemberExp } from "@/hooks/useMember";
+import usePosts, { usePost } from "@/hooks/usePosts";
 import { IPost } from "@/types/Post";
+import { formatLastTime } from "@/utils/formatTime";
 import {
   DeleteOutlined,
   EditOutlined,
   ExclamationCircleFilled,
+  ExportOutlined,
   HeartFilled,
   HeartOutlined,
   LinkOutlined,
   MessageOutlined,
   MoreOutlined,
 } from "@ant-design/icons";
-import { Button, Divider, Dropdown, Flex, Input, Modal, message } from "antd";
-import moment from "moment";
-import { Content, MoreLink, PostWrapper } from "./styled";
 import { useQuery } from "@tanstack/react-query";
-import reactionsController from "@/controllers/reactionController";
+import { Button, Divider, Dropdown, Flex, Input, Modal, message } from "antd";
 import { useMemo, useState } from "react";
-import { formatLastTime } from "@/utils/formatTime";
-import commentController from "@/controllers/commentController";
-import { useMemberExp } from "@/hooks/useMember";
-import { useParams } from "next/navigation";
+import { Content, MoreLink, PostWrapper } from "./styled";
+import { useRouter } from "next/router";
 
 type Props = {
   data: IPost;
@@ -33,10 +32,13 @@ const Post = ({ data }: Props) => {
   const { data: memberData } = useMember();
   const isOwner = memberData?.id === data.createdBy.id;
   const { refetch } = usePosts();
+  const { refetch: postRefetch } = usePost(data.id);
   const { refetch: refetchMyLevel } = useMemberExp();
+  const router = useRouter();
+  const postId = router.query.postId as string;
 
   const [commentValue, setCommentValue] = useState("");
-  const [toggleComments, setToggleComments] = useState(false);
+  const [toggleComments, setToggleComments] = useState(!!postId);
 
   const reactionQuery = useQuery({
     queryKey: ["post_detail", data.id],
@@ -46,12 +48,23 @@ const Post = ({ data }: Props) => {
     () => reactionQuery.data?.data.find((x) => x.type === "LIKE")?.count,
     [reactionQuery.data]
   );
+
   const isLiked = useMemo(
     () => data.reactions.findIndex((x) => x.memberId === memberData?.id) !== -1,
     [data.reactions, memberData?.id]
   );
 
   const { setOpenPostModal, setPostContent, setPost } = useClubNetwork();
+
+  const handleRefetchData = async () => {
+    if (postId) {
+      await postRefetch();
+    } else {
+      await refetch();
+    }
+    await reactionQuery.refetch();
+    await refetchMyLevel();
+  };
 
   const handleLike = async () => {
     try {
@@ -63,9 +76,7 @@ const Post = ({ data }: Props) => {
           postId: data.id,
         });
       }
-      await refetch();
-      await reactionQuery.refetch();
-      await refetchMyLevel();
+      await handleRefetchData();
     } catch (err) {
       message.error("Something went wrong!");
     }
@@ -104,8 +115,7 @@ const Post = ({ data }: Props) => {
         content: commentValue,
       });
       setCommentValue("");
-      await refetch();
-      await refetchMyLevel();
+      await handleRefetchData();
     } catch (err) {
       message.error("Something went wrong!");
     }
@@ -114,18 +124,43 @@ const Post = ({ data }: Props) => {
   const handleDeleteComment = async (commentId: number) => {
     try {
       await commentController.delete(commentId);
-      await refetch();
+      await handleRefetchData();
     } catch (err) {
       message.error("Something went wrong!");
     }
   };
 
+  const handleCopyLink = async () => {
+    const link = `${window.location.origin}/member/${memberData?.id}/post/${data.id}`;
+    message.success(`${link} copied to clipboard!`);
+    await navigator.clipboard.writeText(link);
+  };
+
   const renderItems = () => {
     const items = [
       {
+        key: "view-detail",
+        label: (
+          <MoreLink
+            align="center"
+            gap={8}
+            onClick={() => {
+              router.push(`${router.asPath}/post/${data.id}`);
+            }}
+          >
+            <ExportOutlined
+              style={{
+                fontSize: 16,
+              }}
+            />
+            <span>VIEW DETAIL</span>
+          </MoreLink>
+        ),
+      },
+      {
         key: "1",
         label: (
-          <MoreLink align="center" gap={8}>
+          <MoreLink align="center" gap={8} onClick={handleCopyLink}>
             <LinkOutlined
               style={{
                 fontSize: 16,
