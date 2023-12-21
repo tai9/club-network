@@ -19,7 +19,7 @@ import {
   MoreOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Button, Divider, Dropdown, Flex, Input, Modal, message } from "antd";
+import { Button, Divider, Dropdown, Flex, Input, Modal, App } from "antd";
 import { useMemo, useState } from "react";
 import { Content, MoreLink, PostWrapper } from "./styled";
 import { useRouter } from "next/router";
@@ -36,6 +36,7 @@ const Post = ({ data }: Props) => {
   const { refetch: refetchMyLevel } = useMemberExp();
   const router = useRouter();
   const postId = router.query.postId as string;
+  const { message } = App.useApp();
 
   const [commentValue, setCommentValue] = useState("");
   const [toggleComments, setToggleComments] = useState(!!postId);

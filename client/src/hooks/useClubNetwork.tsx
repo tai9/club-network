@@ -3,11 +3,12 @@ import { useState, createContext, useEffect, useContext } from "react";
 import { io } from "socket.io-client";
 import { useNotificationCount, useNotifications } from "./useNotifications";
 import { ESocketEventName } from "@/types/common";
-import { message } from "antd";
+import { App } from "antd";
 
 const usePostContext = () => {
   const { refetch } = useNotifications();
   const { refetch: countRefetch } = useNotificationCount(false);
+  const { message } = App.useApp();
 
   const [openPostModal, setOpenPostModal] = useState(false);
   const [postContent, setPostContent] = useState("");

@@ -1,7 +1,7 @@
 import axiosClient from "@/configs/axiosClient";
 import useClubNetwork from "@/hooks/useClubNetwork";
 import { useMember } from "@/hooks/useMember";
-import { Button, Form, Input, Modal, Typography, message } from "antd";
+import { Button, Form, Input, Modal, Typography, App } from "antd";
 import { setCookie } from "cookies-next";
 
 type FieldType = {
@@ -13,6 +13,7 @@ type FieldType = {
 const LoginModal = () => {
   const { openLoginModal, setOpenLoginModal } = useClubNetwork();
   const { refetch } = useMember();
+  const { message } = App.useApp();
   const onFinish = async (values: any) => {
     try {
       const res = await axiosClient.post("/login", {
