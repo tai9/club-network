@@ -1,3 +1,4 @@
+import { ScreenSizes } from "@/constants/screenSizes";
 import { Flex } from "antd";
 import styled from "styled-components";
 
@@ -12,6 +13,10 @@ export const PostsSectionWrapper = styled.div`
   .post:hover {
     background-color: rgba(255, 255, 255, 0.17);
     cursor: pointer;
+  }
+
+  @media (max-width: ${ScreenSizes.small}) {
+    order: 2;
   }
 `;
 

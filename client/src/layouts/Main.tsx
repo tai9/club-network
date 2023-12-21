@@ -1,7 +1,9 @@
 import Footer from "@/components/common/Footer";
 import Header from "@/components/common/Header";
 import { LayoutProps } from "@/types/common";
-import { Space_Grotesk, Space_Mono } from "next/font/google";
+import { UpOutlined } from "@ant-design/icons";
+import { FloatButton } from "antd";
+import { Space_Grotesk } from "next/font/google";
 import styled from "styled-components";
 
 const SpaceGroteskFont = Space_Grotesk({ subsets: ["latin"] });
@@ -12,7 +14,7 @@ export const MainLayout = ({ children }: LayoutProps) => {
       <Header />
 
       <Main className="grow">{children}</Main>
-
+      <FloatButton.BackTop icon={<UpOutlined />} />
       <Footer />
     </Wrapper>
   );

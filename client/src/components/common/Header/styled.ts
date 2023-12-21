@@ -6,6 +6,7 @@ export const Wrapper = styled.div`
   padding: 17px;
   align-items: center;
   position: relative;
+  padding-left: ;
 
   .pointer {
     cursor: pointer;
@@ -18,6 +19,8 @@ export const HeaderRoutes = styled.div`
   gap: 48px;
   font-size: 17px;
   line-height: 140%;
+  align-items: center;
+  padding-left: 24px;
 
   a:hover {
     color: ${(props) => props.theme.antd.colorPrimary};
