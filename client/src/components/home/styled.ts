@@ -11,6 +11,23 @@ export const ProfileInfoWrapper = styled.div`
   @media (max-width: ${ScreenSizes.small}) {
     padding: 0px 16px 16px;
   }
+
+  @media (max-width: ${ScreenSizes.mobile}) {
+    padding: 24px 16px 16px;
+    justify-content: center;
+
+    .info {
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .profile-actions {
+      position: absolute;
+      flex-direction: column;
+      right: 16px;
+      top: 16px;
+    }
+  }
 `;
 
 export const ProfileName = styled.div`

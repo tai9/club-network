@@ -20,7 +20,7 @@ const ProfileInfo = () => {
   const currentLevel = useMemo(() => myExp as ILevel, [myExp]);
   return (
     <ProfileInfoWrapper>
-      <Flex gap={12} align="center">
+      <Flex className="info" gap={12} align="center">
         <div>
           <Avatar size={80} icon={<UserOutlined />} />
         </div>
@@ -46,7 +46,7 @@ const ProfileInfo = () => {
           <div>{memberData?.bio || "---"}</div>
         </Flex>
       </Flex>
-      <Flex gap="small">
+      <Flex gap="small" className="profile-actions">
         <Button type="primary" icon={<EditOutlined />}></Button>
         <Button type="primary" icon={<ShareAltOutlined />}></Button>
       </Flex>
