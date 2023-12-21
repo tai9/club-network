@@ -8,7 +8,11 @@ import { Avatar, Badge, Empty, Flex, Popconfirm } from "antd";
 import NotiItem from "./NotiItem";
 import { NotificationWrapper } from "./styled";
 
-const Notification = () => {
+type Props = {
+  size?: number;
+};
+
+const Notification = ({ size = 48 }: Props) => {
   const { data: countData, refetch: countRefetch } =
     useNotificationCount(false);
   const { data, refetch } = useNotifications();
@@ -76,7 +80,7 @@ const Notification = () => {
     >
       <Badge color="#f7c842" count={countData?.count || 0} overflowCount={99}>
         <div className="pointer">
-          <Avatar size={48} icon={<BellOutlined />} />
+          <Avatar size={size} icon={<BellOutlined />} />
         </div>
       </Badge>
     </Popconfirm>

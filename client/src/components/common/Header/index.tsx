@@ -18,10 +18,15 @@ import {
   AccountLevel,
   AccountWrapper,
   CustomLink,
+  HeaderMobile,
   HeaderRoutes,
   Wrapper,
 } from "./styled";
-import { AppstoreAddOutlined, TeamOutlined } from "@ant-design/icons";
+import {
+  AppstoreAddOutlined,
+  SearchOutlined,
+  TeamOutlined,
+} from "@ant-design/icons";
 
 export default function Header() {
   const { openLoginModal, setOpenLoginModal } = useClubNetwork();
@@ -46,10 +51,10 @@ export default function Header() {
     window.location.reload();
   };
 
-  return (
-    <Wrapper>
-      <HeaderRoutes>
-        <Link href={"/"}>
+  const renderLinks = () => {
+    return (
+      <>
+        <CustomLink href={"/"}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="56"
@@ -69,7 +74,7 @@ export default function Header() {
               d="M55.25 28H41.259a14 14 0 010-28H55.25v12.601H34.258a1.399 1.399 0 000 2.798H55.25V28z"
             ></path>
           </svg>
-        </Link>
+        </CustomLink>
         <CustomLink href={"/all-profiles"}>
           <span className="text">Members</span>
           <TeamOutlined className="icon" />
@@ -78,61 +83,84 @@ export default function Header() {
           <span className="text">Explore</span>
           <AppstoreAddOutlined className="icon" />
         </CustomLink>
-      </HeaderRoutes>
+      </>
+    );
+  };
 
-      <AccountLayout>
-        <Input size="large" placeholder="Search on Club" />
-        {!data ? (
-          <Button onClick={handleSignIn} type="primary" size="large">
-            JOIN
-          </Button>
-        ) : (
+  return (
+    <div
+      style={{
+        position: "relative",
+      }}
+    >
+      <HeaderMobile>
+        {renderLinks()}
+        <SearchOutlined />
+        {data && (
           <>
-            <Notification />
-            <CustomAvatar
-              username={data.username}
-              onClick={() => setOpenAcount(true)}
-            />
+            <Notification size={32} />
+            <CustomAvatar size={32} username={data.username} />
           </>
         )}
-      </AccountLayout>
+      </HeaderMobile>
 
-      {data && (
-        <AccountWrapper
-          style={{
-            visibility: openAcount ? "visible" : "hidden",
-          }}
-        >
-          <ClickOutSide onClickOutside={handleClose}>
-            <AccountInfo>
-              <AccountHeading>
-                <div>{data.fullname || data.username}</div>
-                <div>
-                  <CustomAvatar
-                    onClick={() => setOpenAcount(true)}
-                    size={48}
-                    username={data.username}
-                  />
-                </div>
-              </AccountHeading>
+      <Wrapper>
+        <HeaderRoutes>{renderLinks()}</HeaderRoutes>
 
-              <AccountLevel>
-                <div>
-                  <HighlightText>{currentLevel?.name}</HighlightText>
-                </div>
-                <div className="xp">{data.exp} XP</div>
-              </AccountLevel>
+        <AccountLayout>
+          <Input size="large" placeholder="Search on Club" />
+          {!data ? (
+            <Button onClick={handleSignIn} type="primary" size="large">
+              JOIN
+            </Button>
+          ) : (
+            <>
+              <Notification />
+              <CustomAvatar
+                username={data.username}
+                onClick={() => setOpenAcount(true)}
+              />
+            </>
+          )}
+        </AccountLayout>
 
-              <AccountFooter>
-                <Link href={`/member/${data?.id}`}>Profile</Link>
-                <div>Account</div>
-                <div>Help</div>
-                <div onClick={handleSignOut}>Sign out</div>
-              </AccountFooter>
-            </AccountInfo>
-          </ClickOutSide>
-        </AccountWrapper>
-      )}
-    </Wrapper>
+        {data && (
+          <AccountWrapper
+            style={{
+              visibility: openAcount ? "visible" : "hidden",
+            }}
+          >
+            <ClickOutSide onClickOutside={handleClose}>
+              <AccountInfo>
+                <AccountHeading>
+                  <div>{data.fullname || data.username}</div>
+                  <div>
+                    <CustomAvatar
+                      onClick={() => setOpenAcount(true)}
+                      size={48}
+                      username={data.username}
+                    />
+                  </div>
+                </AccountHeading>
+
+                <AccountLevel>
+                  <div>
+                    <HighlightText>{currentLevel?.name}</HighlightText>
+                  </div>
+                  <div className="xp">{data.exp} XP</div>
+                </AccountLevel>
+
+                <AccountFooter>
+                  <Link href={`/member/${data?.id}`}>Profile</Link>
+                  <div>Account</div>
+                  <div>Help</div>
+                  <div onClick={handleSignOut}>Sign out</div>
+                </AccountFooter>
+              </AccountInfo>
+            </ClickOutSide>
+          </AccountWrapper>
+        )}
+      </Wrapper>
+    </div>
   );
 }

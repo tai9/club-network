@@ -14,7 +14,12 @@ export const MainLayout = ({ children }: LayoutProps) => {
       <Header />
 
       <Main className="grow">{children}</Main>
-      <FloatButton.BackTop icon={<UpOutlined />} />
+      <FloatButton.BackTop
+        icon={<UpOutlined />}
+        style={{
+          bottom: 90,
+        }}
+      />
       <Footer />
     </Wrapper>
   );

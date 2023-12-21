@@ -24,6 +24,24 @@ export const Wrapper = styled.div`
   }
 `;
 
+export const HeaderMobile = styled.div`
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #060817;
+  display: flex;
+  gap: 32px;
+  padding: 12px 16px;
+  z-index: 999;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 24px;
+  display: none;
+  @media (max-width: ${ScreenSizes.mobile}) {
+    display: flex;
+  }
+`;
+
 export const HeaderRoutes = styled.div`
   display: flex;
   justify-content: space-between;
@@ -148,6 +166,7 @@ export const NotificationWrapper = styled.div`
 `;
 
 export const CustomLink = styled(Link)`
+  display: flex;
   .icon {
     display: none;
   }
@@ -160,8 +179,7 @@ export const CustomLink = styled(Link)`
     }
     .icon {
       display: block;
-      font-size: 21px;
-      font-weight: 600;
+      font-size: 24px;
     }
   }
 `;
