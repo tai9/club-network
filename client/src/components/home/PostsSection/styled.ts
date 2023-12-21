@@ -58,16 +58,6 @@ export const PostWrapper = styled(Flex)`
   }
 `;
 
-export const MoreLink = styled(Flex)`
-  color: #fcf8f2;
-  font-size: 12px;
-  transition: all 0.3s ease 0s;
-
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
 export const Content = styled.div`
   white-space: pre-wrap;
 `;

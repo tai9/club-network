@@ -21,9 +21,10 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { Button, Divider, Dropdown, Flex, Input, Modal, App } from "antd";
 import { useMemo, useState } from "react";
-import { Content, MoreLink, PostWrapper } from "./styled";
+import { Content, PostWrapper } from "./styled";
 import { useRouter } from "next/router";
 import { TwitterShareButton, TwitterIcon } from "react-share";
+import { MoreLink } from "@/components/common/styled";
 
 type Props = {
   data: IPost;

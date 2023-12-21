@@ -1,3 +1,4 @@
+import { Flex } from "antd";
 import styled from "styled-components";
 
 export const HighlightText = styled.span<{ fontSize?: number }>`
@@ -11,4 +12,14 @@ export const HighlightText = styled.span<{ fontSize?: number }>`
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+`;
+
+export const MoreLink = styled(Flex)`
+  color: #fcf8f2;
+  font-size: 12px;
+  transition: all 0.3s ease 0s;
+
+  &:hover {
+    text-decoration: underline;
+  }
 `;

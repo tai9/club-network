@@ -1,16 +1,18 @@
 import { useMemberById } from "@/hooks/useMember";
 import {
   EditOutlined,
+  MobileOutlined,
   ShareAltOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Avatar, Button, Flex, Tag } from "antd";
+import { Avatar, Button, Dropdown, Flex, Modal, Tag } from "antd";
 import { useParams } from "next/navigation";
-import { HighlightText } from "../common/styled";
+import { HighlightText, MoreLink } from "../common/styled";
 import { ProfileInfoWrapper, ProfileName } from "./styled";
 import { useLevels } from "@/hooks/useLevels";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { ILevel } from "@/types/Level";
+import QRModal from "./QRModal";
 
 const ProfileInfo = () => {
   const params = useParams();
@@ -18,6 +20,37 @@ const ProfileInfo = () => {
   const { data: memberData } = useMemberById(+id);
   const { data: myExp } = useLevels(memberData?.exp);
   const currentLevel = useMemo(() => myExp as ILevel, [myExp]);
+
+  const [openQRModal, setOpenQRModal] = useState(false);
+  const handleCancelQR = () => {
+    setOpenQRModal(false);
+  };
+
+  const renderItems = () => {
+    const items = [
+      {
+        key: "QR",
+        label: (
+          <MoreLink
+            align="center"
+            gap={8}
+            onClick={() => {
+              setOpenQRModal(true);
+            }}
+          >
+            <MobileOutlined
+              style={{
+                fontSize: 16,
+              }}
+            />
+            <span>GET QR CODE FOR THIS PAGE</span>
+          </MoreLink>
+        ),
+      },
+    ];
+    return items;
+  };
+
   return (
     <ProfileInfoWrapper>
       <Flex className="info" gap={12} align="center">
@@ -43,13 +76,23 @@ const ProfileInfo = () => {
               <HighlightText>{currentLevel?.name}</HighlightText>
             </Tag>
           </Flex>
-          <div>{memberData?.bio || "---"}</div>
+          {memberData?.bio && <div>{memberData.bio}</div>}
         </Flex>
       </Flex>
       <Flex gap="small" className="profile-actions">
         <Button type="primary" icon={<EditOutlined />}></Button>
-        <Button type="primary" icon={<ShareAltOutlined />}></Button>
+        <Dropdown
+          placement="bottomLeft"
+          trigger={["click"]}
+          menu={{
+            items: renderItems(),
+          }}
+        >
+          <Button type="primary" icon={<ShareAltOutlined />}></Button>
+        </Dropdown>
       </Flex>
+
+      <QRModal open={openQRModal} onCancel={handleCancelQR} />
     </ProfileInfoWrapper>
   );
 };
