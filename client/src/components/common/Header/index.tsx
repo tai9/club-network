@@ -17,9 +17,11 @@ import {
   AccountLayout,
   AccountLevel,
   AccountWrapper,
+  CustomLink,
   HeaderRoutes,
   Wrapper,
 } from "./styled";
+import { AppstoreAddOutlined, TeamOutlined } from "@ant-design/icons";
 
 export default function Header() {
   const { openLoginModal, setOpenLoginModal } = useClubNetwork();
@@ -68,8 +70,14 @@ export default function Header() {
             ></path>
           </svg>
         </Link>
-        <Link href={"/all-profiles"}>Members</Link>
-        <span>Explore</span>
+        <CustomLink href={"/all-profiles"}>
+          <span className="text">Members</span>
+          <TeamOutlined className="icon" />
+        </CustomLink>
+        <CustomLink href={"/explore"}>
+          <span className="text">Explore</span>
+          <AppstoreAddOutlined className="icon" />
+        </CustomLink>
       </HeaderRoutes>
 
       <AccountLayout>

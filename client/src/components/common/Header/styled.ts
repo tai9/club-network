@@ -1,3 +1,5 @@
+import { ScreenSizes } from "@/constants/screenSizes";
+import Link from "next/link";
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
@@ -6,10 +8,19 @@ export const Wrapper = styled.div`
   padding: 17px;
   align-items: center;
   position: relative;
-  padding-left: ;
+  padding-left: 16px;
+  gap: 16px;
 
   .pointer {
     cursor: pointer;
+  }
+
+  @media (max-width: ${ScreenSizes.small}) {
+    padding-left: 0;
+  }
+
+  @media (max-width: ${ScreenSizes.mobile}) {
+    display: none;
   }
 `;
 
@@ -25,6 +36,10 @@ export const HeaderRoutes = styled.div`
   a:hover {
     color: ${(props) => props.theme.antd.colorPrimary};
     cursor: pointer;
+  }
+
+  @media (max-width: ${ScreenSizes.small}) {
+    gap: 24px;
   }
 `;
 
@@ -128,6 +143,25 @@ export const NotificationWrapper = styled.div`
       background-color: rgba(255, 255, 255, 0.05);
       cursor: pointer;
       border-radius: 12px;
+    }
+  }
+`;
+
+export const CustomLink = styled(Link)`
+  .icon {
+    display: none;
+  }
+  .text {
+    display: block;
+  }
+  @media (max-width: ${ScreenSizes.small}) {
+    .text {
+      display: none;
+    }
+    .icon {
+      display: block;
+      font-size: 21px;
+      font-weight: 600;
     }
   }
 `;
