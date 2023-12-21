@@ -1,5 +1,6 @@
 import Footer from "@/components/common/Footer";
 import Header from "@/components/common/Header";
+import { ScreenSizes } from "@/constants/screenSizes";
 import { LayoutProps } from "@/types/common";
 import { UpOutlined } from "@ant-design/icons";
 import { FloatButton } from "antd";
@@ -32,6 +33,10 @@ export const Wrapper = styled.div`
 
   .grow {
     flex-grow: 1;
+  }
+
+  @media (max-width: ${ScreenSizes.mobile}) {
+    padding-top: 24px;
   }
 `;
 

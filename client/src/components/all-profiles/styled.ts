@@ -1,3 +1,4 @@
+import { ScreenSizes } from "@/constants/screenSizes";
 import styled from "styled-components";
 
 export const ProfilesWrapper = styled.div`
@@ -12,6 +13,10 @@ export const ProfilesWrapper = styled.div`
     text-align: center;
     font-weight: 600;
   }
+
+  @media (max-width: ${ScreenSizes.small}) {
+    gap: 24px;
+  }
 `;
 
 export const ProfileList = styled.div`
@@ -21,6 +26,11 @@ export const ProfileList = styled.div`
   width: 100%;
   -webkit-box-flex: 1;
   flex-grow: 1;
+  padding: 0 16px;
+
+  @media (max-width: ${ScreenSizes.small}) {
+    gap: 8px;
+  }
 `;
 
 export const ProfileCardLayout = styled.div`

@@ -13,7 +13,6 @@ export const ProfileInfoWrapper = styled.div`
   }
 
   @media (max-width: ${ScreenSizes.mobile}) {
-    padding: 24px 16px 16px;
     justify-content: center;
 
     .info {
