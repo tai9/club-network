@@ -54,6 +54,10 @@ const usePostContext = () => {
     };
   }, []);
 
+  const handleOpenLogin = () => {
+    setOpenLoginModal(true);
+  };
+
   return {
     openPostModal,
     setOpenPostModal,
@@ -63,6 +67,7 @@ const usePostContext = () => {
     setPost,
     openLoginModal,
     setOpenLoginModal,
+    handleOpenLogin,
 
     socket,
   };

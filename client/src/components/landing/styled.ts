@@ -29,24 +29,16 @@ export const HeroLayout = styled.div`
     white-space: nowrap;
     z-index: 30;
     text-align: left;
-    font-family: inherit;
     font-size: 48px;
     line-height: 140%;
-    color: inherit;
     font-weight: 700;
-    text-transform: unset;
   }
 
   .hero-desc {
-    padding: 0px;
     text-align: left;
-    font-family: inherit;
     font-size: 20px;
     line-height: 150%;
-    color: inherit;
-    margin-bottom: 48px;
     font-weight: 400;
-    text-transform: unset;
   }
 
   .hero-left {

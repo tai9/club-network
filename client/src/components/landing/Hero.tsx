@@ -3,16 +3,11 @@ import { HeroLayout } from "./styled";
 import { Button, Carousel } from "antd";
 import MemberCard from "./MemberCard";
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
-const contentStyle: React.CSSProperties = {
-  margin: 0,
-  height: "160px",
-  color: "#fff",
-  lineHeight: "160px",
-  textAlign: "center",
-  background: "#364d79",
-};
+import useClubNetwork from "@/hooks/useClubNetwork";
+
 const Hero = () => {
   const ref = useRef<any>();
+  const { handleOpenLogin } = useClubNetwork();
   return (
     <HeroLayout>
       <div className="hero-row">
@@ -21,6 +16,19 @@ const Hero = () => {
           <div className="hero-desc">
             Unlock a world where creators and collectors converge, collaborate,
             and thrive in the AI art realm.
+          </div>
+          <div>
+            <Button
+              type="primary"
+              size="large"
+              style={{
+                width: 130,
+                height: 48,
+              }}
+              onClick={handleOpenLogin}
+            >
+              JOIN
+            </Button>
           </div>
         </div>
         <div className="hero-right">
