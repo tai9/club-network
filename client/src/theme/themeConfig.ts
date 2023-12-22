@@ -9,6 +9,7 @@ const customTheme: ThemeConfig = {
     fontSize: 14,
     colorPrimary: "#f7c842",
     fontFamily: SpaceGroteskFont.style.fontFamily,
+    colorLinkHover: "#f7c842",
   },
   components: {
     Button: {

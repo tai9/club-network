@@ -23,6 +23,7 @@ export const HeroLayout = styled.div`
     align-items: center;
     max-width: 1100px;
     margin: 146px auto;
+    width: 100%;
   }
 
   .hero-title {
@@ -65,6 +66,33 @@ export const HeroLayout = styled.div`
     top: 50%;
     right: 40px;
     z-index: 10;
+  }
+
+  @media (max-width: ${ScreenSizes.medium}) {
+    padding-top: 0;
+    .hero-row {
+      flex-direction: column;
+      gap: 0;
+      padding: 0 16px;
+      margin: 100px auto;
+    }
+    .hero-left {
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+    }
+    .hero-desc {
+      text-align: center;
+    }
+  }
+  @media (max-width: ${ScreenSizes.small}) {
+    .hero-title {
+      font-size: 40px;
+    }
+
+    .hero-right {
+      width: 100%;
+    }
   }
 `;
 

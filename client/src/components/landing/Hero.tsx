@@ -42,8 +42,12 @@ const Hero = () => {
               ref.current?.prev();
             }}
           />
-          <div>
-            <Carousel ref={ref} infinite autoplay>
+          <div
+            style={{
+              maxWidth: "100vw",
+            }}
+          >
+            <Carousel ref={ref} infinite>
               <MemberCard />
               <MemberCard />
               <MemberCard />
