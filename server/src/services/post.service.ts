@@ -1,11 +1,34 @@
 import { IGetPostsParams } from "@/types/Post";
+import { Any, Between, LessThanOrEqual, Like, MoreThanOrEqual } from "typeorm";
 import { AppDataSource } from "../configs/db.config";
 import { Post } from "../entities";
 
 const postRepository = AppDataSource.getRepository(Post);
 
-const getPosts = async (params?: IGetPostsParams) => {
+const getPosts = async (queries?: IGetPostsParams) => {
+  const skip = queries.page * queries.limit;
+
   try {
+    let where = {};
+
+    if (!!queries.memberIds?.length) {
+      where["createdBy"] = {
+        id: Any(queries.memberIds),
+      };
+    }
+
+    if (queries.search) {
+      where["content"] = Like(`%${queries.search}%`);
+    }
+
+    if (queries.from && queries.to) {
+      where["createdAt"] = Between(queries.from, queries.to);
+    } else if (queries.from) {
+      where["createdAt"] = MoreThanOrEqual(queries.from);
+    } else if (queries.to) {
+      where["createdAt"] = LessThanOrEqual(queries.to);
+    }
+
     const [data, count] = await postRepository.findAndCount({
       relations: [
         "createdBy",
@@ -14,14 +37,20 @@ const getPosts = async (params?: IGetPostsParams) => {
         "comments.createdBy",
         "reactions",
       ],
-      where: {
-        createdBy: {
-          id: params?.memberId,
-        },
-      },
+      where,
+      skip,
+      take: queries.limit,
     });
 
-    return { data, count };
+    const totalPages = Math.ceil(count / queries.limit) || 1;
+
+    return {
+      count,
+      totalPages,
+      page: queries.page,
+      limit: queries.limit,
+      data,
+    };
   } catch (err) {
     throw err;
   }

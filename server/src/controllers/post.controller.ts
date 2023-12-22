@@ -5,6 +5,7 @@ import postService from "../services/post.service";
 import memberService from "@/services/member.service";
 import { IGetPostsParams } from "@/types/Post";
 // import auditService from "../services/audit.service";
+import Joi from "joi";
 
 const createPost = async (req: Request, res: Response) => {
   const member = (req as any)?.member as Member;
@@ -39,12 +40,18 @@ const createPost = async (req: Request, res: Response) => {
   }
 };
 
-const getPosts = async (
-  req: Request<any, any, any, IGetPostsParams>,
-  res: Response
-) => {
+const getPostsSchema = Joi.object<IGetPostsParams>({
+  search: Joi.string().optional(),
+  from: Joi.string().optional(),
+  to: Joi.string().optional(),
+  memberIds: Joi.array().items(Joi.number()).optional(),
+  page: Joi.number().integer().min(0).max(100).default(0).optional(),
+  limit: Joi.number().integer().min(1).max(100).default(20).optional(),
+});
+const getPosts = async (req: Request, res: Response) => {
   try {
-    const posts = await postService.getPosts(req.query);
+    const queries = await getPostsSchema.validateAsync(req.query);
+    const posts = await postService.getPosts(queries);
     return res.status(constants.HTTP_STATUS_OK).json(posts);
   } catch (error) {
     console.log(error);
