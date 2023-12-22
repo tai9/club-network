@@ -1,3 +1,4 @@
+import { ScreenSizes } from "@/constants/screenSizes";
 import styled from "styled-components";
 
 export const LandingLayout = styled.div`
@@ -70,10 +71,116 @@ export const HeroLayout = styled.div`
 export const MembersLayout = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 16px;
+  align-items: center;
+
+  background-image: url(https://storage.googleapis.com/uncut-fm-production/production/home/landscape-new.webp);
+  background-size: 700px;
+  background-repeat: repeat-x;
+  background-position: center bottom;
+  padding-top: 64px;
+
+  .member-carousel {
+    width: 100%;
+    position: relative;
+  }
+
+  .left-btn {
+    position: absolute;
+    top: 50%;
+    left: 40px;
+    z-index: 10;
+  }
+  .right-btn {
+    position: absolute;
+    top: 50%;
+    right: 40px;
+    z-index: 10;
+  }
 `;
+
 export const InfoLayout = styled.div`
   display: flex;
   flex-direction: column;
+  background-color: rgb(247, 247, 247);
+  color: rgb(64, 64, 64);
+  min-height: auto;
+  margin: 0px;
+  padding-top: 128px;
+  position: relative;
+  align-items: center;
+  padding-left: 32px;
+  padding-right: 32px;
+
+  .section {
+    display: flex;
+    max-width: 1100px;
+    align-items: center;
+  }
+
+  .section img {
+    width: 521px;
+    height: 521px;
+  }
+
+  .heading {
+    font-size: 36px;
+    line-height: 120%;
+    margin-bottom: 80px;
+    font-weight: 700;
+    text-transform: unset;
+  }
+
+  .title {
+    font-size: 32px;
+    line-height: 120%;
+    font-weight: 700;
+    text-transform: unset;
+  }
+
+  .desc {
+    font-size: 18px;
+    line-height: 150%;
+    font-weight: 400;
+    text-transform: unset;
+  }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .section-2 {
+    order: 2;
+  }
+
+  @media (max-width: ${ScreenSizes.small}) {
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 60px;
+
+    .heading {
+      margin-bottom: 60px;
+    }
+
+    .section {
+      flex-direction: column;
+    }
+
+    .info {
+      gap: 8px;
+    }
+
+    .section-2 {
+      order: unset;
+    }
+
+    .section img {
+      width: 360px;
+      height: unset;
+    }
+  }
 `;
 
 export const MemberCardLayout = styled.div`
@@ -149,4 +256,16 @@ export const MemberCardLayout = styled.div`
   background-repeat: no-repeat;
   background-image: url(https://ik.imagekit.io/n8imvdjvz/tr:w-128,h-128/https://storage.googleapis.com/uncut-fm-production/production/users/4294970938/user_1690540602.jpeg);
   background-color: rgba(99, 40, 33, 0.8); */
+`;
+
+export const MemberCard2Layout = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  position: relative;
+  background: rgba(217, 217, 217, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 4px 4px 0px;
 `;
