@@ -7,9 +7,13 @@ export const Wrapper = styled.div`
   justify-content: space-between;
   padding: 17px;
   align-items: center;
-  position: relative;
   padding-left: 16px;
   gap: 16px;
+
+  background: transparent;
+  position: absolute;
+  width: 100%;
+  top: 0;
 
   .pointer {
     cursor: pointer;

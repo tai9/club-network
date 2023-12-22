@@ -10,6 +10,7 @@ import {
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import LandingPage from "@/components/landing";
 
 const auth = getAuth(firebase_app);
 
@@ -49,15 +50,16 @@ const HomePage = () => {
   // }, []);
 
   return (
-    <div>
-      <button
+    <>
+      <LandingPage />
+      {/* <button
         onClick={async () => {
           const s = await axios.get("/club-network-api/test-ws");
           console.log(s, "😀");
         }}
       >
         Connect
-      </button>
+      </button> */}
       {/* <button onClick={() => signIn()}>Sign in</button>
       <button onClick={() => signOut()}>Sign out</button>
       <button
@@ -94,7 +96,7 @@ const HomePage = () => {
       </button>
       <ProfileInfo />
       <NewFeed /> */}
-    </div>
+    </>
   );
 };
 
