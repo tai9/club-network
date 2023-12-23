@@ -14,5 +14,11 @@ export interface IPost extends IBaseEntity {
 }
 
 export interface IGetPostsParams {
-  myself?: boolean;
+  memberId?: number;
+  memberIds?: number[];
+  page?: number;
+  limit?: number;
+  search?: string;
+  from?: string;
+  to?: string;
 }

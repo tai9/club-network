@@ -1,9 +1,12 @@
 import { useMember } from "@/hooks/useMember";
-import usePosts, { usePost } from "@/hooks/usePosts";
+import { usePost } from "@/hooks/usePosts";
+import usePostsInfinity from "@/hooks/usePostsInfinity";
 import { Button, Empty, Flex } from "antd";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
 import Post from "./Post";
+import PostSkeleton from "./PostSkeleton";
 import PostStatus from "./PostStatus";
 import { PostsSectionWrapper } from "./styled";
 
@@ -15,10 +18,30 @@ const PostsSection = () => {
   const isMember = memberData?.id === +id;
   const isDetail = !!postId;
 
+  const { ref, inView } = useInView();
+
   const { data: postDetail } = usePost(+postId);
 
-  const { data: postData, refetch: postsRefetch } = usePosts();
+  const {
+    data: postData,
+    refetch: postsRefetch,
+    hasNextPage,
+    isFetchingNextPage,
+    status,
+    fetchNextPage,
+  } = usePostsInfinity({
+    limit: 25,
+  });
   const [feedType, setFeedType] = useState<"new" | "own" | "discover">("own");
+
+  useEffect(() => {
+    (async () => {
+      if (inView && hasNextPage) {
+        await fetchNextPage();
+        console.log("loadmore");
+      }
+    })();
+  }, [fetchNextPage, hasNextPage, inView]);
 
   useEffect(() => {
     if (isMember) {
@@ -83,6 +106,17 @@ const PostsSection = () => {
     return type === feedType ? "primary" : "text";
   };
 
+  const renderSkeletons = () => {
+    return (
+      <Flex gap={16} vertical>
+        <PostSkeleton />
+        <PostSkeleton />
+        <PostSkeleton />
+        <PostSkeleton />
+      </Flex>
+    );
+  };
+
   const renderPostsSection = () => {
     if (isDetail) {
       return postDetail ? (
@@ -92,13 +126,25 @@ const PostsSection = () => {
       );
     }
 
+    if (status === "pending") {
+      return renderSkeletons();
+    }
+
+    if (postData && postData.pages[0].count === 0) {
+      return <Empty description="No Posts" />;
+    }
+
     return (
       <Flex gap={16} vertical>
-        {postData?.data.count !== 0 ? (
-          postData?.data.data.map((post) => <Post key={post.id} data={post} />)
-        ) : (
-          <Empty description="No Posts" />
-        )}
+        {postData?.pages.map((group, i) => (
+          <React.Fragment key={i}>
+            {group.data.map((post) => (
+              <Post key={post.id} data={post} />
+            ))}
+          </React.Fragment>
+        ))}
+
+        {isFetchingNextPage && renderSkeletons()}
       </Flex>
     );
   };
@@ -125,6 +171,7 @@ const PostsSection = () => {
         </>
       )}
       {renderPostsSection()}
+      <div ref={ref} />
     </PostsSectionWrapper>
   );
 };

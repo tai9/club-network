@@ -6,7 +6,7 @@ import { Post } from "../entities";
 const postRepository = AppDataSource.getRepository(Post);
 
 const getPosts = async (queries?: IGetPostsParams) => {
-  const skip = queries.page * queries.limit;
+  const skip = (queries.page - 1) * queries.limit;
 
   try {
     let where = {};

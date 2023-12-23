@@ -20,10 +20,16 @@ export interface IBaseEntity {
   updatedAt: Date;
 }
 
-export type DataWithPagination<T> = {
-  count: number;
+export type DataWithPagination<T> = IPagination & {
   data: T[];
 };
+
+export interface IPagination {
+  page: number;
+  limit: number;
+  totalPages: number;
+  count: number;
+}
 
 export type ReactionType = "LIKE" | "COMMENT" | "POST";
 
