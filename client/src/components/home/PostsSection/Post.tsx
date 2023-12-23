@@ -18,13 +18,14 @@ import {
   MessageOutlined,
   MoreOutlined,
 } from "@ant-design/icons";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Button, Divider, Dropdown, Flex, Input, Modal, App } from "antd";
 import { useMemo, useState } from "react";
 import { Content, PostWrapper } from "./styled";
 import { useRouter } from "next/router";
 import { TwitterShareButton, TwitterIcon } from "react-share";
 import { MoreLink } from "@/components/common/styled";
+import queryClient from "@/configs/queryClient";
 
 type Props = {
   data: IPost;
@@ -33,9 +34,6 @@ type Props = {
 const Post = ({ data }: Props) => {
   const { data: memberData } = useMember();
   const isOwner = memberData?.id === data.createdBy.id;
-  const { refetch } = usePosts();
-  const { refetch: postRefetch } = usePost(data.id);
-  const { refetch: refetchMyLevel } = useMemberExp();
   const router = useRouter();
   const postId = router.query.postId as string;
   const { message } = App.useApp();
@@ -43,18 +41,9 @@ const Post = ({ data }: Props) => {
   const [commentValue, setCommentValue] = useState("");
   const [toggleComments, setToggleComments] = useState(!!postId);
 
-  const reactionQuery = useQuery({
-    queryKey: ["post_detail", data.id],
-    queryFn: () => reactionsController.getOfPost(data.id),
-  });
   const likeCount = useMemo(
-    () => reactionQuery.data?.data.find((x) => x.type === "LIKE")?.count,
-    [reactionQuery.data]
-  );
-
-  const isLiked = useMemo(
-    () => data.reactions.findIndex((x) => x.memberId === memberData?.id) !== -1,
-    [data.reactions, memberData?.id]
+    () => data.reactionCount?.find((x) => x.type === "LIKE")?.count,
+    [data.reactionCount]
   );
 
   const postDetailLink = useMemo(
@@ -64,30 +53,31 @@ const Post = ({ data }: Props) => {
 
   const { setOpenPostModal, setPostContent, setPost } = useClubNetwork();
 
-  const handleRefetchData = async () => {
-    if (postId) {
-      await postRefetch();
-    } else {
-      await refetch();
-    }
-    await reactionQuery.refetch();
-    await refetchMyLevel();
-  };
-
-  const handleLike = async () => {
-    try {
-      if (isLiked) {
-        await reactionsController.delete(data.id, "LIKE");
+  const likeMutation = useMutation({
+    mutationFn: () => {
+      if (data.isLiked) {
+        return reactionsController.delete(data.id, "LIKE");
       } else {
-        await reactionsController.create({
+        return reactionsController.create({
           type: "LIKE",
           postId: data.id,
         });
       }
-      await handleRefetchData();
-    } catch (err) {
-      message.error("Something went wrong!");
-    }
+    },
+    onSuccess: () => {
+      if (postId) {
+        queryClient.invalidateQueries({ queryKey: ["posts", { postId }] });
+      } else {
+        queryClient.invalidateQueries({ queryKey: ["posts-infinity"] });
+      }
+      queryClient.invalidateQueries({
+        queryKey: ["member-exp", memberData?.id],
+      });
+    },
+  });
+
+  const handleLike = async () => {
+    await likeMutation.mutateAsync();
   };
 
   const handleEdit = () => {
@@ -108,7 +98,8 @@ const Post = ({ data }: Props) => {
       onOk: async () => {
         try {
           await postController.delete(data.id);
-          await refetch();
+          // await refetch();
+          // apply mutation set query data
         } catch (error) {
           message.error("Something went wrong!");
         }
@@ -123,7 +114,8 @@ const Post = ({ data }: Props) => {
         content: commentValue,
       });
       setCommentValue("");
-      await handleRefetchData();
+      // await handleRefetchData();
+      // apply mutation set query data
     } catch (err) {
       message.error("Something went wrong!");
     }
@@ -132,7 +124,8 @@ const Post = ({ data }: Props) => {
   const handleDeleteComment = async (commentId: number) => {
     try {
       await commentController.delete(commentId);
-      await handleRefetchData();
+      // apply mutation set query data
+      // await handleRefetchData();
     } catch (err) {
       message.error("Something went wrong!");
     }
@@ -250,12 +243,12 @@ const Post = ({ data }: Props) => {
       <Flex gap={24} justify="space-between">
         <Flex gap={24}>
           <Flex gap={4} onClick={handleLike}>
-            {isLiked ? <HeartFilled /> : <HeartOutlined />}
+            {data.isLiked ? <HeartFilled /> : <HeartOutlined />}
             <span>{likeCount || 0}</span>
           </Flex>
           <Flex gap={4} onClick={() => setToggleComments((prev) => !prev)}>
             <MessageOutlined />
-            <span>{data.comments.length || 0}</span>
+            <span>{data.commentCount || 0}</span>
           </Flex>
         </Flex>
         <Flex gap={16} align="center">

@@ -1,3 +1,4 @@
+import { ICount, ReactionType } from "@/types/common";
 import { AppDataSource } from "../configs/db.config";
 import { Reaction } from "../entities";
 
@@ -12,7 +13,7 @@ const getReactions = async () => {
   }
 };
 
-const getReactionsOfPost = async (postId: number) => {
+const getReactionsOfPost = async (postId: number): Promise<ICount[]> => {
   try {
     const count = await reactionRepository.query(
       `select type, COUNT(*) from reactions WHERE "postId" = $1 GROUP by type`,
@@ -62,6 +63,24 @@ const deleteReaction = async (payload: {
   }
 };
 
+const checkMemberReaction = async (
+  postId: number,
+  memberId: number,
+  reactionType: ReactionType
+) => {
+  try {
+    return await reactionRepository.exist({
+      where: {
+        memberId,
+        postId,
+        type: reactionType,
+      },
+    });
+  } catch (err) {
+    throw err;
+  }
+};
+
 export default {
   createReaction,
   getReactions,
@@ -69,4 +88,5 @@ export default {
   deleteReaction,
   updateReaction,
   getReactionsOfPost,
+  checkMemberReaction,
 };

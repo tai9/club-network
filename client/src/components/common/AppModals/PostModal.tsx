@@ -1,14 +1,21 @@
+import queryClient from "@/configs/queryClient";
 import postController from "@/controllers/postController";
 import useClubNetwork from "@/hooks/useClubNetwork";
-import usePosts from "@/hooks/usePosts";
-import { Input, Modal, App } from "antd";
-import React, { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { App, Input, Modal } from "antd";
 
 const PostModal = () => {
   const { openPostModal, setOpenPostModal, postContent, setPostContent, post } =
     useClubNetwork();
-  const { refetch } = usePosts();
   const { message } = App.useApp();
+
+  const mutation = useMutation({
+    mutationFn: postController.create,
+    onSuccess: () => {
+      message.success("Your post is up! 🚀");
+      queryClient.invalidateQueries({ queryKey: ["posts-infinity"] });
+    },
+  });
 
   const onCancel = () => {
     setOpenPostModal(false);
@@ -23,14 +30,12 @@ const PostModal = () => {
         });
         message.success("Your post is updated!");
       } else {
-        await postController.create({
+        await mutation.mutateAsync({
           content: postContent,
         });
-        message.success("Your post is up! 🚀");
       }
 
       setOpenPostModal(false);
-      await refetch();
     } catch (err) {
       message.error("Something went wrong!");
     }

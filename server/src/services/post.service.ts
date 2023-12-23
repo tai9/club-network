@@ -1,7 +1,9 @@
-import { IGetPostsParams } from "@/types/Post";
+import { IGetPostsParams, IPost } from "@/types/Post";
 import { Any, Between, LessThanOrEqual, Like, MoreThanOrEqual } from "typeorm";
 import { AppDataSource } from "../configs/db.config";
 import { Post } from "../entities";
+import reactionService from "./reaction.service";
+import commentService from "./comment.service";
 
 const postRepository = AppDataSource.getRepository(Post);
 
@@ -33,14 +35,34 @@ const getPosts = async (queries?: IGetPostsParams) => {
       relations: [
         "createdBy",
         "createdBy.role",
-        "comments",
-        "comments.createdBy",
-        "reactions",
+        // "comments",
+        // "comments.createdBy",
+        // "reactions",
       ],
       where,
       skip,
       take: queries.limit,
     });
+
+    const posts: IPost[] = [];
+
+    for await (const post of data) {
+      const [reactionCount, commentCount, isLiked] = await Promise.all([
+        await reactionService.getReactionsOfPost(post.id),
+        await commentService.getCommentCountOfPost(post.id),
+        await reactionService.checkMemberReaction(
+          post.id,
+          post.createdBy.id,
+          "LIKE"
+        ),
+      ]);
+      posts.push({
+        ...post,
+        reactionCount,
+        commentCount,
+        isLiked,
+      });
+    }
 
     const totalPages = Math.ceil(count / queries.limit) || 1;
 
@@ -49,7 +71,7 @@ const getPosts = async (queries?: IGetPostsParams) => {
       totalPages,
       page: queries.page,
       limit: queries.limit,
-      data,
+      data: posts,
     };
   } catch (err) {
     throw err;

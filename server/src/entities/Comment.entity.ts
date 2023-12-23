@@ -25,6 +25,7 @@ export class Comment extends BaseEntity implements IComment {
   @ManyToOne(() => Post, (post) => post.id, {
     onDelete: "CASCADE",
   })
+  @JoinColumn({ name: "postId" })
   @Column({
     type: "int",
   })

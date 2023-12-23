@@ -16,3 +16,8 @@ export enum ESocketEventName {
   "NOTIFICATION" = "NOTIFICATION",
   "LEVEL_UP" = "LEVEL_UP",
 }
+
+export interface ICount {
+  type: string;
+  count: number;
+}

@@ -52,7 +52,7 @@ const usePostContext = () => {
     return () => {
       s.disconnect();
     };
-  }, []);
+  }, [countRefetch, message, refetch]);
 
   const handleOpenLogin = () => {
     setOpenLoginModal(true);

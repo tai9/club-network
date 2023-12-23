@@ -50,10 +50,22 @@ const deleteComment = async (id: number) => {
   }
 };
 
+const getCommentCountOfPost = async (postId: number) => {
+  try {
+    const count = await commentRepository.countBy({
+      postId,
+    });
+    return count;
+  } catch (err) {
+    throw err;
+  }
+};
+
 export default {
   createComment,
   getComments,
   getCommentById,
   deleteComment,
   updateComment,
+  getCommentCountOfPost,
 };

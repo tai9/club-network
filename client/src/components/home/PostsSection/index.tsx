@@ -29,9 +29,7 @@ const PostsSection = () => {
     isFetchingNextPage,
     status,
     fetchNextPage,
-  } = usePostsInfinity({
-    limit: 25,
-  });
+  } = usePostsInfinity();
   const [feedType, setFeedType] = useState<"new" | "own" | "discover">("own");
 
   useEffect(() => {
