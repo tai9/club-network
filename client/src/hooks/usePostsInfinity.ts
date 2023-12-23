@@ -1,5 +1,5 @@
 import postController from "@/controllers/postController";
-import { IGetPostsParams } from "@/types/Post";
+import { IGetPostsParams } from "@server/types/Post";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 const usePostsInfinity = (params?: IGetPostsParams) => {

@@ -1,7 +1,7 @@
 import axiosClient from "@/configs/axiosClient";
 import memberController from "@/controllers/memberController";
 import { MEMBER_DATA } from "@/queryKeys";
-import { IMember } from "@/types/Member";
+import { IMember } from "@server/types/Member";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { message } from "antd";

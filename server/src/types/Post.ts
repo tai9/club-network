@@ -1,3 +1,4 @@
+import { IMember } from "./Member";
 import { IBaseEntity, ICount } from "./common";
 
 export interface IPost extends IBaseEntity {
@@ -8,6 +9,7 @@ export interface IPost extends IBaseEntity {
   reactionCount?: ICount[];
   commentCount?: number;
   isLiked?: boolean;
+  createdBy: IMember;
 }
 
 export interface IGetPostsParams {

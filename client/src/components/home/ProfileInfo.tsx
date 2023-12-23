@@ -11,7 +11,7 @@ import { HighlightText, MoreLink } from "../common/styled";
 import { ProfileInfoWrapper, ProfileName } from "./styled";
 import { useLevels } from "@/hooks/useLevels";
 import { useMemo, useState } from "react";
-import { ILevel } from "@/types/Level";
+import { ILevel } from "@server/types/Level";
 import QRModal from "./QRModal";
 
 const ProfileInfo = () => {

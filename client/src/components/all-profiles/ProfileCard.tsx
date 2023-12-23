@@ -3,9 +3,9 @@ import { ProfileCardLayout } from "./styled";
 import CustomAvatar from "../common/CustomAvatar";
 import { Flex, Tag, Tooltip } from "antd";
 import { HeartOutlined, MessageOutlined } from "@ant-design/icons";
-import { IMember } from "@/types/Member";
+import { IMember } from "@server/types/Member";
 import { useLevels } from "@/hooks/useLevels";
-import { ILevel } from "@/types/Level";
+import { ILevel } from "@server/types/Level";
 
 type Props = {
   member: IMember;

@@ -1,6 +1,6 @@
 import axiosClient from "@/configs/axiosClient";
-import { IMember } from "@/types/Member";
-import { DataWithPagination } from "@/types/common";
+import { IMember } from "@server/types/Member";
+import { DataWithPagination } from "@server/types/common";
 
 const prefix = "members";
 

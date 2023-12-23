@@ -2,7 +2,7 @@ import { Flex, Progress, Tooltip } from "antd";
 import React, { useMemo } from "react";
 import { HighlightText } from "../styled";
 import { useLevels } from "@/hooks/useLevels";
-import { ILevel } from "@/types/Level";
+import { ILevel } from "@server/types/Level";
 
 const twoColors = { "0%": "#108ee9", "100%": "#87d068" };
 

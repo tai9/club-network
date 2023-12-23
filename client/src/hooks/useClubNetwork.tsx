@@ -1,8 +1,8 @@
-import { IPost } from "@/types/Post";
+import { IPost } from "@server/types/Post";
 import { useState, createContext, useEffect, useContext } from "react";
 import { io } from "socket.io-client";
 import { useNotificationCount, useNotifications } from "./useNotifications";
-import { ESocketEventName } from "@/types/common";
+import { ESocketEventName } from "@server/types/common";
 import { App } from "antd";
 
 const usePostContext = () => {

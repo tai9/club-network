@@ -1,6 +1,6 @@
 import axiosClient from "@/configs/axiosClient";
-import { INotification } from "@/types/Notification";
-import { DataWithPagination } from "@/types/common";
+import { INotification } from "@server/types/Notification";
+import { DataWithPagination } from "@server/types/common";
 
 const prefix = "notifications";
 

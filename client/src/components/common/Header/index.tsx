@@ -1,7 +1,7 @@
 import useClubNetwork from "@/hooks/useClubNetwork";
 import { useLevels } from "@/hooks/useLevels";
 import { useMember } from "@/hooks/useMember";
-import { ILevel } from "@/types/Level";
+import { ILevel } from "@server/types/Level";
 import { Button, Input } from "antd";
 import { deleteCookie } from "cookies-next";
 import Link from "next/link";

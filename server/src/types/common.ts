@@ -21,3 +21,14 @@ export interface ICount {
   type: string;
   count: number;
 }
+
+export interface IPagination {
+  page: number;
+  limit: number;
+  totalPages: number;
+  count: number;
+}
+
+export type DataWithPagination<T> = IPagination & {
+  data: T[];
+};

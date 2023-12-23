@@ -1,6 +1,6 @@
 import axiosClient from "@/configs/axiosClient";
-import { IPost } from "@/types/Post";
-import { DataWithPagination } from "@/types/common";
+import { IPost } from "@server/types/Post";
+import { DataWithPagination } from "@server/types/common";
 
 const prefix = "posts";
 

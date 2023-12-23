@@ -1,11 +1,11 @@
 import CustomAvatar from "@/components/common/CustomAvatar";
+import { MoreLink } from "@/components/common/styled";
+import queryClient from "@/configs/queryClient";
 import commentController from "@/controllers/commentController";
 import postController from "@/controllers/postController";
 import reactionsController from "@/controllers/reactionController";
 import useClubNetwork from "@/hooks/useClubNetwork";
-import { useMember, useMemberExp } from "@/hooks/useMember";
-import usePosts, { usePost } from "@/hooks/usePosts";
-import { IPost } from "@/types/Post";
+import { useMember } from "@/hooks/useMember";
 import { formatLastTime } from "@/utils/formatTime";
 import {
   DeleteOutlined,
@@ -18,14 +18,13 @@ import {
   MessageOutlined,
   MoreOutlined,
 } from "@ant-design/icons";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { Button, Divider, Dropdown, Flex, Input, Modal, App } from "antd";
-import { useMemo, useState } from "react";
-import { Content, PostWrapper } from "./styled";
+import { IPost } from "@server/types/Post";
+import { useMutation } from "@tanstack/react-query";
+import { App, Button, Divider, Dropdown, Flex, Input, Modal } from "antd";
 import { useRouter } from "next/router";
-import { TwitterShareButton, TwitterIcon } from "react-share";
-import { MoreLink } from "@/components/common/styled";
-import queryClient from "@/configs/queryClient";
+import { useMemo, useState } from "react";
+import { TwitterShareButton } from "react-share";
+import { Content, PostWrapper } from "./styled";
 
 type Props = {
   data: IPost;
@@ -280,7 +279,7 @@ const Post = ({ data }: Props) => {
         <>
           <Divider style={{ margin: 0 }} />
 
-          <Flex gap={16} vertical>
+          {/* <Flex gap={16} vertical>
             {data.comments.map((c) => (
               <Flex gap={12} key={c.id}>
                 <CustomAvatar username={c.createdBy.username} size="default" />
@@ -317,7 +316,7 @@ const Post = ({ data }: Props) => {
               />
               <Button onClick={handleComment}>Reply</Button>
             </Flex>
-          </Flex>
+          </Flex> */}
         </>
       ) : (
         <></>

@@ -1,7 +1,7 @@
 import { Badge, Flex } from "antd";
 import React from "react";
 import CustomAvatar from "../CustomAvatar";
-import { INotification } from "@/types/Notification";
+import { INotification } from "@server/types/Notification";
 import { formatLastTime } from "@/utils/formatTime";
 
 type Props = {
