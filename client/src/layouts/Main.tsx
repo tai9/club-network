@@ -1,8 +1,9 @@
 import Footer from "@/components/common/Footer";
 import Header from "@/components/common/Header";
 import { ScreenSizes } from "@/constants/screenSizes";
+import useClubNetwork from "@/hooks/useClubNetwork";
 import { LayoutProps } from "@/types/common";
-import { UpOutlined } from "@ant-design/icons";
+import { UpOutlined, UserOutlined } from "@ant-design/icons";
 import { FloatButton } from "antd";
 import { Space_Grotesk } from "next/font/google";
 import { useRouter } from "next/router";
@@ -14,6 +15,8 @@ export const MainLayout = ({ children }: LayoutProps) => {
   const router = useRouter();
   const path = router.asPath;
 
+  const { onlineUsers } = useClubNetwork();
+
   return (
     <Wrapper className={`${SpaceGroteskFont.className}`}>
       <Header />
@@ -21,11 +24,21 @@ export const MainLayout = ({ children }: LayoutProps) => {
       <Main path={path} className="grow">
         {children}
       </Main>
+
       <FloatButton.BackTop
         icon={<UpOutlined />}
         style={{
+          bottom: 150,
+        }}
+      />
+
+      <FloatButton
+        tooltip={<div>Online users</div>}
+        badge={{ count: onlineUsers.length, color: "#52c41a" }}
+        style={{
           bottom: 90,
         }}
+        icon={<UserOutlined />}
       />
       <Footer />
     </Wrapper>

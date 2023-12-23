@@ -15,6 +15,7 @@ const usePostContext = () => {
   const [post, setPost] = useState<IPost>();
   const [socket, setSocket] = useState<any>();
   const [openLoginModal, setOpenLoginModal] = useState(false);
+  const [onlineUsers, setOnlineUsers] = useState<any[]>([]);
 
   useEffect(() => {
     const URL =
@@ -36,6 +37,7 @@ const usePostContext = () => {
     });
     s.on("users", (value) => {
       console.log("users online now: 😑", value);
+      setOnlineUsers(value);
     });
     s.on(ESocketEventName.NOTIFICATION, async (value) => {
       console.log("WS: ", ESocketEventName.NOTIFICATION);
@@ -68,6 +70,7 @@ const usePostContext = () => {
     openLoginModal,
     setOpenLoginModal,
     handleOpenLogin,
+    onlineUsers,
 
     socket,
   };
