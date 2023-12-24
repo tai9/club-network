@@ -6,6 +6,7 @@ export const ProfilesWrapper = styled.div`
   gap: 48px;
   flex-direction: column;
   padding: 0 16px;
+  padding-bottom: 64px;
 
   .heading {
     font-size: 56px;

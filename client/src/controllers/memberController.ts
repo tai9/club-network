@@ -16,8 +16,18 @@ const memberController = {
       responseType: "blob",
     });
   },
+  upload(formData: any) {
+    return axiosClient.post(`/${prefix}/upload`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
   create(data: any) {
     return axiosClient.post(`/${prefix}`, data);
+  },
+  bulkCreate(data: any) {
+    return axiosClient.post(`/${prefix}/bulk-create`, data);
   },
   getExp(memberId: number) {
     return axiosClient.get<{ exp: number }>(`/${prefix}/${memberId}/exp`);

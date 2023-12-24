@@ -10,6 +10,7 @@ import { IMember } from "@/types/Member";
 import Papa from "papaparse";
 import fs from "fs";
 import moment from "moment";
+import roleService from "@/services/role.service";
 
 const createMember = async (req: Request, res: Response) => {
   try {
@@ -43,15 +44,18 @@ const bulkCreateMembers = async (req: Request, res: Response) => {
     const membersPayload = await bulkCreateSchema.validateAsync(
       req.body.members
     );
+    const role = await roleService.getRoleByName("TV");
+
     const arr: Member[] = [];
     for await (const m of membersPayload) {
       const member = new Member();
-      member.fullname = m.members;
+      member.fullname = m.fullname;
       member.email = m.email;
       member.bio = m.bio;
       member.fbLink = m.fbLink;
       member.insLink = m.insLink;
       member.twitterLink = m.twitterLink;
+      member.role = role;
       member.username = generateRandomUsername();
       member.password = await hash(process.env.DEFAULT_MEMBER_PASSWORD, 10);
       arr.push(member);
@@ -81,7 +85,7 @@ const exportMembersCsv = async (req: Request, res: Response) => {
         username: m.username,
         password: process.env.DEFAULT_MEMBER_PASSWORD,
         fullname: m.fullname,
-        role: m.role.description,
+        role: m.role?.description,
         email: m.email,
         bio: m.bio,
         fbLink: m.fbLink,
@@ -107,6 +111,30 @@ const exportMembersCsv = async (req: Request, res: Response) => {
       fs.unlinkSync(filePath);
     });
     // return res.status(constants.HTTP_STATUS_OK).json(members);
+  } catch (error) {
+    console.log(error);
+    res.status(constants.HTTP_STATUS_BAD_REQUEST).json(error);
+  }
+};
+
+const uploadCsv = async (req: Request, res: Response) => {
+  try {
+    const csvData = req.file.buffer.toString("utf-8");
+    Papa.parse(csvData, {
+      header: true, // Specify if the CSV has a header row
+      dynamicTyping: true, // Automatically convert numeric values to numbers
+      complete: (result) => {
+        // TODO: handle wrong csv file format
+        res.json({
+          message: "File uploaded and processed successfully",
+          result: result.data,
+        });
+      },
+      error: (err: any) => {
+        console.error(err);
+        res.status(500).json({ error: "Error parsing CSV file" });
+      },
+    });
   } catch (error) {
     console.log(error);
     res.status(constants.HTTP_STATUS_BAD_REQUEST).json(error);
@@ -181,4 +209,5 @@ export default {
   getMember,
   getMemberExp,
   exportMembersCsv,
+  uploadCsv,
 };

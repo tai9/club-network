@@ -2,15 +2,19 @@ import memberController from "@/controllers/memberController";
 import { useMembers } from "@/hooks/useMember";
 import { TableOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { useMutation } from "@tanstack/react-query";
-import { App, Button, Flex, Radio } from "antd";
+import { App, Button, Flex, Modal, Radio, UploadProps } from "antd";
 import { saveAs } from "file-saver";
 import Link from "next/link";
 import ProfileCard from "./ProfileCard";
 import { ProfileList, ProfilesWrapper } from "./styled";
+import { useState } from "react";
+import BulkCreateModal from "./BulkCreateModal";
 
 const AllProfiles = () => {
   const { data } = useMembers();
   const { message } = App.useApp();
+
+  const [openBulk, setOpenBulk] = useState(false);
 
   const mutation = useMutation({
     mutationKey: ["members", "export-csv"],
@@ -28,13 +32,19 @@ const AllProfiles = () => {
     await mutation.mutateAsync();
   };
 
+  const handleCancel = () => {
+    setOpenBulk(false);
+  };
+
   return (
     <ProfilesWrapper>
       <div className="heading">All Profiles</div>
       <Flex gap={18} vertical justify="space-between">
-        <Flex justify="space-between">
+        <Flex justify="space-between" align="center">
           <Flex gap={12}>
-            <Button type="primary">+ Bulk create members</Button>
+            <Button type="primary" onClick={() => setOpenBulk(true)}>
+              + Bulk create members
+            </Button>
             <Button loading={mutation.isPending} onClick={handleExport}>
               Export members
             </Button>
@@ -58,6 +68,8 @@ const AllProfiles = () => {
           })}
         </ProfileList>
       </Flex>
+
+      <BulkCreateModal open={openBulk} handleCancel={handleCancel} />
     </ProfilesWrapper>
   );
 };

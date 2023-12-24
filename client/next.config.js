@@ -22,6 +22,7 @@ const nextConfig = {
     "rc-util",
     "rc-tree",
     "rc-tooltip",
+    "rc-table",
   ],
   async rewrites() {
     return [

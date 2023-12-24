@@ -38,6 +38,14 @@ const getRoleById = async (id: number) => {
   }
 };
 
+const getRoleByName = async (name: string) => {
+  try {
+    return await roleRepository.findOneBy({ name });
+  } catch (err) {
+    throw err;
+  }
+};
+
 const deleteRole = async (id: number) => {
   try {
     return await roleRepository.delete({
@@ -54,4 +62,5 @@ export default {
   getRoleById,
   deleteRole,
   updateRole,
+  getRoleByName,
 };
