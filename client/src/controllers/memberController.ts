@@ -24,7 +24,7 @@ const memberController = {
     });
   },
   create(data: any) {
-    return axiosClient.post(`/${prefix}`, data);
+    return axiosClient.post<IMember>(`/${prefix}`, data);
   },
   bulkCreate(data: any) {
     return axiosClient.post(`/${prefix}/bulk-create`, data);

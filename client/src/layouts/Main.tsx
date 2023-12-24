@@ -29,6 +29,7 @@ export const MainLayout = ({ children }: LayoutProps) => {
         icon={<UpOutlined />}
         style={{
           bottom: 150,
+          right: 80,
         }}
       />
 
@@ -36,7 +37,8 @@ export const MainLayout = ({ children }: LayoutProps) => {
         tooltip={<div>Online users</div>}
         badge={{ count: onlineUsers.length, color: "#52c41a" }}
         style={{
-          bottom: 90,
+          bottom: 80,
+          right: 80,
         }}
         icon={<UserOutlined />}
       />

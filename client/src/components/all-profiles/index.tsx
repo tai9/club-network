@@ -9,12 +9,14 @@ import ProfileCard from "./ProfileCard";
 import { ProfileList, ProfilesWrapper } from "./styled";
 import { useState } from "react";
 import BulkCreateModal from "./BulkCreateModal";
+import CreateModal from "./CreateModal";
 
 const AllProfiles = () => {
   const { data } = useMembers();
   const { message } = App.useApp();
 
   const [openBulk, setOpenBulk] = useState(false);
+  const [openCreate, setOpenCreate] = useState(false);
 
   const mutation = useMutation({
     mutationKey: ["members", "export-csv"],
@@ -32,8 +34,12 @@ const AllProfiles = () => {
     await mutation.mutateAsync();
   };
 
-  const handleCancel = () => {
+  const handleBulkCancel = () => {
     setOpenBulk(false);
+  };
+
+  const handleCancel = () => {
+    setOpenCreate(false);
   };
 
   return (
@@ -42,7 +48,10 @@ const AllProfiles = () => {
       <Flex gap={18} vertical justify="space-between">
         <Flex justify="space-between" align="center">
           <Flex gap={12}>
-            <Button type="primary" onClick={() => setOpenBulk(true)}>
+            <Button type="primary" onClick={() => setOpenCreate(true)}>
+              + Create member
+            </Button>
+            <Button onClick={() => setOpenBulk(true)}>
               + Bulk create members
             </Button>
             <Button loading={mutation.isPending} onClick={handleExport}>
@@ -69,7 +78,8 @@ const AllProfiles = () => {
         </ProfileList>
       </Flex>
 
-      <BulkCreateModal open={openBulk} handleCancel={handleCancel} />
+      <CreateModal open={openCreate} handleCancel={handleCancel} />
+      <BulkCreateModal open={openBulk} handleCancel={handleBulkCancel} />
     </ProfilesWrapper>
   );
 };
