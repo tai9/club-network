@@ -76,11 +76,12 @@ const getMembers = async () => {
 
 const getMemberByUsername = async (username: string) => {
   try {
-    return await memberRepository
-      .createQueryBuilder("member")
-      .where("member.username=:username", { username })
-      .addSelect("member.password")
-      .getOne();
+    return await memberRepository.findOne({
+      relations: ["role"],
+      where: {
+        username,
+      },
+    });
   } catch (err) {
     throw err;
   }

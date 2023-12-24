@@ -126,7 +126,7 @@ const BulkCreateModal = ({ handleCancel, ...props }: Props) => {
     }
 
     if (members) {
-      return <MemberTable dataSource={members} />;
+      return <MemberTable showSearch dataSource={members} />;
     }
 
     return (
