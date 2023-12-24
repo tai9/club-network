@@ -5,6 +5,7 @@ export const ProfilesWrapper = styled.div`
   display: flex;
   gap: 48px;
   flex-direction: column;
+  padding: 0 16px;
 
   .heading {
     font-size: 56px;
@@ -26,7 +27,6 @@ export const ProfileList = styled.div`
   width: 100%;
   -webkit-box-flex: 1;
   flex-grow: 1;
-  padding: 0 16px;
 
   @media (max-width: ${ScreenSizes.small}) {
     gap: 8px;

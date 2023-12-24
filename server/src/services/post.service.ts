@@ -86,6 +86,14 @@ const createPost = async (post: Post) => {
   }
 };
 
+const bulkCreatePost = async (posts: Post[]) => {
+  try {
+    return await postRepository.insert(posts);
+  } catch (err) {
+    throw err;
+  }
+};
+
 const updatePost = async (post: Post) => {
   try {
     post.updatedAt = new Date();
@@ -125,6 +133,7 @@ const deletePost = async (id: number) => {
 };
 
 export default {
+  bulkCreatePost,
   createPost,
   getPosts,
   getPostById,

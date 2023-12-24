@@ -169,7 +169,16 @@ const updateExp = async (id: number, reactionType: ReactionType) => {
   }
 };
 
+const bulkCreateMembers = async (members: Member[]) => {
+  try {
+    return await memberRepository.insert(members);
+  } catch (err) {
+    throw err;
+  }
+};
+
 export default {
+  bulkCreateMembers,
   createMember,
   getMembers,
   getMemberByUsername,

@@ -5,6 +5,11 @@ import { Member } from "../entities";
 // import auditService from "../services/audit.service";
 import { hash } from "bcrypt";
 import { generateRandomUsername } from "@/utils/common";
+import Joi from "joi";
+import { IMember } from "@/types/Member";
+import Papa from "papaparse";
+import fs from "fs";
+import moment from "moment";
 
 const createMember = async (req: Request, res: Response) => {
   try {
@@ -19,6 +24,89 @@ const createMember = async (req: Request, res: Response) => {
     member.password = await hash(req.body.password, 10);
     const memberCreated = await memberService.createMember(member);
     return res.status(constants.HTTP_STATUS_OK).json(memberCreated);
+  } catch (error) {
+    console.log(error);
+    res.status(constants.HTTP_STATUS_BAD_REQUEST).json(error);
+  }
+};
+
+const bulkCreateSchema = Joi.array().items({
+  fullname: Joi.string().optional(),
+  email: Joi.string().optional(),
+  bio: Joi.string().optional(),
+  fbLink: Joi.string().optional(),
+  twitterLink: Joi.string().optional(),
+  insLink: Joi.string().optional(),
+});
+const bulkCreateMembers = async (req: Request, res: Response) => {
+  try {
+    const membersPayload = await bulkCreateSchema.validateAsync(
+      req.body.members
+    );
+    const arr: Member[] = [];
+    for await (const m of membersPayload) {
+      const member = new Member();
+      member.fullname = m.members;
+      member.email = m.email;
+      member.bio = m.bio;
+      member.fbLink = m.fbLink;
+      member.insLink = m.insLink;
+      member.twitterLink = m.twitterLink;
+      member.username = generateRandomUsername();
+      member.password = await hash(process.env.DEFAULT_MEMBER_PASSWORD, 10);
+      arr.push(member);
+    }
+    const membersCreated = await memberService.bulkCreateMembers(arr);
+    return res
+      .status(constants.HTTP_STATUS_OK)
+      .json(membersCreated.generatedMaps);
+  } catch (error) {
+    console.log(error);
+    res.status(constants.HTTP_STATUS_BAD_REQUEST).json(error);
+  }
+};
+
+const exportMembersCsv = async (req: Request, res: Response) => {
+  try {
+    const members = await memberService.getMembers();
+    const memberData = [];
+    members.data.forEach((m: IMember) => {
+      const reactionCount = m.reactionCount.reduce((result, item) => {
+        result[item.type.toLowerCase()] = parseInt(item.count, 10);
+        return result;
+      }, {});
+
+      const member = {
+        id: m.id,
+        username: m.username,
+        password: process.env.DEFAULT_MEMBER_PASSWORD,
+        fullname: m.fullname,
+        role: m.role.description,
+        email: m.email,
+        bio: m.bio,
+        fbLink: m.fbLink,
+        insLink: m.insLink,
+        twitterLink: m.twitterLink,
+        postCount: m.postCount,
+        ...reactionCount,
+        createdAt: moment(m.createdAt).format("DD/MM/yyyy hh:mm:ss"),
+        updatedAt: moment(m.updatedAt).format("DD/MM/yyyy hh:mm:ss"),
+      };
+
+      memberData.push(member);
+    });
+
+    const csvData = Papa.unparse(memberData);
+    // Specify CSV file path
+    const filePath = "output.csv";
+
+    // Write CSV data to the file
+    fs.writeFileSync(filePath, csvData);
+    res.download(filePath, `members-exported-${moment.now()}.csv`, (err) => {
+      // Cleanup: Remove the temporary file after it's sent
+      fs.unlinkSync(filePath);
+    });
+    // return res.status(constants.HTTP_STATUS_OK).json(members);
   } catch (error) {
     console.log(error);
     res.status(constants.HTTP_STATUS_BAD_REQUEST).json(error);
@@ -86,9 +174,11 @@ const deleteMember = async (req: Request, res: Response) => {
 };
 
 export default {
+  bulkCreateMembers,
   createMember,
   getMembers,
   deleteMember,
   getMember,
   getMemberExp,
+  exportMembersCsv,
 };

@@ -11,6 +11,11 @@ const memberController = {
   get(memberId: number) {
     return axiosClient.get<IMember>(`/${prefix}/${memberId}`);
   },
+  export() {
+    return axiosClient.get(`/${prefix}/export-csv`, {
+      responseType: "blob",
+    });
+  },
   create(data: any) {
     return axiosClient.post(`/${prefix}`, data);
   },

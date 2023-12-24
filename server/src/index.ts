@@ -19,6 +19,10 @@ import meRouters from "./routers/me.router";
 import { createServer } from "node:http";
 import { initSocketServer } from "./configs/socket.config";
 import notificationRouters from "./routers/notification.router";
+import multer from "multer";
+import csvParser from "csv-parser";
+import fs from "fs";
+import Papa from "papaparse";
 
 config();
 
@@ -39,9 +43,34 @@ const PORT = process.env.PORT || 8000;
 const server = createServer(app);
 export const io = initSocketServer(server);
 
+// Set up multer for handling file uploads
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+// Define a route to handle file uploads
+app.post("/upload", upload.single("file"), (req, res) => {
+  // Access the uploaded file from req.file.buffer
+  const csvData = req.file.buffer.toString("utf-8");
+
+  // Use papaparse to parse the CSV data
+  Papa.parse(csvData, {
+    header: true, // Specify if the CSV has a header row
+    dynamicTyping: true, // Automatically convert numeric values to numbers
+    complete: (result) => {
+      // Result.data contains the parsed CSV data
+      console.log(result.data);
+      res.json({ message: "File uploaded and processed successfully" });
+    },
+    error: (err) => {
+      console.error(err);
+      res.status(500).json({ error: "Error parsing CSV file" });
+    },
+  });
+});
 
 app.use("/ping", (req, res) => {
   res.send("ok");
