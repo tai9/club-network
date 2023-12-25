@@ -2,7 +2,7 @@ import memberController from "@/controllers/memberController";
 import { useMember, useMembers } from "@/hooks/useMember";
 import { TableOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { useMutation } from "@tanstack/react-query";
-import { App, Button, Flex, Input, Radio } from "antd";
+import { App, Button, Empty, Flex, Input, Radio } from "antd";
 import { saveAs } from "file-saver";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -13,10 +13,11 @@ import ProfileCard from "./ProfileCard";
 import { ProfileList, ProfilesWrapper } from "./styled";
 import { useDebounce } from "use-debounce";
 import { IGetMembersParams } from "@server/types/Member";
+import ProfileCardSkeleton from "./ProfileCardSkeleton";
 
 const AllProfiles = () => {
   const [memberParams, setMemberParams] = useState<IGetMembersParams>();
-  const { data } = useMembers(memberParams);
+  const { data, isFetching } = useMembers(memberParams);
   const { message } = App.useApp();
   const { data: memberData } = useMember();
 
@@ -62,6 +63,26 @@ const AllProfiles = () => {
     setLayout(value);
   };
 
+  const renderProfileCardGrid = () => {
+    if (data && data.count === 0) {
+      return <Empty />;
+    }
+    return (
+      <ProfileList>
+        {data?.data.map((member) => {
+          return (
+            <Link key={member.id} href={`/member/${member.id}`}>
+              <ProfileCard member={member} />
+            </Link>
+          );
+        })}
+
+        {isFetching &&
+          Array.from({ length: 24 }, (_, i) => <ProfileCardSkeleton key={i} />)}
+      </ProfileList>
+    );
+  };
+
   return (
     <ProfilesWrapper>
       <div className="heading">All Profiles</div>
@@ -104,19 +125,13 @@ const AllProfiles = () => {
             setSearch(value);
           }}
         />
-        {layout === "grid" && (
-          <ProfileList>
-            {data?.data.map((member) => {
-              return (
-                <Link key={member.id} href={`/member/${member.id}`}>
-                  <ProfileCard member={member} />
-                </Link>
-              );
-            })}
-          </ProfileList>
-        )}
+        {layout === "grid" && renderProfileCardGrid()}
         {layout === "table" && (
-          <MemberTable onlyView={false} dataSource={data?.data} />
+          <MemberTable
+            isLoading={isFetching}
+            onlyView={false}
+            dataSource={data?.data}
+          />
         )}
       </Flex>
 

@@ -1,10 +1,8 @@
 import axiosClient from "@/configs/axiosClient";
 import memberController from "@/controllers/memberController";
-import { MEMBER_DATA } from "@/queryKeys";
 import { IMember } from "@server/types/Member";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { message } from "antd";
 
 export const useMember = () => {
   return useQuery({
@@ -33,6 +31,7 @@ export const useMembers = (params?: any) => {
       const res = await memberController.getAll(params);
       return res.data;
     },
+    placeholderData: keepPreviousData,
   });
 };
 

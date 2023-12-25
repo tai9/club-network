@@ -16,9 +16,15 @@ type Props = {
   showSearch?: boolean;
   onlyView?: boolean;
   dataSource?: IMember[];
+  isLoading?: boolean;
 };
 
-const MemberTable = ({ dataSource, showSearch, onlyView = true }: Props) => {
+const MemberTable = ({
+  dataSource,
+  showSearch,
+  onlyView = true,
+  isLoading,
+}: Props) => {
   const { modal, message } = App.useApp();
 
   const [data, setData] = useState(dataSource);
@@ -208,7 +214,12 @@ const MemberTable = ({ dataSource, showSearch, onlyView = true }: Props) => {
           }}
         />
       )}
-      <Table columns={columns} dataSource={data} rowKey={(e) => e.id} />
+      <Table
+        columns={columns}
+        dataSource={data}
+        rowKey={(e) => e.id}
+        loading={isLoading}
+      />
       <CreateModal
         title={"Update a member"}
         open={openEditModal}
