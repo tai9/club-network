@@ -5,8 +5,10 @@ import { DataWithPagination } from "@server/types/common";
 const prefix = "members";
 
 const memberController = {
-  getAll() {
-    return axiosClient.get<DataWithPagination<IMember>>(`/${prefix}`);
+  getAll(params?: any) {
+    return axiosClient.get<DataWithPagination<IMember>>(`/${prefix}`, {
+      params,
+    });
   },
   get(memberId: number) {
     return axiosClient.get<IMember>(`/${prefix}/${memberId}`);

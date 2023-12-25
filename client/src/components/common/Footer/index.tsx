@@ -1,8 +1,6 @@
-import Image from "next/image";
-import Link from "next/link";
-import { FooterLayout } from "./styled";
 import { Flex } from "antd";
 import { CustomLink } from "../Header/styled";
+import { FooterLayout } from "./styled";
 
 const Footer = () => {
   return (

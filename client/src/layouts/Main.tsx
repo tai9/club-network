@@ -14,6 +14,7 @@ const SpaceGroteskFont = Space_Grotesk({ subsets: ["latin"] });
 export const MainLayout = ({ children }: LayoutProps) => {
   const router = useRouter();
   const path = router.asPath;
+  const displayFooter = !path.includes("/all-profiles");
 
   const { onlineUsers } = useClubNetwork();
 
@@ -42,7 +43,7 @@ export const MainLayout = ({ children }: LayoutProps) => {
         }}
         icon={<UserOutlined />}
       />
-      <Footer />
+      {displayFooter && <Footer />}
     </Wrapper>
   );
 };

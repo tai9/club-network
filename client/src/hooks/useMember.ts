@@ -26,11 +26,11 @@ export const useMemberById = (memberId: number) => {
   });
 };
 
-export const useMembers = () => {
+export const useMembers = (params?: any) => {
   return useQuery({
-    queryKey: ["members"],
+    queryKey: ["members", params],
     queryFn: async () => {
-      const res = await memberController.getAll();
+      const res = await memberController.getAll(params);
       return res.data;
     },
   });

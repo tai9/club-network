@@ -5,21 +5,34 @@ import { useMutation } from "@tanstack/react-query";
 import { App, Button, Flex, Input, Radio } from "antd";
 import { saveAs } from "file-saver";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BulkCreateModal from "./BulkCreateModal";
 import CreateModal from "./CreateModal";
 import MemberTable from "./MemberTable";
 import ProfileCard from "./ProfileCard";
 import { ProfileList, ProfilesWrapper } from "./styled";
+import { useDebounce } from "use-debounce";
+import { IGetMembersParams } from "@server/types/Member";
 
 const AllProfiles = () => {
-  const { data } = useMembers();
+  const [memberParams, setMemberParams] = useState<IGetMembersParams>();
+  const { data } = useMembers(memberParams);
   const { message } = App.useApp();
   const { data: memberData } = useMember();
 
   const [layout, setLayout] = useState<"grid" | "table">("grid");
   const [openBulk, setOpenBulk] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
+
+  const [search, setSearch] = useState<string>();
+  const [searchDebounced] = useDebounce(search, 1000);
+
+  useEffect(() => {
+    setMemberParams((prev) => ({
+      ...prev,
+      search: searchDebounced,
+    }));
+  }, [searchDebounced]);
 
   const mutation = useMutation({
     mutationKey: ["members", "export-csv"],
@@ -83,17 +96,13 @@ const AllProfiles = () => {
           </Radio.Group>
         </Flex>
         <Input
-          placeholder="Search by name"
+          placeholder="Search by username, fullname, email"
           size="large"
-          // onChange={(e) => {
-          //   const value = e.currentTarget.value;
-          //   const searchData = dataSource?.filter((x) =>
-          //     (x.fullname as string)
-          //       ?.toLowerCase()
-          //       .includes(value.toLowerCase())
-          //   );
-          //   setData(searchData);
-          // }}
+          allowClear
+          onChange={(e) => {
+            const value = e.currentTarget.value || undefined;
+            setSearch(value);
+          }}
         />
         {layout === "grid" && (
           <ProfileList>
