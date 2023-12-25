@@ -18,7 +18,6 @@ export class Member extends BaseEntity implements IMember {
 
   @Column({
     type: "varchar",
-    select: false,
   })
   password: string;
 
