@@ -1,9 +1,19 @@
 import React from "react";
 import { IMember } from "@server/types/Member";
-import { App, Modal, ModalProps, Button, Form, Input, Typography } from "antd";
+import {
+  App,
+  Modal,
+  ModalProps,
+  Button,
+  Form,
+  Input,
+  Typography,
+  Select,
+} from "antd";
 import { useMutation } from "@tanstack/react-query";
 import memberController from "@/controllers/memberController";
 import queryClient from "@/configs/queryClient";
+import { useRoles } from "@/hooks/useRoles";
 
 type Props = ModalProps & {
   handleCancel: () => void;
@@ -14,6 +24,7 @@ type Props = ModalProps & {
 const CreateModal = ({ handleCancel, member, title, ...props }: Props) => {
   const { message } = App.useApp();
   const isEditting = !!member;
+  const { data: roles } = useRoles();
 
   const createMutation = useMutation({
     mutationKey: ["members", "create"],
@@ -73,7 +84,7 @@ const CreateModal = ({ handleCancel, member, title, ...props }: Props) => {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
-        initialValues={member}
+        initialValues={{ ...member, role: member?.role?.id }}
       >
         <Form.Item<IMember>
           label="Fullname"
@@ -93,9 +104,23 @@ const CreateModal = ({ handleCancel, member, title, ...props }: Props) => {
           <Input.Password />
         </Form.Item>
 
+        <Form.Item<IMember>
+          label="Role"
+          name="role"
+          rules={[{ required: true, message: "Please select your role!" }]}
+        >
+          <Select
+            options={roles?.data.map((x) => ({
+              value: x.id,
+              label: x.description,
+            }))}
+          />
+        </Form.Item>
+
         <Form.Item<IMember> label="Email" name="email">
           <Input />
         </Form.Item>
+
         <Form.Item<IMember> label="Bio" name="bio">
           <Input />
         </Form.Item>

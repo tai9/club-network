@@ -12,9 +12,24 @@ import fs from "fs";
 import moment from "moment";
 import roleService from "@/services/role.service";
 
+const createMemberSchema = Joi.object({
+  fullname: Joi.string().required(),
+  password: Joi.string().required(),
+  role: Joi.number().required(),
+  email: Joi.string().allow(null, "").optional(),
+  bio: Joi.string().allow(null, "").optional(),
+  fbLink: Joi.string().allow(null, "").optional(),
+  twitterLink: Joi.string().allow(null, "").optional(),
+  insLink: Joi.string().allow(null, "").optional(),
+});
 const createMember = async (req: Request, res: Response) => {
   try {
+    const memberPayload = await createMemberSchema.validateAsync(req.body);
+
+    const role = await roleService.getRoleById(memberPayload.role);
+
     const member = new Member();
+    member.role = role;
     member.fullname = req.body.fullname;
     member.email = req.body.email;
     member.bio = req.body.bio;
@@ -210,6 +225,7 @@ const updateMemberSchema = Joi.object({
   fbLink: Joi.string().allow(null, "").optional(),
   twitterLink: Joi.string().allow(null, "").optional(),
   insLink: Joi.string().allow(null, "").optional(),
+  role: Joi.number().required(),
 });
 const updateMember = async (req: Request, res: Response) => {
   const id = +req.params.id;
@@ -217,8 +233,11 @@ const updateMember = async (req: Request, res: Response) => {
     const memberPayload = await updateMemberSchema.validateAsync(req.body);
 
     const member = await memberService.getMemberById(id);
+    const role = await roleService.getRoleById(memberPayload.role);
+
     member.updatedAt = new Date();
     member.fullname = memberPayload.fullname || member.fullname;
+    member.role = role || member.role;
     member.email = memberPayload.email || member.email;
     member.bio = memberPayload.bio || member.bio;
     member.fbLink = memberPayload.fbLink || member.fbLink;

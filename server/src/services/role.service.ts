@@ -5,7 +5,11 @@ const roleRepository = AppDataSource.getRepository(Role);
 
 const getRoles = async () => {
   try {
-    const [data, count] = await roleRepository.findAndCount();
+    const [data, count] = await roleRepository.findAndCount({
+      order: {
+        grade: "DESC",
+      },
+    });
     return { data, count };
   } catch (err) {
     throw err;
