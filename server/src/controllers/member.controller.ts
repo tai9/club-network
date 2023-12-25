@@ -6,7 +6,7 @@ import { Member } from "../entities";
 import { hash } from "bcrypt";
 import { generateRandomUsername } from "@/utils/common";
 import Joi from "joi";
-import { IMember } from "@/types/Member";
+import { IGetMembersParams, IMember } from "@/types/Member";
 import Papa from "papaparse";
 import fs from "fs";
 import moment from "moment";
@@ -157,9 +157,18 @@ const uploadCsv = async (req: Request, res: Response) => {
   }
 };
 
+const getMembersSchema = Joi.object<IGetMembersParams>({
+  search: Joi.string().optional(),
+  fromExp: Joi.string().optional(),
+  toExp: Joi.string().optional(),
+  memberIds: Joi.array().items(Joi.number()).optional(),
+  page: Joi.number().integer().min(1).max(100).default(1).optional(),
+  limit: Joi.number().integer().min(1).max(100).default(51).optional(),
+});
 const getMembers = async (req: Request, res: Response) => {
   try {
-    const members = await memberService.getMembers();
+    const queries = await getMembersSchema.validateAsync(req.query);
+    const members = await memberService.getMembers(queries);
     return res.status(constants.HTTP_STATUS_OK).json(members);
   } catch (error) {
     console.log(error);

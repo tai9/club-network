@@ -20,3 +20,12 @@ export interface IMember extends IBaseEntity {
   role?: IRole;
   roles?: IRole[];
 }
+
+export interface IGetMembersParams {
+  memberIds?: number[];
+  page?: number;
+  limit?: number;
+  search?: string;
+  fromExp?: number;
+  toExp?: number;
+}
