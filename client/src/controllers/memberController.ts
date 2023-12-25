@@ -23,8 +23,14 @@ const memberController = {
       },
     });
   },
+  update(id: number, data: any) {
+    return axiosClient.put(`/${prefix}/${id}`, data);
+  },
   create(data: any) {
     return axiosClient.post<IMember>(`/${prefix}`, data);
+  },
+  delete(id: number) {
+    return axiosClient.delete(`/${prefix}/${id}`);
   },
   bulkCreate(data: any) {
     return axiosClient.post(`/${prefix}/bulk-create`, data);

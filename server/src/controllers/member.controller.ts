@@ -202,6 +202,43 @@ const deleteMember = async (req: Request, res: Response) => {
   }
 };
 
+const updateMemberSchema = Joi.object({
+  fullname: Joi.string().required(),
+  password: Joi.string().allow(null, "").optional(),
+  email: Joi.string().allow(null, "").optional(),
+  bio: Joi.string().allow(null, "").optional(),
+  fbLink: Joi.string().allow(null, "").optional(),
+  twitterLink: Joi.string().allow(null, "").optional(),
+  insLink: Joi.string().allow(null, "").optional(),
+});
+const updateMember = async (req: Request, res: Response) => {
+  const id = +req.params.id;
+  try {
+    const memberPayload = await updateMemberSchema.validateAsync(req.body);
+
+    const member = await memberService.getMemberById(id);
+    member.updatedAt = new Date();
+    member.fullname = memberPayload.fullname || member.fullname;
+    member.email = memberPayload.email || member.email;
+    member.bio = memberPayload.bio || member.bio;
+    member.fbLink = memberPayload.fbLink || member.fbLink;
+    member.insLink = memberPayload.insLink || member.insLink;
+    member.twitterLink = memberPayload.twitterLink || member.twitterLink;
+    member.password = memberPayload.password
+      ? await hash(memberPayload.password, 10)
+      : member.password;
+
+    const memberUpdate = await memberService.updateMember(member);
+
+    return res
+      .status(constants.HTTP_STATUS_OK)
+      .json(memberUpdate.generatedMaps);
+  } catch (error) {
+    console.log(error);
+    res.status(constants.HTTP_STATUS_BAD_REQUEST).json(error);
+  }
+};
+
 export default {
   bulkCreateMembers,
   createMember,
@@ -211,4 +248,5 @@ export default {
   getMemberExp,
   exportMembersCsv,
   uploadCsv,
+  updateMember,
 };

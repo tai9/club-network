@@ -106,10 +106,16 @@ const AllProfiles = () => {
             })}
           </ProfileList>
         )}
-        {layout === "table" && <MemberTable dataSource={data?.data} />}
+        {layout === "table" && (
+          <MemberTable onlyView={false} dataSource={data?.data} />
+        )}
       </Flex>
 
-      <CreateModal open={openCreate} handleCancel={handleCancel} />
+      <CreateModal
+        title={"Create a member"}
+        open={openCreate}
+        handleCancel={handleCancel}
+      />
       <BulkCreateModal open={openBulk} handleCancel={handleBulkCancel} />
     </ProfilesWrapper>
   );

@@ -7,16 +7,18 @@ import queryClient from "@/configs/queryClient";
 
 type Props = ModalProps & {
   handleCancel: () => void;
+  member?: IMember;
+  title?: string;
 };
 
-const CreateModal = ({ handleCancel, ...props }: Props) => {
+const CreateModal = ({ handleCancel, member, title, ...props }: Props) => {
   const { message } = App.useApp();
+  const isEditting = !!member;
 
-  const mutation = useMutation({
+  const createMutation = useMutation({
     mutationKey: ["members", "create"],
     mutationFn: memberController.create,
     onSuccess: (response) => {
-      console.log(response);
       message.success(`Create ${response.data.fullname} success`);
       queryClient.invalidateQueries({
         queryKey: ["members"],
@@ -28,9 +30,28 @@ const CreateModal = ({ handleCancel, ...props }: Props) => {
     },
   });
 
+  const updateMutation = useMutation({
+    mutationKey: ["members", "update"],
+    mutationFn: (variables: [number, any]) =>
+      memberController.update(variables[0], variables[1]),
+    onSuccess: (response) => {
+      message.success(`Update ${response.data.fullname} success`);
+      queryClient.invalidateQueries({
+        queryKey: ["members"],
+      });
+      handleCancel();
+    },
+    onError: () => {
+      message.error("Update member error");
+    },
+  });
+
   const onFinish = async (values: any) => {
-    console.log("Success:", values);
-    await mutation.mutateAsync(values);
+    if (isEditting) {
+      await updateMutation.mutateAsync([member.id, values]);
+      return;
+    }
+    await createMutation.mutateAsync(values);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -45,13 +66,14 @@ const CreateModal = ({ handleCancel, ...props }: Props) => {
       onCancel={handleCancel}
       width={350}
     >
-      <Typography.Title level={2}>Create a member</Typography.Title>
+      <Typography.Title level={2}>{title}</Typography.Title>
       <Form
         layout="vertical"
         name="basic"
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
+        initialValues={member}
       >
         <Form.Item<IMember>
           label="Fullname"
@@ -64,7 +86,9 @@ const CreateModal = ({ handleCancel, ...props }: Props) => {
         <Form.Item<IMember>
           label="Password"
           name="password"
-          rules={[{ required: true, message: "Please input your password!" }]}
+          rules={[
+            { required: !isEditting, message: "Please input your password!" },
+          ]}
         >
           <Input.Password />
         </Form.Item>
@@ -86,7 +110,11 @@ const CreateModal = ({ handleCancel, ...props }: Props) => {
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit">
+          <Button
+            type="primary"
+            htmlType="submit"
+            loading={createMutation.isPending || updateMutation.isPending}
+          >
             Submit
           </Button>
         </Form.Item>

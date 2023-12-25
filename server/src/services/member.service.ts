@@ -52,6 +52,7 @@ const getMembers = async () => {
         role: {
           grade: "DESC",
         },
+        updatedAt: "DESC",
       },
     });
     for (const member of data) {

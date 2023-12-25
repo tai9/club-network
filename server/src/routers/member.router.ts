@@ -14,5 +14,6 @@ memberRouters.post("/bulk-create", memberController.bulkCreateMembers);
 memberRouters.get("/", memberController.getMembers);
 memberRouters.get("/:id", memberController.getMember);
 memberRouters.delete("/:id", memberController.deleteMember);
+memberRouters.put("/:id", memberController.updateMember);
 
 export default memberRouters;

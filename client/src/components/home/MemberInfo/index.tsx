@@ -27,7 +27,7 @@ const MemberInfo = () => {
           <div>Twitter</div>
         </Flex>
       </Flex>
-      <Level exp={levelData?.exp || 0} />
+      <Level showProgress exp={levelData?.exp || 0} />
     </Wrapper>
   );
 };
