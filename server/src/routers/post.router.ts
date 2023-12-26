@@ -4,6 +4,7 @@ import { authenticateToken } from "@/middlewares/authentication";
 
 const postRouters = express.Router();
 postRouters.get("/", postController.getPosts);
+postRouters.get("/highlight", postController.getHighlightPosts);
 
 postRouters.use(authenticateToken);
 postRouters.post("/", postController.createPost);

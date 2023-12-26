@@ -1,4 +1,4 @@
-import { IGetPostsParams, IPost } from "@/types/Post";
+import { IGetHighlightPostsParams, IGetPostsParams, IPost } from "@/types/Post";
 import { Any, Between, LessThanOrEqual, Like, MoreThanOrEqual } from "typeorm";
 import { AppDataSource } from "../configs/db.config";
 import { Post } from "../entities";
@@ -147,6 +147,47 @@ const deletePost = async (id: number) => {
   }
 };
 
+const getHighlightPosts = async (
+  queries: IGetHighlightPostsParams = {
+    page: 1,
+    limit: 20,
+  }
+) => {
+  try {
+    const skip = (queries.page - 1) * queries.limit;
+    const query = `
+        SELECT
+            p.*,
+            COUNT(c."id") AS "commentCount",
+            COUNT(*) FILTER (WHERE r."type" = 'LIKE') AS "likeCount"
+        FROM "posts" p
+        LEFT JOIN "comments" c ON p."id" = c."postId"
+        LEFT JOIN "reactions" r ON p."id" = r."postId"
+        GROUP BY p."id"
+        ORDER BY "commentCount" DESC, "likeCount" DESC
+        LIMIT ${queries.limit}
+        OFFSET ${skip}
+    `;
+
+    const data = await postRepository.manager.query(query);
+
+    const res = await Promise.all(
+      data.map(async (item) => {
+        const post = await getPostById(item.id);
+        return {
+          ...post,
+          commentCount: item.commentcount,
+          likeCount: item.likecount,
+        };
+      })
+    );
+
+    return res;
+  } catch (err) {
+    throw err;
+  }
+};
+
 export default {
   bulkCreatePost,
   createPost,
@@ -154,4 +195,5 @@ export default {
   getPostById,
   deletePost,
   updatePost,
+  getHighlightPosts,
 };

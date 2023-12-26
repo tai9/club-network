@@ -24,3 +24,8 @@ export interface IGetPostsParams {
   to?: string;
   isNotification?: boolean;
 }
+
+export interface IGetHighlightPostsParams {
+  page?: number;
+  limit?: number;
+}

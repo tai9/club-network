@@ -3,7 +3,7 @@ import { constants } from "http2";
 import { Post, Member } from "../entities";
 import postService from "../services/post.service";
 import memberService from "@/services/member.service";
-import { IGetPostsParams } from "@/types/Post";
+import { IGetHighlightPostsParams, IGetPostsParams } from "@/types/Post";
 // import auditService from "../services/audit.service";
 import Joi from "joi";
 
@@ -124,6 +124,20 @@ const getPost = async (req: Request, res: Response) => {
     res.status(constants.HTTP_STATUS_BAD_REQUEST).json(error);
   }
 };
+const getHighlightPostsSchema = Joi.object<IGetHighlightPostsParams>({
+  page: Joi.number().integer().min(1).max(100).default(1).optional(),
+  limit: Joi.number().integer().min(1).max(100).default(20).optional(),
+});
+const getHighlightPosts = async (req: Request, res: Response) => {
+  try {
+    const queries = await getHighlightPostsSchema.validateAsync(req.query);
+    const posts = await postService.getHighlightPosts(queries);
+    return res.status(constants.HTTP_STATUS_OK).json(posts);
+  } catch (error) {
+    console.log(error);
+    res.status(constants.HTTP_STATUS_BAD_REQUEST).json(error);
+  }
+};
 
 export default {
   createPost,
@@ -131,4 +145,5 @@ export default {
   deletePost,
   updatePost,
   getPost,
+  getHighlightPosts,
 };
