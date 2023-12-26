@@ -47,6 +47,7 @@ const getPostsSchema = Joi.object<IGetPostsParams>({
   to: Joi.string().optional(),
   isNotification: Joi.boolean().optional(),
   memberIds: Joi.array().items(Joi.number()).optional(),
+  order: Joi.array().items(Joi.string()).optional(),
   page: Joi.number().integer().min(1).max(100).default(1).optional(),
   limit: Joi.number().integer().min(1).max(100).default(20).optional(),
 });

@@ -16,6 +16,7 @@ export interface IPost extends IBaseEntity {
 export interface IGetPostsParams {
   memberId?: number;
   memberIds?: number[];
+  order?: string[];
   page?: number;
   limit?: number;
   search?: string;

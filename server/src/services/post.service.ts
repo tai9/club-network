@@ -12,6 +12,7 @@ const getPosts = async (queries?: IGetPostsParams) => {
 
   try {
     let where = {};
+    let order = {};
 
     if (!!queries.memberIds?.length) {
       where["createdBy"] = {
@@ -21,6 +22,13 @@ const getPosts = async (queries?: IGetPostsParams) => {
 
     if (queries.isNotification) {
       where["isNotification"] = queries.isNotification;
+    }
+
+    if (!!queries.order?.length) {
+      queries.order.forEach((o) => {
+        const [key, value] = o.split(",");
+        order[key] = value;
+      });
     }
 
     if (queries.search) {
@@ -49,6 +57,7 @@ const getPosts = async (queries?: IGetPostsParams) => {
       order: {
         isNotification: "DESC",
         updatedAt: "DESC",
+        ...order,
       },
     });
 
