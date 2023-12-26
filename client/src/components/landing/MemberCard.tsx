@@ -1,11 +1,17 @@
-import React from "react";
+import { getPostDetailLink } from "@/utils/routeMapper";
+import { IPost } from "@server/types/Post";
+import { Flex, Typography } from "antd";
+import Link from "next/link";
+import Level from "../common/Level";
 import { MemberCardLayout } from "./styled";
-import { Flex } from "antd";
-import { HighlightText } from "../common/styled";
 
-const MemberCard = () => {
+type Props = {
+  post: IPost;
+};
+
+const MemberCard = ({ post }: Props) => {
   return (
-    <div>
+    <Link href={getPostDetailLink(post.createdBy.id, post.id)}>
       <MemberCardLayout>
         <div className="user-avatar">
           <div className="mask">
@@ -15,14 +21,21 @@ const MemberCard = () => {
         <div className="body">
           <Flex vertical gap={2}>
             <div className="text1">
-              tailor <span className="role">(CN)</span>
+              {post.createdBy.fullname}{" "}
+              <span className="role">({post.createdBy.role?.description})</span>
             </div>
-            <HighlightText>Level 10</HighlightText>
+            <Level exp={post.createdBy.exp} />
           </Flex>
-          <div>Mathematician and Generative Artist :)</div>
+          <Typography.Paragraph
+            ellipsis={{
+              rows: 3,
+            }}
+          >
+            {post.content}
+          </Typography.Paragraph>
         </div>
       </MemberCardLayout>
-    </div>
+    </Link>
   );
 };
 

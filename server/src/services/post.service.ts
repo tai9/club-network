@@ -19,6 +19,10 @@ const getPosts = async (queries?: IGetPostsParams) => {
       };
     }
 
+    if (queries.isNotification) {
+      where["isNotification"] = queries.isNotification;
+    }
+
     if (queries.search) {
       where["content"] = Like(`%${queries.search}%`);
     }
@@ -42,6 +46,10 @@ const getPosts = async (queries?: IGetPostsParams) => {
       where,
       skip,
       take: queries.limit,
+      order: {
+        isNotification: "DESC",
+        updatedAt: "DESC",
+      },
     });
 
     const posts: IPost[] = [];
@@ -97,9 +105,7 @@ const bulkCreatePost = async (posts: Post[]) => {
 const updatePost = async (post: Post) => {
   try {
     post.updatedAt = new Date();
-    return await postRepository.update(post.id, {
-      ...post,
-    });
+    return await postRepository.save(post);
   } catch (err) {
     throw err;
   }

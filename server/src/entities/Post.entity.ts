@@ -40,6 +40,12 @@ export class Post extends BaseEntity implements IPost {
   })
   status: string;
 
+  @Column({
+    type: "boolean",
+    nullable: true,
+  })
+  isNotification: boolean;
+
   @DeleteDateColumn()
   deletedAt: Date;
 
@@ -47,7 +53,10 @@ export class Post extends BaseEntity implements IPost {
   @JoinColumn({ name: "createdBy" })
   createdBy: Member;
 
-  @OneToMany(() => Comment, (c) => c.postId)
+  @OneToMany(() => Comment, (c) => c.postId, {
+    onDelete: "CASCADE",
+  })
+  @JoinColumn({ name: "comments" })
   comments: Comment[];
 
   @OneToMany(() => Reaction, (c) => c.postId)

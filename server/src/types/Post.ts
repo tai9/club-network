@@ -9,6 +9,7 @@ export interface IPost extends IBaseEntity {
   reactionCount?: ICount[];
   commentCount?: number;
   isLiked?: boolean;
+  isNotification: boolean;
   createdBy: IMember;
 }
 
@@ -20,4 +21,5 @@ export interface IGetPostsParams {
   search?: string;
   from?: string;
   to?: string;
+  isNotification?: boolean;
 }

@@ -1,5 +1,6 @@
 import CustomAvatar from "@/components/common/CustomAvatar";
 import { MoreLink } from "@/components/common/styled";
+import { VerifyIcon } from "@/components/icons/VerifyIcon";
 import queryClient from "@/configs/queryClient";
 import commentController from "@/controllers/commentController";
 import postController from "@/controllers/postController";
@@ -17,10 +18,11 @@ import {
   LinkOutlined,
   MessageOutlined,
   MoreOutlined,
+  ToTopOutlined,
 } from "@ant-design/icons";
 import { IPost } from "@server/types/Post";
 import { useMutation } from "@tanstack/react-query";
-import { App, Button, Divider, Dropdown, Flex, Input, Modal } from "antd";
+import { App, Divider, Dropdown, Flex, Modal, Typography } from "antd";
 import { useRouter } from "next/router";
 import { useMemo, useState } from "react";
 import { TwitterShareButton } from "react-share";
@@ -63,17 +65,43 @@ const Post = ({ data }: Props) => {
         });
       }
     },
-    onSuccess: () => {
-      if (postId) {
-        queryClient.invalidateQueries({ queryKey: ["posts", { postId }] });
-      } else {
-        queryClient.invalidateQueries({ queryKey: ["posts-infinity"] });
-      }
-      queryClient.invalidateQueries({
-        queryKey: ["member-exp", memberData?.id],
-      });
+    onSuccess: async () => {
+      await handleRefetchData();
+    },
+    onError: () => {
+      message.error("Something went wrong!");
     },
   });
+
+  const notifyMutation = useMutation({
+    mutationFn: () => {
+      return postController.update(data.id, {
+        isNotification: !data.isNotification,
+      });
+    },
+    onSuccess: async (data) => {
+      message.success(
+        `${
+          data?.data.isNotification ? "Notify" : "Unnotify"
+        } post successfully!`
+      );
+      await handleRefetchData();
+    },
+    onError: () => {
+      message.error("Something went wrong!");
+    },
+  });
+
+  const handleRefetchData = async () => {
+    if (postId) {
+      await queryClient.invalidateQueries({ queryKey: ["posts", { postId }] });
+    } else {
+      await queryClient.invalidateQueries({ queryKey: ["posts-infinity"] });
+    }
+    await queryClient.invalidateQueries({
+      queryKey: ["member-exp", memberData?.id],
+    });
+  };
 
   const handleLike = async () => {
     await likeMutation.mutateAsync();
@@ -106,6 +134,10 @@ const Post = ({ data }: Props) => {
     });
   };
 
+  const handleNotify = async () => {
+    await notifyMutation.mutateAsync();
+  };
+
   const handleComment = async () => {
     try {
       await commentController.create({
@@ -136,40 +168,65 @@ const Post = ({ data }: Props) => {
   };
 
   const renderItems = () => {
-    const items = [
-      {
-        key: "view-detail",
-        label: (
-          <MoreLink
-            align="center"
-            gap={8}
-            onClick={() => {
-              router.push(`${router.asPath}/post/${data.id}`);
-            }}
-          >
-            <ExportOutlined
-              style={{
-                fontSize: 16,
+    const items = [];
+
+    // TODO: check CN role
+    if (isOwner) {
+      items.push(
+        ...[
+          {
+            key: "notify",
+            label: (
+              <MoreLink align="center" gap={8} onClick={handleNotify}>
+                <ToTopOutlined
+                  style={{
+                    fontSize: 16,
+                  }}
+                />
+                <span>{data.isNotification ? "UNNOTIFY" : "NOTIFY"}</span>
+              </MoreLink>
+            ),
+          },
+        ]
+      );
+    }
+
+    items.push(
+      ...[
+        {
+          key: "view-detail",
+          label: (
+            <MoreLink
+              align="center"
+              gap={8}
+              onClick={() => {
+                router.push(`${router.asPath}/post/${data.id}`);
               }}
-            />
-            <span>VIEW DETAIL</span>
-          </MoreLink>
-        ),
-      },
-      {
-        key: "1",
-        label: (
-          <MoreLink align="center" gap={8} onClick={handleCopyLink}>
-            <LinkOutlined
-              style={{
-                fontSize: 16,
-              }}
-            />
-            <span>COPPY LINK</span>
-          </MoreLink>
-        ),
-      },
-    ];
+            >
+              <ExportOutlined
+                style={{
+                  fontSize: 16,
+                }}
+              />
+              <span>VIEW DETAIL</span>
+            </MoreLink>
+          ),
+        },
+        {
+          key: "1",
+          label: (
+            <MoreLink align="center" gap={8} onClick={handleCopyLink}>
+              <LinkOutlined
+                style={{
+                  fontSize: 16,
+                }}
+              />
+              <span>COPPY LINK</span>
+            </MoreLink>
+          ),
+        },
+      ]
+    );
 
     if (isOwner) {
       items.push(
@@ -219,20 +276,27 @@ const Post = ({ data }: Props) => {
             <div className="role">{data.createdBy.role?.description}</div>
           </Flex>
         </Flex>
-        <Dropdown
-          placement="bottomRight"
-          trigger={["click"]}
-          menu={{
-            items: renderItems(),
-          }}
-        >
-          <MoreOutlined
-            style={{
-              cursor: "pointer",
-              fontSize: 16,
+        <Flex gap={8}>
+          {data.isNotification && (
+            <Typography.Text>
+              <VerifyIcon />
+            </Typography.Text>
+          )}
+          <Dropdown
+            placement="bottomRight"
+            trigger={["click"]}
+            menu={{
+              items: renderItems(),
             }}
-          />
-        </Dropdown>
+          >
+            <MoreOutlined
+              style={{
+                cursor: "pointer",
+                fontSize: 16,
+              }}
+            />
+          </Dropdown>
+        </Flex>
       </Flex>
 
       <Content>{data.content}</Content>

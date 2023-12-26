@@ -35,4 +35,16 @@ export const usePost = (postId: number) => {
   });
 };
 
+export const useNotificationPosts = () => {
+  return useQuery({
+    queryKey: ["posts", "notification"],
+    queryFn: async () => {
+      const res = await postController.getAll({
+        isNotification: true,
+      });
+      return res.data;
+    },
+  });
+};
+
 export default usePosts;

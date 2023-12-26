@@ -15,6 +15,7 @@ const createPost = async (req: Request, res: Response) => {
     post.content = req.body.content;
     post.status = req.body.status;
     post.media = req.body.media;
+    post.isNotification = req.body.isNotification;
     post.createdBy = member;
 
     const postCreated = await postService.createPost(post);
@@ -44,6 +45,7 @@ const getPostsSchema = Joi.object<IGetPostsParams>({
   search: Joi.string().optional(),
   from: Joi.string().optional(),
   to: Joi.string().optional(),
+  isNotification: Joi.boolean().optional(),
   memberIds: Joi.array().items(Joi.number()).optional(),
   page: Joi.number().integer().min(1).max(100).default(1).optional(),
   limit: Joi.number().integer().min(1).max(100).default(20).optional(),
@@ -98,7 +100,11 @@ const updatePost = async (req: Request, res: Response) => {
   try {
     const id = +req.params.id;
     const post = await postService.getPostById(id);
-    post.content = req.body.content;
+    post.content = req.body.content || post.content;
+    post.isNotification =
+      typeof req.body.isNotification === "undefined"
+        ? post.isNotification
+        : req.body.isNotification;
     await postService.updatePost(post);
     return res.status(constants.HTTP_STATUS_OK).json(post);
   } catch (error) {

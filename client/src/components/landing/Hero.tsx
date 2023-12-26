@@ -1,13 +1,25 @@
-import React, { useRef } from "react";
-import { HeroLayout } from "./styled";
-import { Button, Carousel } from "antd";
-import MemberCard from "./MemberCard";
-import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import useClubNetwork from "@/hooks/useClubNetwork";
+import { useNotificationPosts } from "@/hooks/usePosts";
+import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
+import { Button, Carousel } from "antd";
+import { useRouter } from "next/router";
+import { useRef } from "react";
+import MemberCard from "./MemberCard";
+import { HeroLayout } from "./styled";
 
 const Hero = () => {
   const ref = useRef<any>();
-  const { handleOpenLogin } = useClubNetwork();
+  const { isLoggedIn, memberData, handleOpenLogin } = useClubNetwork();
+  const { data: notiPosts } = useNotificationPosts();
+
+  const router = useRouter();
+  const handleJoin = () => {
+    if (isLoggedIn) {
+      router.push(`/member/${memberData?.id}`);
+      return;
+    }
+    handleOpenLogin();
+  };
   return (
     <HeroLayout>
       <div className="hero-row">
@@ -25,7 +37,7 @@ const Hero = () => {
                 width: 130,
                 height: 48,
               }}
-              onClick={handleOpenLogin}
+              onClick={handleJoin}
             >
               JOIN
             </Button>
@@ -47,10 +59,10 @@ const Hero = () => {
               maxWidth: "100vw",
             }}
           >
-            <Carousel ref={ref} infinite>
-              <MemberCard />
-              <MemberCard />
-              <MemberCard />
+            <Carousel ref={ref}>
+              {notiPosts?.data.map((post) => (
+                <MemberCard post={post} key={post.id} />
+              ))}
             </Carousel>
           </div>
           <Button

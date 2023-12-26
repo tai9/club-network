@@ -1,14 +1,17 @@
 import { IPost } from "@server/types/Post";
-import { useState, createContext, useEffect, useContext } from "react";
+import { useState, createContext, useEffect, useContext, useMemo } from "react";
 import { io } from "socket.io-client";
 import { useNotificationCount, useNotifications } from "./useNotifications";
 import { ESocketEventName } from "@server/types/common";
 import { App } from "antd";
+import { useMember } from "./useMember";
 
 const usePostContext = () => {
   const { refetch } = useNotifications();
   const { refetch: countRefetch } = useNotificationCount(false);
   const { message } = App.useApp();
+  const { data: memberData } = useMember();
+  const isLoggedIn = useMemo(() => !!memberData?.id, [memberData?.id]);
 
   const [openPostModal, setOpenPostModal] = useState(false);
   const [postContent, setPostContent] = useState("");
@@ -71,6 +74,8 @@ const usePostContext = () => {
     setOpenLoginModal,
     handleOpenLogin,
     onlineUsers,
+    isLoggedIn,
+    memberData,
 
     socket,
   };
