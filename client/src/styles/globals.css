@@ -107,3 +107,8 @@ a {
     color-scheme: dark;
   }
 }
+
+.ant-typography .ant-typography-copy,
+.ant-typography .ant-typography-edit {
+  color: #f7c842;
+}

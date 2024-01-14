@@ -13,7 +13,7 @@ import React, { useEffect, useState } from "react";
 import MemberTable from "./MemberTable";
 import { RcFile, UploadFile } from "antd/es/upload";
 import memberController from "@/controllers/memberController";
-import axiosClient from "@/configs/axiosClient";
+import axiosClient from "@/configs/axiosConfig";
 import { formatBytes } from "@/utils/formatBytes";
 import { useMutation } from "@tanstack/react-query";
 import queryClient from "@/configs/queryClient";

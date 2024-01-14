@@ -152,7 +152,7 @@ export default function Header() {
 
                 <AccountFooter>
                   <Link href={`/member/${data?.id}`}>Profile</Link>
-                  <div>Account</div>
+                  <Link href={`/account/`}>Account</Link>
                   <div>Help</div>
                   <div onClick={handleSignOut}>Sign out</div>
                 </AccountFooter>

@@ -1,4 +1,4 @@
-import axiosClient from "@/configs/axiosClient";
+import axiosClient from "@/configs/axiosConfig";
 import { ILevel } from "@server/types/Level";
 import { DataWithPagination } from "@server/types/common";
 

@@ -1,6 +1,7 @@
-import axiosClient from "@/configs/axiosClient";
+import axiosClient from "@/configs/axiosConfig";
 import { IMember } from "@server/types/Member";
 import { DataWithPagination } from "@server/types/common";
+import { AxiosRequestConfig } from "axios";
 
 const prefix = "members";
 
@@ -25,8 +26,8 @@ const memberController = {
       },
     });
   },
-  update(id: number, data: any) {
-    return axiosClient.put(`/${prefix}/${id}`, data);
+  update(id: number, data: any, config?: AxiosRequestConfig) {
+    return axiosClient.put(`/${prefix}/${id}`, data, config);
   },
   create(data: any) {
     return axiosClient.post<IMember>(`/${prefix}`, data);

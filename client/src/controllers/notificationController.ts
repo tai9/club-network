@@ -1,4 +1,4 @@
-import axiosClient from "@/configs/axiosClient";
+import axiosClient from "@/configs/axiosConfig";
 import { INotification } from "@server/types/Notification";
 import { DataWithPagination } from "@server/types/common";
 

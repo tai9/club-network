@@ -1,4 +1,3 @@
-import axiosClient from "@/configs/axiosClient";
 import useClubNetwork from "@/hooks/useClubNetwork";
 import { useMember } from "@/hooks/useMember";
 import {
@@ -10,7 +9,7 @@ import {
   WalletOutlined,
 } from "@ant-design/icons";
 import { App, Button, Flex, Form, Input, Modal, Typography } from "antd";
-import { setCookie } from "cookies-next";
+import { signIn } from "next-auth/react";
 
 type FieldType = {
   username?: string;
@@ -24,22 +23,23 @@ const LoginModal = () => {
   const { message } = App.useApp();
   const onFinish = async (values: any) => {
     try {
-      const res = await axiosClient.post("/login", {
+      const s = await signIn("credentials", {
         username: values.username,
         password: values.password,
       });
+      console.log(s);
 
-      if (res.data.loginCount === 1) {
-        message.success("Welcome to our club 🚀");
-      }
+      // if (res.data.loginCount === 1) {
+      //   message.success("Welcome to our club 🚀");
+      // }
 
-      setCookie("memberId", res.data.id);
-      localStorage.setItem("username", res.data.username);
-      localStorage.setItem("accessToken", res.data.accessToken);
-      localStorage.setItem("memberId", res.data.id);
-      // window.location.reload();
-      await refetch();
-      onCancel();
+      // setCookie("memberId", res.data.id);
+      // localStorage.setItem("username", res.data.username);
+      // localStorage.setItem("accessToken", res.data.accessToken);
+      // localStorage.setItem("memberId", res.data.id);
+      // // window.location.reload();
+      // await refetch();
+      // onCancel();
     } catch (err) {
       message.error("Something went wrong!");
     }

@@ -1,4 +1,4 @@
-import axiosClient from "@/configs/axiosClient";
+import axiosClient from "@/configs/axiosConfig";
 
 const reactionsController = {
   getAll() {

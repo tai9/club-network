@@ -1,18 +1,23 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import { useSession } from "next-auth/react";
 
 const axiosClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_CLUB_NETWORK_API_PROXY,
 });
 
+export const axiosServer = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_CLUB_NETWORK_API,
+});
+
 // Add a request interceptor
 axiosClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("accessToken");
+    // const token = localStorage.getItem("accessToken");
 
     // Set the Authorization header if a token is available
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+    // if (token) {
+    //   config.headers.Authorization = `Bearer ${token}`;
+    // }
 
     return config;
   },

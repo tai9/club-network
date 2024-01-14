@@ -1,4 +1,4 @@
-import axiosClient from "@/configs/axiosClient";
+import axiosClient from "@/configs/axiosConfig";
 import { IRole } from "@server/types/Role";
 import { DataWithPagination } from "@server/types/common";
 

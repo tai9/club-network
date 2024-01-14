@@ -1,4 +1,4 @@
-import axiosClient from "@/configs/axiosClient";
+import axiosClient from "@/configs/axiosConfig";
 import { IPost } from "@server/types/Post";
 import { DataWithPagination } from "@server/types/common";
 

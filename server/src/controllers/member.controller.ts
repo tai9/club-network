@@ -227,6 +227,7 @@ const deleteMember = async (req: Request, res: Response) => {
 };
 
 const updateMemberSchema = Joi.object({
+  id: Joi.number().optional(),
   fullname: Joi.string().required(),
   password: Joi.string().allow(null, "").optional(),
   email: Joi.string().allow(null, "").optional(),
@@ -234,15 +235,15 @@ const updateMemberSchema = Joi.object({
   fbLink: Joi.string().allow(null, "").optional(),
   twitterLink: Joi.string().allow(null, "").optional(),
   insLink: Joi.string().allow(null, "").optional(),
-  role: Joi.number().required(),
-});
+  roleId: Joi.number().optional(),
+}).unknown(true);
 const updateMember = async (req: Request, res: Response) => {
   const id = +req.params.id;
   try {
     const memberPayload = await updateMemberSchema.validateAsync(req.body);
 
     const member = await memberService.getMemberById(id);
-    const role = await roleService.getRoleById(memberPayload.role);
+    const role = await roleService.getRoleById(memberPayload.roleId);
 
     member.updatedAt = new Date();
     member.fullname = memberPayload.fullname || member.fullname;
