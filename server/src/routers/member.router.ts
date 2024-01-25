@@ -6,13 +6,13 @@ const memberRouters = express.Router();
 
 memberRouters.post("/", memberController.createMember);
 memberRouters.get("/:id/exp", memberController.getMemberExp);
+memberRouters.get("/", memberController.getMembers);
+memberRouters.get("/:id", memberController.getMember);
 
 memberRouters.use(authenticateToken);
 memberRouters.post("/upload", memberController.uploadCsv);
 memberRouters.get("/export-csv", memberController.exportMembersCsv);
 memberRouters.post("/bulk-create", memberController.bulkCreateMembers);
-memberRouters.get("/", memberController.getMembers);
-memberRouters.get("/:id", memberController.getMember);
 memberRouters.delete("/:id", memberController.deleteMember);
 memberRouters.put("/:id", memberController.updateMember);
 

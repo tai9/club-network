@@ -23,3 +23,14 @@ export const MoreLink = styled(Flex)`
     text-decoration: underline;
   }
 `;
+
+export const AvatarStyled = styled.div`
+  cursor: pointer;
+  position: relative;
+  .vm {
+    width: 24px;
+    position: absolute;
+    right: -3px;
+    top: -9px;
+  }
+`;

@@ -5,7 +5,7 @@ import { ILevel } from "@server/types/Level";
 import { Button, Input } from "antd";
 import { deleteCookie } from "cookies-next";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ClickOutSide from "../ClickOutSide";
 import CustomAvatar from "../CustomAvatar";
 import { HighlightText } from "../styled";
@@ -27,6 +27,9 @@ import {
   SearchOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
+import Logo from "../Logo";
+import { useSession } from "next-auth/react";
+import { AuthController } from "@/controllers/authController";
 
 export default function Header() {
   const { openLoginModal, setOpenLoginModal } = useClubNetwork();
@@ -35,9 +38,18 @@ export default function Header() {
     setOpenAcount(false);
   };
 
+  const { data: session } = useSession();
+
   const { data } = useMember();
   const { data: myExp } = useLevels(data?.exp);
   const currentLevel = useMemo(() => myExp as ILevel, [myExp]);
+
+  // authenticate user
+  useEffect(() => {
+    if (session) {
+      AuthController.initialize(session.user.accessToken);
+    }
+  }, [session]);
 
   const handleSignIn = async () => {
     setOpenLoginModal(true);
@@ -55,25 +67,11 @@ export default function Header() {
     return (
       <>
         <CustomLink href={"/"}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="56"
-            height="28"
-            viewBox="0 0 56 28"
-            fill="none"
+          <Logo
             style={{
               width: 30,
             }}
-          >
-            <path
-              fill="currentColor"
-              d="M28 0v14a14 14 0 01-28 0V0h12.601v21a1.399 1.399 0 002.798 0V0H28z"
-            ></path>
-            <path
-              fill="currentColor"
-              d="M55.25 28H41.259a14 14 0 010-28H55.25v12.601H34.258a1.399 1.399 0 000 2.798H55.25V28z"
-            ></path>
-          </svg>
+          />
         </CustomLink>
         <CustomLink href={"/all-profiles"}>
           <span className="text">Members</span>

@@ -17,7 +17,10 @@ const ProfileCard = ({ member }: Props) => {
 
   return (
     <ProfileCardLayout>
-      <CustomAvatar username={member.username} />
+      <CustomAvatar
+        username={member.username}
+        isHost={member.role?.grade === 10}
+      />
       <Flex vertical gap={4}>
         <Flex align="center" gap={4}>
           <Tooltip title={member.fullname ? member.username : null}>
