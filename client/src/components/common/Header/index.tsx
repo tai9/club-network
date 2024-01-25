@@ -28,7 +28,7 @@ import {
   TeamOutlined,
 } from "@ant-design/icons";
 import Logo from "../Logo";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { AuthController } from "@/controllers/authController";
 
 export default function Header() {
@@ -56,11 +56,12 @@ export default function Header() {
   };
 
   const handleSignOut = async () => {
-    localStorage.removeItem("username");
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("memberId");
-    deleteCookie("memberId");
-    window.location.reload();
+    // localStorage.removeItem("username");
+    // localStorage.removeItem("accessToken");
+    // localStorage.removeItem("memberId");
+    // deleteCookie("memberId");
+    // window.location.reload();
+    await signOut();
   };
 
   const renderLinks = () => {
