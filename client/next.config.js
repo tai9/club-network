@@ -28,7 +28,9 @@ const nextConfig = {
     return [
       {
         source: "/club-network-api/:path*",
-        destination: `${process.env.NEXT_PUBLIC_CLUB_NETWORK_API}/:path*`, // Proxy to Backend
+        destination: `${
+          process.env.NEXT_PUBLIC_CLUB_NETWORK_API || "http://localhost:8000"
+        }/:path*`, // Proxy to Backend
       },
     ];
   },
