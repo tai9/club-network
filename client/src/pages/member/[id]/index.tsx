@@ -5,9 +5,7 @@ import { MainLayout } from "@/layouts";
 import { IMember } from "@server/types/Member";
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 
-const HomePage = ({
-  memberData,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const HomePage = () => {
   return (
     <div>
       <ProfileInfo />
@@ -15,14 +13,25 @@ const HomePage = ({
     </div>
   );
 };
+// TODO: Implement ISR
+// const HomePage = ({
+//   memberData,
+// }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+//   return (
+//     <div>
+//       <ProfileInfo />
+//       <NewFeed />
+//     </div>
+//   );
+// };
 
-export const getServerSideProps = (async (context) => {
-  const memberId = context.query.id as string;
-  // const res = await memberController.get(+memberId);
+// export const getServerSideProps = (async (context) => {
+//   const memberId = context.query.id as string;
+//   // const res = await memberController.get(+memberId);
 
-  // Pass data to the page via props
-  return { props: { memberData: undefined } };
-}) satisfies GetServerSideProps<{ memberData?: IMember }>;
+//   // Pass data to the page via props
+//   return { props: { memberData: undefined } };
+// }) satisfies GetServerSideProps<{ memberData?: IMember }>;
 
 HomePage.Layout = MainLayout;
 

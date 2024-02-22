@@ -6,7 +6,7 @@ import { ESocketEventName } from "@server/types/common";
 import { App } from "antd";
 import { useMember } from "./useMember";
 
-const usePostContext = () => {
+const useClubNetworkContext = () => {
   const { refetch } = useNotifications();
   const { refetch: countRefetch } = useNotificationCount(false);
   const { message } = App.useApp();
@@ -82,10 +82,9 @@ const usePostContext = () => {
 };
 
 const useAppContext = () => {
-  const postContextValues = usePostContext();
-
+  const contextValues = useClubNetworkContext();
   return {
-    ...postContextValues,
+    ...contextValues,
   };
 };
 
