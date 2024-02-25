@@ -21,9 +21,10 @@
   },
   "scripts": {
     "dev": "nodemon",
-    "start": "nodemon dist/index.js",
     "build-ts": "tsc",
     "build": "yarn run build-ts",
+    "serve": "node dist/index.js",
+    "start": "yarn run serve",
     "typeorm": "typeorm-ts-node-esm -d ./src/configs/db.config.ts",
     "migration-generate": "typeorm migration:create",
     "migration:up": "yarn run typeorm migration:run",
