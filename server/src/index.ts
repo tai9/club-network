@@ -71,7 +71,7 @@ app.use("/badges", authenticateToken, badgeRouters);
 app.use("/notifications", authenticateToken, notificationRouters);
 
 // connect DB
-getDbConnection();
+// getDbConnection();
 
 app.listen(PORT, () => {
   console.log(`Server listening on port http://localhost:${PORT}`);
