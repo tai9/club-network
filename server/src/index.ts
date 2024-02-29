@@ -1,8 +1,6 @@
-import RedisStore from "connect-redis";
 import cookieParser from "cookie-parser";
 import { config } from "dotenv";
 import express from "express";
-import Redis from "ioredis";
 import { getDbConnection } from "./configs/db.config";
 import memberRouters from "./routers/member.router";
 import { authenticateToken } from "./middlewares/authentication";
@@ -23,20 +21,9 @@ import multer from "multer";
 import csvParser from "csv-parser";
 import fs from "fs";
 import Papa from "papaparse";
+import "./configs/redis.config";
 
 config();
-
-// const redisClient = new Redis({
-//   host: process.env.REDIS_HOST || "127.0.0.1",
-//   port: +process.env.REDIS_PORT || 6379,
-//   username: process.env.REDIS_USERNAME || "default",
-//   password: process.env.REDIS_PASSWORD || "",
-// });
-
-// const redisStore = new RedisStore({
-//   client: redisClient,
-//   prefix: process.env.APP_NAME,
-// });
 
 const app = express();
 const PORT = process.env.PORT || 8000;
