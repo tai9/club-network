@@ -51,6 +51,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.use("/", (req, res) => {
+  res.send("Club Network API");
+});
+
 app.use("/ping", (req, res) => {
   res.send("ok");
 });

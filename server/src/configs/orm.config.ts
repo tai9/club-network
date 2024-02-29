@@ -1,3 +1,4 @@
+import { DataSourceOptions } from "typeorm";
 import {
   Activity,
   Comment,
@@ -12,7 +13,6 @@ import {
   Notification,
 } from "../entities";
 import "dotenv/config";
-import { DataSourceOptions } from "typeorm";
 
 const dataSourceOptions: DataSourceOptions = {
   type: "postgres",
@@ -39,6 +39,7 @@ const dataSourceOptions: DataSourceOptions = {
   ],
   extra: {
     connectionLimit: 20,
+    trustServerCertificate: true,
   },
   migrations: ["./src/migrations/*{.ts,.js}"],
   migrationsRun: true,
