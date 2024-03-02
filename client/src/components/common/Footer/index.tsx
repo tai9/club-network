@@ -12,7 +12,8 @@ const Footer = () => {
             <Flex gap={4} vertical>
               <CustomLink href={"/"}>Home</CustomLink>
               <CustomLink href={"/all-profiles"}>Members</CustomLink>
-              <CustomLink href={"/"}>Explorer</CustomLink>
+              <CustomLink href={"/tickets"}>Tickets</CustomLink>
+              <CustomLink href={"/explorer"}>Explorer</CustomLink>
             </Flex>
           </Flex>
           <Flex gap={16} vertical>

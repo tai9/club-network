@@ -24,6 +24,7 @@ import {
 } from "./styled";
 import {
   AppstoreAddOutlined,
+  SnippetsOutlined,
   SearchOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
@@ -77,6 +78,10 @@ export default function Header() {
         <CustomLink href={"/all-profiles"}>
           <span className="text">Members</span>
           <TeamOutlined className="icon" />
+        </CustomLink>
+        <CustomLink href={"/tickets"}>
+          <span className="text">Tickets</span>
+          <SnippetsOutlined className="icon" />
         </CustomLink>
         <CustomLink href={"/explore"}>
           <span className="text">Explore</span>
