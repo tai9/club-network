@@ -11,6 +11,7 @@ import {
   Post,
   Reaction,
   Notification,
+  Ticket,
 } from "../entities";
 import "dotenv/config";
 
@@ -36,6 +37,7 @@ const dataSourceOptions: DataSourceOptions = {
     Post,
     Reaction,
     Notification,
+    Ticket,
   ],
   extra: {
     connectionLimit: 20,

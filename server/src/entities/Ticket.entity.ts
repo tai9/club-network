@@ -6,7 +6,7 @@ import { BaseEntity, Member } from ".";
 @Entity({
   name: "tickets",
   orderBy: {
-    updateAt: "DESC",
+    createdAt: "DESC",
   },
 })
 export class Ticket extends BaseEntity implements ITicket {
@@ -31,6 +31,18 @@ export class Ticket extends BaseEntity implements ITicket {
     nullable: true,
   })
   tokenId: string;
+
+  @Column({
+    type: "varchar",
+    nullable: true,
+  })
+  expireAt: number;
+
+  @Column({
+    type: "varchar",
+    nullable: true,
+  })
+  status: string;
 
   @Column({
     type: "int",

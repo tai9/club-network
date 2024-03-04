@@ -7,7 +7,9 @@ export interface ITicket extends IBaseEntity {
   description?: string;
   tokenId?: string;
   createdBy: IMember;
-  owner: IMember;
+  owner?: IMember;
+  expireAt?: number;
+  status?: string;
 
   // claim conditions
   supply: number;

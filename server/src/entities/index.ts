@@ -11,3 +11,4 @@ export * from "./Post.entity";
 export * from "./Comment.entity";
 export * from "./Reaction.entity";
 export * from "./Notification.entity";
+export * from "./Ticket.entity";

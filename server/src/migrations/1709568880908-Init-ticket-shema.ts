@@ -5,7 +5,7 @@ import {
   TableForeignKey,
 } from "typeorm";
 
-export class InitTicketShema1709566718351 implements MigrationInterface {
+export class InitTicketShema1709568880908 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
@@ -61,7 +61,17 @@ export class InitTicketShema1709566718351 implements MigrationInterface {
           {
             name: "owner",
             type: "int",
-            isNullable: false,
+            isNullable: true,
+          },
+          {
+            name: "expireAt",
+            type: "int",
+            isNullable: true,
+          },
+          {
+            name: "status",
+            type: "varchar",
+            isNullable: true,
           },
           {
             name: "createdAt",

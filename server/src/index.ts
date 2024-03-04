@@ -22,6 +22,7 @@ import csvParser from "csv-parser";
 import fs from "fs";
 import Papa from "papaparse";
 import "./configs/redis.config";
+import ticketRouters from "./routers/ticket.router";
 
 config();
 
@@ -60,6 +61,8 @@ app.use("/reactions", authenticateToken, reactionRouters);
 app.use("/activities", authenticateToken, activityRouters);
 app.use("/badges", authenticateToken, badgeRouters);
 app.use("/notifications", authenticateToken, notificationRouters);
+
+app.use("/tickets", upload.single("file"), authenticateToken, ticketRouters);
 
 // connect DB
 getDbConnection();
