@@ -1,14 +1,22 @@
 import { sdk } from "@/configs/contract.config";
 import { Member, Ticket } from "@/entities";
 import ticketService from "@/services/ticket.service";
+import { IGetTicketsParams } from "@/types/Ticket";
 import { Request, Response } from "express";
 import { constants } from "http2";
 import Joi from "joi";
 import sharp from "sharp";
 
+const getTicketsSchema = Joi.object<IGetTicketsParams>({
+  search: Joi.string().optional(),
+  order: Joi.array().items(Joi.string()).optional(),
+  page: Joi.number().integer().min(1).max(100).default(1).optional(),
+  limit: Joi.number().integer().min(1).max(100).default(20).optional(),
+});
 const getAll = async (req: Request, res: Response) => {
   try {
-    const tickets = await ticketService.getTickets();
+    const queries = await getTicketsSchema.validateAsync(req.query);
+    const tickets = await ticketService.getTickets(queries);
     return res.status(constants.HTTP_STATUS_OK).json(tickets);
   } catch (error) {
     console.log(error);

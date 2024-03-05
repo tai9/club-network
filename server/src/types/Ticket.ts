@@ -16,3 +16,10 @@ export interface ITicket extends IBaseEntity {
   quantity: number;
   defaultPrice: number;
 }
+
+export interface IGetTicketsParams {
+  order?: string[];
+  page?: number;
+  limit?: number;
+  search?: string;
+}
