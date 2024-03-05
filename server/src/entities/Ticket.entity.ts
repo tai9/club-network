@@ -57,7 +57,7 @@ export class Ticket extends BaseEntity implements ITicket {
   quantity: number;
 
   @Column({
-    type: "int",
+    type: "float",
     default: 0,
   })
   defaultPrice: number;

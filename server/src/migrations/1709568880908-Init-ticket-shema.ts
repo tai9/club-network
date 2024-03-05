@@ -50,7 +50,7 @@ export class InitTicketShema1709568880908 implements MigrationInterface {
           },
           {
             name: "defaultPrice",
-            type: "int",
+            type: "float",
             default: 0,
           },
           {

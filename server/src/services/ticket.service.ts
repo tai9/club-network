@@ -23,7 +23,27 @@ const createTicket = async (ticket: Ticket) => {
   }
 };
 
+const getTicketById = async (id: number) => {
+  try {
+    return await ticketRepository.findOneBy({
+      id,
+    });
+  } catch (err) {
+    throw err;
+  }
+};
+
+const updateTicket = async (ticket: Ticket) => {
+  try {
+    return await ticketRepository.update(ticket.id, ticket);
+  } catch (err) {
+    throw err;
+  }
+};
+
 export default {
   getTickets,
   createTicket,
+  getTicketById,
+  updateTicket,
 };

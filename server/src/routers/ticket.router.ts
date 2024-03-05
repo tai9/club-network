@@ -6,7 +6,7 @@ const ticketRouters = express.Router();
 ticketRouters.get("/", ticketController.getAll);
 ticketRouters.post("/", ticketController.create);
 ticketRouters.post(
-  "/:tokenId/publish",
+  "/:ticketId/publish",
   ticketController.configureClaimConditions
 );
 
