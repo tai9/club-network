@@ -6,6 +6,7 @@ import { sdk } from "@/configs/contract.config";
 import ticketService from "@/services/ticket.service";
 import { Member, Ticket } from "@/entities";
 import memberService from "@/services/member.service";
+import Joi from "joi";
 
 const getAll = async (req: Request, res: Response) => {
   try {
@@ -17,6 +18,10 @@ const getAll = async (req: Request, res: Response) => {
   }
 };
 
+const createTicketSchema = Joi.object<{ name: string; description?: string }>({
+  name: Joi.string().required(),
+  description: Joi.string().allow(null, "").optional(),
+});
 const create = async (req: Request, res: Response) => {
   try {
     const member = (req as any)?.member as Member;
@@ -25,11 +30,15 @@ const create = async (req: Request, res: Response) => {
       process.env.CLUBNETWORK_CONTRACT_ADDRESS
     );
 
+    const { name, description } = await createTicketSchema.validateAsync(
+      req.body
+    );
+
     // Custom metadata of the NFTs to create
     const metadatas = [
       {
-        name: "Cool NFT",
-        description: "This is a cool NFT",
+        name,
+        description,
         image: fileBuffer, // This can be an image url or file
       },
     ];
