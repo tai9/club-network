@@ -81,6 +81,7 @@ const configureClaimConditions = async (req: Request, res: Response) => {
   try {
     const ticketId = req.params.ticketId;
     const ticket = await ticketService.getTicketById(+ticketId);
+    const tokenId = ticket.tokenId;
 
     const contract = await sdk.getContract(
       process.env.CLUBNETWORK_CONTRACT_ADDRESS
@@ -97,10 +98,46 @@ const configureClaimConditions = async (req: Request, res: Response) => {
         price, // presale price
       },
     ];
-    await contract.erc1155.claimConditions.set(ticket.tokenId, claimConditions);
+    await contract.erc1155.claimConditions.set(tokenId, claimConditions);
+
     ticket.quantity = maxClaimableSupply;
     ticket.defaultPrice = price;
+
     await ticketService.updateTicket(ticket);
+    res.status(constants.HTTP_STATUS_OK).json(ticket);
+  } catch (error) {
+    console.log(error);
+    res.status(constants.HTTP_STATUS_BAD_REQUEST).json(error);
+  }
+};
+
+const createCheckoutLinkSchema = Joi.object<{
+  title: string;
+  description?: string;
+}>({
+  title: Joi.string().required(),
+  description: Joi.string().allow(null, "").optional(),
+});
+const createCheckoutLink = async (req: Request, res: Response) => {
+  try {
+    const ticketId = req.params.ticketId;
+    const ticket = await ticketService.getTicketById(+ticketId);
+    const tokenId = ticket.tokenId;
+
+    const { title, description } = await createCheckoutLinkSchema.validateAsync(
+      req.body
+    );
+
+    const { checkoutUrl } = await ticketService.createCheckoutLink({
+      title,
+      description,
+      tokenId,
+      imageUrl: ticket.image,
+    });
+
+    ticket.checkoutUrl = checkoutUrl;
+    await ticketService.updateTicket(ticket);
+
     res.status(constants.HTTP_STATUS_OK).json(ticket);
   } catch (error) {
     console.log(error);
@@ -112,4 +149,5 @@ export default {
   getAll,
   create,
   configureClaimConditions,
+  createCheckoutLink,
 };

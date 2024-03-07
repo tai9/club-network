@@ -62,6 +62,12 @@ export class Ticket extends BaseEntity implements ITicket {
   })
   defaultPrice: number;
 
+  @Column({
+    type: "varchar",
+    nullable: true,
+  })
+  checkoutUrl: string;
+
   @ManyToOne(() => Member, (member) => member.id)
   @JoinColumn({ name: "createdBy" })
   @Column({

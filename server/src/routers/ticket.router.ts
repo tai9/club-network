@@ -6,8 +6,12 @@ const ticketRouters = express.Router();
 ticketRouters.get("/", ticketController.getAll);
 ticketRouters.post("/", ticketController.create);
 ticketRouters.post(
-  "/:ticketId/publish",
+  "/:ticketId/claim-conditions",
   ticketController.configureClaimConditions
+);
+ticketRouters.post(
+  "/:ticketId/checkout-link",
+  ticketController.createCheckoutLink
 );
 
 export default ticketRouters;

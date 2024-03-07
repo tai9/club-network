@@ -15,6 +15,9 @@ export interface ITicket extends IBaseEntity {
   supply: number;
   quantity: number;
   defaultPrice: number;
+
+  // payment
+  checkoutUrl: string;
 }
 
 export interface IGetTicketsParams {

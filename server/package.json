@@ -49,6 +49,7 @@
   "dependencies": {
     "@thirdweb-dev/sdk": "^4.0.38",
     "@types/papaparse": "^5.3.14",
+    "axios": "^1.6.7",
     "bcrypt": "^5.1.1",
     "connect-redis": "^7.1.0",
     "cookie-parser": "^1.4.6",
