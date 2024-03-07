@@ -23,6 +23,7 @@ import fs from "fs";
 import Papa from "papaparse";
 import "./configs/redis.config";
 import ticketRouters from "./routers/ticket.router";
+import webhookRouters from "./routers/webhook.router";
 
 config();
 
@@ -48,6 +49,9 @@ app.use("/ping", (req, res) => {
 });
 
 app.use("/", publicRouters);
+
+// webhooks
+app.use("/webhook", webhookRouters);
 
 app.use("/members", upload.single("file"), memberRouters);
 app.use("/posts", postRouters);
