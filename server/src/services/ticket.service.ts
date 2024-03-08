@@ -64,6 +64,16 @@ const getTicketById = async (id: number) => {
   }
 };
 
+const getTicketByTokenId = async (tokenId: string) => {
+  try {
+    return await ticketRepository.findOneBy({
+      tokenId,
+    });
+  } catch (err) {
+    throw err;
+  }
+};
+
 const updateTicket = async (ticket: Ticket) => {
   try {
     return await ticketRepository.update(ticket.id, ticket);
@@ -93,7 +103,7 @@ const createCheckoutLink = async ({
       imageUrl,
       contractId: process.env.THIRDWEB_CONTRACT_ID,
       thirdwebClientId: process.env.THIRDWEB_CLIENT_ID,
-      successCallbackUrl: "",
+      successCallbackUrl: process.env.CLUB_NETWORK_CLIENT_URL,
       cancelCallbackUrl: "",
       brandButtonShape: "rounded",
       brandColorScheme: "#f7c842",
@@ -108,7 +118,7 @@ const createCheckoutLink = async ({
       hidePayWithIdeal: true,
       limitPerTransaction: 5,
       redirectAfterPayment: false,
-      sendEmailOnTransferSucceeded: false,
+      sendEmailOnTransferSucceeded: true,
       priceAndCurrencySymbol: {
         price: "0",
         currencySymbol: "ETH",
@@ -137,4 +147,5 @@ export default {
   getTicketById,
   updateTicket,
   createCheckoutLink,
+  getTicketByTokenId,
 };

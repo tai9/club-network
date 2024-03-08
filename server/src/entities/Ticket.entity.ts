@@ -1,5 +1,5 @@
 import { IMember } from "@/types/Member";
-import { ITicket } from "@/types/Ticket";
+import { ITicket, TicketStatus, TicketType } from "@/types/Ticket";
 import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
 import { BaseEntity, Member } from ".";
 
@@ -42,7 +42,7 @@ export class Ticket extends BaseEntity implements ITicket {
     type: "varchar",
     nullable: true,
   })
-  status: string;
+  status: TicketStatus;
 
   @Column({
     type: "int",
@@ -67,6 +67,12 @@ export class Ticket extends BaseEntity implements ITicket {
     nullable: true,
   })
   checkoutUrl: string;
+
+  @Column({
+    type: "varchar",
+    nullable: true,
+  })
+  type: TicketType;
 
   @ManyToOne(() => Member, (member) => member.id)
   @JoinColumn({ name: "createdBy" })

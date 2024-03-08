@@ -59,6 +59,7 @@ const create = async (req: Request, res: Response) => {
     ticket.description = firstNFT.description;
     ticket.createdBy = member;
     ticket.owner = member;
+    ticket.type = "ticket";
 
     const ticketCreated = await ticketService.createTicket(ticket);
     res.status(constants.HTTP_STATUS_OK).json(ticketCreated);

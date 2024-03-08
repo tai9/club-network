@@ -1,6 +1,10 @@
 import { IMember } from "./Member";
 import { IBaseEntity } from "./common";
 
+export type TicketType = "ticket" | "asset";
+
+export type TicketStatus = "PURCHASED" | "TRANSFERED" | "BURNED";
+
 export interface ITicket extends IBaseEntity {
   name: string;
   image: string; // ipfs format
@@ -9,7 +13,8 @@ export interface ITicket extends IBaseEntity {
   createdBy: IMember;
   owner?: IMember;
   expireAt?: number;
-  status?: string;
+  status?: TicketStatus;
+  type?: TicketType;
 
   // claim conditions
   supply: number;
@@ -17,7 +22,7 @@ export interface ITicket extends IBaseEntity {
   defaultPrice: number;
 
   // payment
-  checkoutUrl: string;
+  checkoutUrl?: string;
 }
 
 export interface IGetTicketsParams {

@@ -144,6 +144,16 @@ const getMemberById = async (id: number) => {
   }
 };
 
+const getMemberByEmail = async (email: string) => {
+  try {
+    return await memberRepository.findOneBy({
+      email,
+    });
+  } catch (err) {
+    throw err;
+  }
+};
+
 const getMemberExp = async (id: number) => {
   try {
     return await memberRepository
@@ -235,4 +245,5 @@ export default {
   updateMember,
   updateExp,
   getMemberById,
+  getMemberByEmail,
 };
