@@ -1,13 +1,20 @@
 import useClubNetwork from "@/hooks/useClubNetwork";
 import { useLevels } from "@/hooks/useLevels";
 import { useMember } from "@/hooks/useMember";
+import {
+  AppstoreAddOutlined,
+  SearchOutlined,
+  SnippetsOutlined,
+  TeamOutlined,
+} from "@ant-design/icons";
 import { ILevel } from "@server/types/Level";
 import { Button, Input } from "antd";
-import { deleteCookie } from "cookies-next";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import ClickOutSide from "../ClickOutSide";
 import CustomAvatar from "../CustomAvatar";
+import Logo from "../Logo";
 import { HighlightText } from "../styled";
 import Notification from "./Notification";
 import {
@@ -22,15 +29,6 @@ import {
   HeaderRoutes,
   Wrapper,
 } from "./styled";
-import {
-  AppstoreAddOutlined,
-  SnippetsOutlined,
-  SearchOutlined,
-  TeamOutlined,
-} from "@ant-design/icons";
-import Logo from "../Logo";
-import { signOut, useSession } from "next-auth/react";
-import { AuthController } from "@/controllers/authController";
 
 export default function Header() {
   const { openLoginModal, setOpenLoginModal } = useClubNetwork();
@@ -44,13 +42,6 @@ export default function Header() {
   const { data } = useMember();
   const { data: myExp } = useLevels(data?.exp);
   const currentLevel = useMemo(() => myExp as ILevel, [myExp]);
-
-  // authenticate user
-  useEffect(() => {
-    if (session) {
-      AuthController.initialize(session.user.accessToken);
-    }
-  }, [session]);
 
   const handleSignIn = async () => {
     setOpenLoginModal(true);

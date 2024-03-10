@@ -11,7 +11,9 @@ const memberRepository = AppDataSource.getRepository(Member);
 
 const createMember = async (member: Member) => {
   try {
-    return await AppDataSource.manager.save(member);
+    const m = await memberRepository.save(member);
+    m && delete m.password;
+    return m;
   } catch (err) {
     throw err;
   }
@@ -146,9 +148,14 @@ const getMemberById = async (id: number) => {
 
 const getMemberByEmail = async (email: string) => {
   try {
-    return await memberRepository.findOneBy({
-      email,
+    const member = await memberRepository.findOne({
+      relations: ["role"],
+      where: {
+        email,
+      },
     });
+    member && delete member.password;
+    return member;
   } catch (err) {
     throw err;
   }

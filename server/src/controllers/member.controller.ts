@@ -39,7 +39,6 @@ const createMember = async (req: Request, res: Response) => {
     member.username = req.body.username || generateRandomUsername();
     member.password = await hash(req.body.password, 10);
     const memberCreated = await memberService.createMember(member);
-    delete memberCreated.password;
     return res.status(constants.HTTP_STATUS_OK).json(memberCreated);
   } catch (error) {
     console.log(error);

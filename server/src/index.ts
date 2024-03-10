@@ -48,6 +48,10 @@ app.use("/ping", (req, res) => {
   res.send("ok");
 });
 
+app.use("/auth-ping", authenticateToken, (req, res) => {
+  res.send("auth ok");
+});
+
 app.use("/", publicRouters);
 
 // webhooks

@@ -43,19 +43,39 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      return true;
+      if (!user) return false;
+
+      try {
+        if (account?.provider === "google") {
+          const member = await axiosClient.post("/login/email", {
+            name: user.name,
+            email: user.email,
+            image: user.image,
+          });
+          return !!member.data;
+        }
+
+        return false;
+      } catch (err) {
+        return false;
+      }
     },
-    async session({ session, token, user }) {
-      session.user.idToken = token.id as string;
-      session.user.accessToken = token.accessToken;
-      return session;
-    },
-    async jwt({ token, user, account, profile, isNewUser }) {
+    async jwt({ token, user, account, profile }) {
       if (user) {
         token.id = user.id;
+        token.idToken = user.id;
         token.accessToken = user.accessToken;
       }
+      if (account) {
+        token.idToken = account.id_token;
+        token.accessToken = account.access_token;
+      }
       return token;
+    },
+    async session({ session, token, user }) {
+      session.user.idToken = token.idToken;
+      session.user.accessToken = token.accessToken;
+      return session;
     },
   },
 };
