@@ -25,17 +25,20 @@ export const authOptions: AuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        const res = await axiosServer.post("/login", credentials);
+        try {
+          const res = await axiosServer.post("/login", credentials);
+          const user = res.data;
+          if (user) {
+            // Any object returned will be saved in `user` property of the JWT
+            return user;
+          } else {
+            // If you return null then an error will be displayed advising the user to check their details.
+            return null;
 
-        const user = res.data;
-        if (user) {
-          // Any object returned will be saved in `user` property of the JWT
-          return user;
-        } else {
-          // If you return null then an error will be displayed advising the user to check their details.
+            // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
+          }
+        } catch (err) {
           return null;
-
-          // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
         }
       },
     }),
@@ -44,7 +47,6 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
       if (!user) return false;
-
       try {
         if (account?.provider === "google") {
           const member = await axiosClient.post("/login/email", {
@@ -54,11 +56,11 @@ export const authOptions: AuthOptions = {
           });
           return !!member.data;
         }
-
-        return false;
       } catch (err) {
         return false;
       }
+
+      return true;
     },
     async jwt({ token, user, account, profile }) {
       if (user) {
