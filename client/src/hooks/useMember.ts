@@ -2,23 +2,15 @@ import axiosClient from "@/configs/axiosConfig";
 import memberController from "@/controllers/memberController";
 import { IMember } from "@server/types/Member";
 import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 
 export const useMember = () => {
-  const { data } = useSession();
-  const accessToken = data?.user.accessToken;
   return useQuery({
     queryKey: ["member-me"],
     queryFn: async () => {
-      const res = await axiosClient.get<IMember>("/me", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const res = await axiosClient.get<IMember>("/me");
       return res.data;
     },
-    enabled: !!accessToken,
   });
 };
 
@@ -57,20 +49,10 @@ export const useMemberExp = (memberId?: number) => {
 };
 
 export const useMemberUpdateMutation = () => {
-  const { data } = useSession();
-  const accessToken = data?.user.accessToken;
   return useMutation({
     mutationKey: ["member-me"],
     mutationFn: async (member: IMember) => {
-      const res = await memberController.update(
-        member.id,
-        { ...member },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const res = await memberController.update(member.id, { ...member });
       return res.data;
     },
   });

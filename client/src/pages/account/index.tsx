@@ -129,11 +129,7 @@ export const getServerSideProps = (async (context) => {
 
   const token = session.user.accessToken;
 
-  const res = await axiosServer.get<IMember>("/me", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const res = await axiosServer.get<IMember>("/me");
   const memberData = res.data;
 
   // Pass data to the page via props

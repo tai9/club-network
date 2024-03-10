@@ -1,28 +1,23 @@
 import { INotification } from "@server/types/Notification";
 import { DataWithPagination } from "@server/types/common";
-import { AuthController } from "./authController";
+import axiosClient from "@/configs/axiosConfig";
 
 const prefix = "notifications";
 
 const notificationController = {
   getAll() {
-    return AuthController.axiosClient.get<DataWithPagination<INotification>>(
-      `/${prefix}`
-    );
+    return axiosClient.get<DataWithPagination<INotification>>(`/${prefix}`);
   },
   count(isRead?: boolean) {
-    return AuthController.axiosClient.get<{ count: number }>(
-      `/${prefix}/count`,
-      {
-        params: { isRead },
-      }
-    );
+    return axiosClient.get<{ count: number }>(`/${prefix}/count`, {
+      params: { isRead },
+    });
   },
   readAll() {
-    return AuthController.axiosClient.post(`/${prefix}`);
+    return axiosClient.post(`/${prefix}`);
   },
   read(id: number) {
-    return AuthController.axiosClient.put(`/${prefix}/${id}`);
+    return axiosClient.put(`/${prefix}/${id}`);
   },
 };
 

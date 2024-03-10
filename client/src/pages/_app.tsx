@@ -1,7 +1,6 @@
 import AppModals from "@/components/common/AppModals";
 import queryClient from "@/configs/queryClient";
 import { AuthContextProvider } from "@/contexts/AuthContext";
-import { AuthenProvider } from "@/hooks/useAuth";
 import { ClubNetworkProvider } from "@/hooks/useClubNetwork";
 import { MainLayout } from "@/layouts";
 import "@/styles/globals.css";
@@ -30,12 +29,10 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
               <SessionProvider session={pageProps.session}>
                 <ClubNetworkProvider>
                   <AntDApp>
-                    <AuthenProvider>
-                      <Layout>
-                        <Component {...pageProps} />
-                        <AppModals />
-                      </Layout>
-                    </AuthenProvider>
+                    <Layout>
+                      <Component {...pageProps} />
+                      <AppModals />
+                    </Layout>
                   </AntDApp>
                 </ClubNetworkProvider>
               </SessionProvider>

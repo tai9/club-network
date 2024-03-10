@@ -1,4 +1,3 @@
-import { AuthController } from "@/controllers/authController";
 import notificationController from "@/controllers/notificationController";
 import { useQuery } from "@tanstack/react-query";
 
@@ -9,7 +8,6 @@ export const useNotifications = () => {
       const res = await notificationController.getAll();
       return res.data;
     },
-    enabled: AuthController.isAuthenticated,
   });
 };
 
@@ -20,6 +18,5 @@ export const useNotificationCount = (isRead?: boolean) => {
       const res = await notificationController.count(isRead);
       return res.data;
     },
-    enabled: AuthController.isAuthenticated,
   });
 };
