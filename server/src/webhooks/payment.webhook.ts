@@ -35,9 +35,12 @@ export const thirdwebCheckoutsWebhookHandler = async (
       ticket.image = purchaseTicket.image;
       ticket.description = purchaseTicket.description;
       ticket.createdBy = purchaseTicket.createdBy;
+      ticket.defaultPrice = purchaseTicket.defaultPrice;
       ticket.owner = member;
       ticket.type = "asset";
       ticket.status = "PURCHASED";
+      ticket.supply = 1;
+      ticket.quantity = 1;
 
       await ticketService.createTicket(ticket);
       await activityService.createActivity({

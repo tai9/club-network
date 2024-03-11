@@ -113,23 +113,25 @@ const TicketTable = ({
       },
     },
     {
-      title: "Supply",
-      dataIndex: "supply",
-      key: "supply",
-      responsive: ["sm"],
-    },
-    {
-      title: "Quantity",
-      dataIndex: "quantity",
-      key: "quantity",
-      responsive: ["sm"],
-    },
-    {
       title: "Price",
       dataIndex: "defaultPrice",
       key: "defaultPrice",
       responsive: ["sm"],
     },
+    {
+      title: "Supply",
+      dataIndex: "supply",
+      key: "supply",
+      responsive: ["sm"],
+      render: (value, record) => {
+        return (
+          <Typography.Text>
+            {value}/{record.quantity}
+          </Typography.Text>
+        );
+      },
+    },
+
     {
       title: "Type",
       dataIndex: "type",
