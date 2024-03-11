@@ -7,6 +7,12 @@ type Props = {
 };
 
 const TicketCard = ({ ticket }: Props) => {
+  const handleBuy = () => {
+    const isOnSale = ticket.status === "SALE" && !!ticket.checkoutUrl;
+    if (isOnSale) {
+      window.open(ticket.checkoutUrl, "_ blank");
+    }
+  };
   return (
     <ProfileCardLayout>
       <img src={ticket.image} alt={ticket.name} width="100%" />
@@ -28,7 +34,7 @@ const TicketCard = ({ ticket }: Props) => {
         </Flex>
       </Flex>
 
-      <Button disabled={ticket.status !== "SALE"}>
+      <Button disabled={ticket.status !== "SALE"} onClick={handleBuy}>
         {ticket.status === "SALE" ? "Buy" : `Owned ${ticket.owner?.fullname}`}
       </Button>
     </ProfileCardLayout>

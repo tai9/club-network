@@ -64,6 +64,13 @@ const TicketTable = ({
     });
   };
 
+  const handleBuy = (ticket: ITicket) => {
+    const isOnSale = ticket.status === "SALE" && !!ticket.checkoutUrl;
+    if (isOnSale) {
+      window.open(ticket.checkoutUrl, "_ blank");
+    }
+  };
+
   const columns: ColumnsType<ITicket> = [
     {
       title: "Token ID",
@@ -78,18 +85,19 @@ const TicketTable = ({
       key: "name",
       width: 500,
       render: (value, record) => {
+        const isOnSale = record.status === "SALE" && !!record.checkoutUrl;
         return (
-          <Link
-            href={`/tickets/${record.id}`}
+          <div
+            onClick={() => handleBuy(record)}
             style={{
-              textDecoration: "underline",
+              cursor: isOnSale ? "pointer" : "auto",
             }}
           >
             <TicketName>
               <img src={record.image} alt={value} width={24} height={24} />
-              <Typography.Text underline>{value}</Typography.Text>
+              <Typography.Text underline={isOnSale}>{value}</Typography.Text>
             </TicketName>
-          </Link>
+          </div>
         );
       },
     },
@@ -200,9 +208,7 @@ const TicketTable = ({
           {onlyView && (
             <Button
               disabled={record.status !== "SALE"}
-              onClick={() => {
-                console.log("buy", record);
-              }}
+              onClick={() => handleBuy(record)}
             >
               BUY
             </Button>
