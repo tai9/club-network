@@ -14,7 +14,9 @@ const SpaceGroteskFont = Space_Grotesk({ subsets: ["latin"] });
 export const MainLayout = ({ children }: LayoutProps) => {
   const router = useRouter();
   const path = router.asPath;
-  const displayFooter = !path.includes("/all-profiles");
+  const displayFooter = !(
+    path.includes("/all-profiles") || path.includes("/tickets")
+  );
 
   const { onlineUsers } = useClubNetwork();
 
@@ -65,7 +67,7 @@ export const Wrapper = styled.div`
 export const Main = styled.main<{ path: string }>`
   flex-grow: 1;
   padding-top: ${(p) => (p.path === "/" ? 0 : "82px")};
-  max-width: ${(p) => (p.path === "/" ? "auto" : "1100px")};
+  max-width: ${(p) => (p.path === "/" ? "auto" : "1280px")};
   margin: 0 auto;
   width: 100%;
 `;

@@ -41,9 +41,9 @@ export const ProfileCardLayout = styled.div`
   padding: 12px 8px;
   border-radius: 8px;
   display: flex;
+  flex-direction: column;
   gap: 8px;
   overflow: hidden;
-  align-items: center;
   border: 1px solid rgba(255, 255, 255, 0.08);
   transition: background-color 500ms ease-out 0s;
   width: 100%;
@@ -53,18 +53,19 @@ export const ProfileCardLayout = styled.div`
     cursor: pointer;
   }
 
-  .role {
-    overflow: hidden;
-    max-width: 13rem;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    white-space: pre-wrap;
-    font-size: 12px;
-    line-height: 18px;
-    color: inherit;
-    font-weight: 400;
-    text-transform: unset;
+  .price-section {
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 10px;
+  }
+`;
+
+export const TicketName = styled.div`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  img {
+    border-radius: 6px;
   }
 `;

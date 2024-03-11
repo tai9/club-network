@@ -3,7 +3,12 @@ import { IBaseEntity } from "./common";
 
 export type TicketType = "ticket" | "asset";
 
-export type TicketStatus = "PURCHASED" | "TRANSFERED" | "BURNED";
+export type TicketStatus =
+  | "CREATED"
+  | "SALE"
+  | "PURCHASED"
+  | "TRANSFERED"
+  | "BURNED";
 
 export interface ITicket extends IBaseEntity {
   name: string;

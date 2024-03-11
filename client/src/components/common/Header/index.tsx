@@ -9,7 +9,7 @@ import {
 } from "@ant-design/icons";
 import { ILevel } from "@server/types/Level";
 import { Button, Input } from "antd";
-import { signOut, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import ClickOutSide from "../ClickOutSide";
@@ -44,15 +44,10 @@ export default function Header() {
   const currentLevel = useMemo(() => myExp as ILevel, [myExp]);
 
   const handleSignIn = async () => {
-    setOpenLoginModal(true);
+    await signIn();
   };
 
   const handleSignOut = async () => {
-    // localStorage.removeItem("username");
-    // localStorage.removeItem("accessToken");
-    // localStorage.removeItem("memberId");
-    // deleteCookie("memberId");
-    // window.location.reload();
     await signOut();
   };
 

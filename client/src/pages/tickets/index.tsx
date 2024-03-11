@@ -1,4 +1,5 @@
 import TicketPage from "@/components/tickets";
+import { MainLayout } from "@/layouts";
 import React from "react";
 
 const Tickets = () => {
@@ -8,5 +9,7 @@ const Tickets = () => {
     </>
   );
 };
+
+Tickets.Layout = MainLayout;
 
 export default Tickets;

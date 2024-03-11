@@ -1,59 +1,34 @@
-import memberController from "@/controllers/memberController";
-import { useMember, useMembers } from "@/hooks/useMember";
+import { useMember } from "@/hooks/useMember";
+import { useTickets } from "@/hooks/useTickets";
 import { TableOutlined, UnorderedListOutlined } from "@ant-design/icons";
-import { useMutation } from "@tanstack/react-query";
+import { IGetTicketsParams } from "@server/types/Ticket";
 import { App, Button, Empty, Flex, Input, Radio } from "antd";
-import { saveAs } from "file-saver";
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import BulkCreateModal from "./BulkCreateModal";
-import CreateModal from "./CreateModal";
-import MemberTable from "./MemberTable";
-import ProfileCard from "./ProfileCard";
-import { ProfileList, ProfilesWrapper } from "./styled";
 import { useDebounce } from "use-debounce";
-import { IGetMembersParams } from "@server/types/Member";
+import CreateModal from "./CreateModal";
 import ProfileCardSkeleton from "./ProfileCardSkeleton";
+import TicketCard from "./TicketCard";
+import TicketTable from "./TicketTable";
+import { ProfileList, ProfilesWrapper } from "./styled";
 
 const TicketPage = () => {
-  const [memberParams, setMemberParams] = useState<IGetMembersParams>();
-  const { data, isFetching } = useMembers(memberParams);
+  const [params, setParams] = useState<IGetTicketsParams>();
+  const { data, isFetching } = useTickets(params);
   const { message } = App.useApp();
   const { data: memberData } = useMember();
 
   const [layout, setLayout] = useState<"grid" | "table">("grid");
-  const [openBulk, setOpenBulk] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
 
   const [search, setSearch] = useState<string>();
   const [searchDebounced] = useDebounce(search, 1000);
 
   useEffect(() => {
-    setMemberParams((prev) => ({
+    setParams((prev) => ({
       ...prev,
       search: searchDebounced,
     }));
   }, [searchDebounced]);
-
-  const mutation = useMutation({
-    mutationKey: ["members", "export-csv"],
-    mutationFn: memberController.export,
-    onSuccess: (response) => {
-      const blob = new Blob([response.data], { type: "text/csv" });
-      saveAs(blob, `members-list-${Date.now()}`);
-    },
-    onError: () => {
-      message.error("Export csv file error");
-    },
-  });
-
-  const handleExport = async () => {
-    await mutation.mutateAsync();
-  };
-
-  const handleBulkCancel = () => {
-    setOpenBulk(false);
-  };
 
   const handleCancel = () => {
     setOpenCreate(false);
@@ -69,12 +44,8 @@ const TicketPage = () => {
     }
     return (
       <ProfileList>
-        {data?.data.map((member) => {
-          return (
-            <Link key={member.id} href={`/member/${member.id}`}>
-              <ProfileCard member={member} />
-            </Link>
-          );
+        {data?.data.map((ticket) => {
+          return <TicketCard ticket={ticket} />;
         })}
 
         {isFetching &&
@@ -85,20 +56,14 @@ const TicketPage = () => {
 
   return (
     <ProfilesWrapper>
-      <div className="heading">All Profiles</div>
+      <div className="heading">All Tickets</div>
       <Flex gap={18} vertical>
         <Flex justify="space-between" align="center">
           <div>
             {memberData?.role?.name === "CN" && (
               <Flex gap={12}>
                 <Button type="primary" onClick={() => setOpenCreate(true)}>
-                  + Create member
-                </Button>
-                <Button onClick={() => setOpenBulk(true)}>
-                  + Bulk create members
-                </Button>
-                <Button loading={mutation.isPending} onClick={handleExport}>
-                  Export members
+                  + Create ticket
                 </Button>
               </Flex>
             )}
@@ -127,7 +92,7 @@ const TicketPage = () => {
         />
         {layout === "grid" && renderProfileCardGrid()}
         {layout === "table" && (
-          <MemberTable
+          <TicketTable
             isLoading={isFetching}
             onlyView={false}
             dataSource={data?.data}
@@ -136,11 +101,10 @@ const TicketPage = () => {
       </Flex>
 
       <CreateModal
-        title={"Create a member"}
+        title={"Create a ticket"}
         open={openCreate}
         handleCancel={handleCancel}
       />
-      <BulkCreateModal open={openBulk} handleCancel={handleBulkCancel} />
     </ProfilesWrapper>
   );
 };

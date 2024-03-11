@@ -60,6 +60,7 @@ const create = async (req: Request, res: Response) => {
     ticket.createdBy = member;
     ticket.owner = member;
     ticket.type = "ticket";
+    ticket.status = "CREATED";
 
     const ticketCreated = await ticketService.createTicket(ticket);
     res.status(constants.HTTP_STATUS_OK).json(ticketCreated);
@@ -137,6 +138,7 @@ const createCheckoutLink = async (req: Request, res: Response) => {
     });
 
     ticket.checkoutUrl = checkoutUrl;
+    ticket.status = "SALE";
     await ticketService.updateTicket(ticket);
 
     res.status(constants.HTTP_STATUS_OK).json(ticket);
