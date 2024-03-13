@@ -21,7 +21,7 @@ import multer from "multer";
 import csvParser from "csv-parser";
 import fs from "fs";
 import Papa from "papaparse";
-import "./configs/redis.config";
+// import "./configs/redis.config";
 import ticketRouters from "./routers/ticket.router";
 import webhookRouters from "./routers/webhook.router";
 
