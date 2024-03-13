@@ -21,6 +21,12 @@ const ticketController = {
       },
     });
   },
+  configClaimConditions(ticketId: number, payload: any) {
+    return axiosClient.post(`/${prefix}/${ticketId}/claim-conditions`, payload);
+  },
+  createCheckoutLink(ticketId: number, payload: any) {
+    return axiosClient.post(`/${prefix}/${ticketId}/checkout-link`, payload);
+  },
   update(id: number, data: any, config?: AxiosRequestConfig) {
     return axiosClient.put(`/${prefix}/${id}`, data, config);
   },

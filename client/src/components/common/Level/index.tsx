@@ -4,7 +4,7 @@ import { HighlightText } from "../styled";
 import { useLevels } from "@/hooks/useLevels";
 import { ILevel } from "@server/types/Level";
 
-const twoColors = { "0%": "#108ee9", "100%": "#87d068" };
+export const twoColors = { "0%": "#108ee9", "100%": "#87d068" };
 
 type Props = {
   exp: number;

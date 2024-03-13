@@ -9,6 +9,7 @@ import moment from "moment";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import CreateModal from "./CreateModal";
+import PublishModal from "./PublishModal";
 import { TicketName } from "./styled";
 
 type Props = {
@@ -28,10 +29,15 @@ const TicketTable = ({
 
   const [data, setData] = useState(dataSource);
   const [openEditModal, setOpenEditModal] = useState(false);
+  const [openPublishModal, setOpenPublishModal] = useState(false);
   const [ticket, setTicket] = useState<ITicket>();
 
   const handleEditCancel = () => {
     setOpenEditModal(false);
+  };
+
+  const handlePublishCancel = () => {
+    setOpenPublishModal(false);
   };
 
   useEffect(() => {
@@ -192,6 +198,26 @@ const TicketTable = ({
           {!onlyView && (
             <>
               <Button
+                disabled={
+                  record.status !== "CREATED" && record.status !== "SALE"
+                }
+                onClick={() => {
+                  setTicket(record);
+                  if (record.status === "CREATED") {
+                    setOpenPublishModal(true);
+                  } else {
+                    modal.confirm({
+                      title: `Are you sure to unpublish ${ticket?.name}?`,
+                      onOk: () => {
+                        message.success(`Unpublished ${ticket?.name}`);
+                      },
+                    });
+                  }
+                }}
+              >
+                {record.status === "SALE" ? "Unpublish" : "Publish"}
+              </Button>
+              <Button
                 disabled={record.status !== "SALE"}
                 onClick={() => {
                   setTicket(record);
@@ -235,18 +261,28 @@ const TicketTable = ({
           }}
         />
       )}
+
       <Table
         columns={columns}
         dataSource={data}
         rowKey={(e) => e.id}
         loading={isLoading}
       />
+
       <CreateModal
         title={"Update a ticket"}
         open={openEditModal}
         handleCancel={handleEditCancel}
         ticket={ticket}
       />
+
+      {ticket && (
+        <PublishModal
+          open={openPublishModal}
+          handleCancel={handlePublishCancel}
+          ticket={ticket}
+        />
+      )}
     </Flex>
   );
 };

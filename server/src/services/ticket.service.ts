@@ -103,7 +103,10 @@ const createCheckoutLink = async ({
       imageUrl,
       contractId: process.env.THIRDWEB_CONTRACT_ID,
       thirdwebClientId: process.env.THIRDWEB_CLIENT_ID,
-      successCallbackUrl: process.env.CLUB_NETWORK_CLIENT_URL,
+      successCallbackUrl:
+        process.env.NODE_ENV === "production"
+          ? process.env.CLUB_NETWORK_CLIENT_URL
+          : "",
       cancelCallbackUrl: "",
       brandButtonShape: "rounded",
       brandColorScheme: "#f7c842",
