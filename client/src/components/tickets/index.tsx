@@ -3,7 +3,7 @@ import { useTickets } from "@/hooks/useTickets";
 import { TableOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { IGetTicketsParams } from "@server/types/Ticket";
 import { App, Button, Empty, Flex, Input, Radio } from "antd";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import CreateModal from "./CreateModal";
 import ProfileCardSkeleton from "./ProfileCardSkeleton";
@@ -14,7 +14,6 @@ import { ProfileList, ProfilesWrapper } from "./styled";
 const TicketPage = () => {
   const [params, setParams] = useState<IGetTicketsParams>();
   const { data, isFetching } = useTickets(params);
-  const { message } = App.useApp();
   const { data: memberData } = useMember();
 
   const [layout, setLayout] = useState<"grid" | "table">("grid");
@@ -45,7 +44,11 @@ const TicketPage = () => {
     return (
       <ProfileList>
         {data?.data.map((ticket) => {
-          return <TicketCard ticket={ticket} />;
+          return (
+            <React.Fragment key={ticket.id}>
+              <TicketCard ticket={ticket} />
+            </React.Fragment>
+          );
         })}
 
         {isFetching &&
