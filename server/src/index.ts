@@ -70,7 +70,7 @@ app.use("/activities", authenticateToken, activityRouters);
 app.use("/badges", authenticateToken, badgeRouters);
 app.use("/notifications", authenticateToken, notificationRouters);
 
-app.use("/tickets", upload.single("file"), authenticateToken, ticketRouters);
+// app.use("/tickets", upload.single("file"), authenticateToken, ticketRouters);
 
 // connect DB
 getDbConnection();
