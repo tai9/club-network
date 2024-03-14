@@ -73,7 +73,7 @@ app.use("/notifications", authenticateToken, notificationRouters);
 // app.use("/tickets", upload.single("file"), authenticateToken, ticketRouters);
 
 // connect DB
-getDbConnection();
+// getDbConnection();
 
 app.listen(PORT, () => {
   console.log(`Server listening on port http://localhost:${PORT}`);
