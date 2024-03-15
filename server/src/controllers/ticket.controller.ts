@@ -1,4 +1,4 @@
-import { sdk } from "@/configs/contract.config";
+// import { sdk } from "@/configs/contract.config";
 import { Member, Ticket } from "@/entities";
 import ticketService from "@/services/ticket.service";
 import { IGetTicketsParams } from "@/types/Ticket";
