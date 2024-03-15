@@ -1,6 +1,6 @@
 import cookieParser from "cookie-parser";
 import { config } from "dotenv";
-import express from "express";
+import express, { Application } from "express";
 import { getDbConnection } from "./configs/db.config";
 import memberRouters from "./routers/member.router";
 import { authenticateToken } from "./middlewares/authentication";
@@ -24,11 +24,11 @@ import multer from "multer";
 // import "./configs/redis.config";
 import ticketRouters from "./routers/ticket.router";
 import webhookRouters from "./routers/webhook.router";
-import { ThirdwebSDK } from "@thirdweb-dev/sdk";
+import router from "./routers/router";
 
 config();
 
-const app = express();
+const app: Application = express();
 const PORT = process.env.PORT || 8000;
 const server = createServer(app);
 export const io = initSocketServer(server);
@@ -48,6 +48,7 @@ app.get("/", (req, res) => {
 app.use("/ping", (req, res) => {
   res.send("ok");
 });
+app.use("/", router);
 
 app.use("/auth-ping", authenticateToken, (req, res) => {
   res.send("auth ok");
