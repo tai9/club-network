@@ -1,4 +1,4 @@
-// import { sdk } from "@/configs/contract.config";
+import thirdwebContract from "@/configs/contract.config";
 import { Member, Ticket } from "@/entities";
 import ticketService from "@/services/ticket.service";
 import { IGetTicketsParams } from "@/types/Ticket";
@@ -6,6 +6,8 @@ import { Request, Response } from "express";
 import { constants } from "http2";
 import Joi from "joi";
 import sharp from "sharp";
+// import { Sepolia } from "@thirdweb-dev/chains";
+// import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 
 const getTicketsSchema = Joi.object<IGetTicketsParams>({
   search: Joi.string().optional(),
@@ -29,40 +31,47 @@ const createTicketSchema = Joi.object<{ name: string; description?: string }>({
   description: Joi.string().allow(null, "").optional(),
 });
 const create = async (req: Request, res: Response) => {
-  // try {
-  //   const member = (req as any)?.member as Member;
-  //   const fileBuffer = await sharp(req.file.buffer).toBuffer();
-  //   const contract = await sdk.getContract(
-  //     process.env.CLUBNETWORK_CONTRACT_ADDRESS
-  //   );
-  //   const { name, description } = await createTicketSchema.validateAsync(
-  //     req.body
-  //   );
-  //   // Custom metadata of the NFTs to create
-  //   const metadatas = [
-  //     {
-  //       name,
-  //       description,
-  //       image: fileBuffer, // This can be an image url or file
-  //     },
-  //   ];
-  //   const results = await contract.erc1155.lazyMint(metadatas); // uploads and creates the NFTs on chain
-  //   const firstNFT = await results[0].data(); // (optional) fetch details of the first created NFT
-  //   const ticket = new Ticket();
-  //   ticket.tokenId = firstNFT.id;
-  //   ticket.name = firstNFT.name as string;
-  //   ticket.image = firstNFT.image;
-  //   ticket.description = firstNFT.description;
-  //   ticket.createdBy = member;
-  //   ticket.owner = member;
-  //   ticket.type = "ticket";
-  //   ticket.status = "CREATED";
-  //   const ticketCreated = await ticketService.createTicket(ticket);
-  //   res.status(constants.HTTP_STATUS_OK).json(ticketCreated);
-  // } catch (error) {
-  //   console.log(error);
-  //   res.status(constants.HTTP_STATUS_BAD_REQUEST).json(error);
-  // }
+  try {
+    const member = (req as any)?.member as Member;
+    const fileBuffer = await sharp(req.file.buffer).toBuffer();
+    // const sdk = ThirdwebSDK.fromPrivateKey(
+    //   process.env.WALLET_PRIVATE_KEY,
+    //   Sepolia,
+    //   {
+    //     secretKey: process.env.CONTRACT_SECRET_KEY,
+    //   }
+    // );
+    const contract = await thirdwebContract.sdk.getContract(
+      process.env.CLUBNETWORK_CONTRACT_ADDRESS
+    );
+    const { name, description } = await createTicketSchema.validateAsync(
+      req.body
+    );
+    // Custom metadata of the NFTs to create
+    const metadatas = [
+      {
+        name,
+        description,
+        image: fileBuffer, // This can be an image url or file
+      },
+    ];
+    const results = await contract.erc1155.lazyMint(metadatas); // uploads and creates the NFTs on chain
+    const firstNFT = await results[0].data(); // (optional) fetch details of the first created NFT
+    const ticket = new Ticket();
+    ticket.tokenId = firstNFT.id;
+    ticket.name = firstNFT.name as string;
+    ticket.image = firstNFT.image;
+    ticket.description = firstNFT.description;
+    ticket.createdBy = member;
+    ticket.owner = member;
+    ticket.type = "ticket";
+    ticket.status = "CREATED";
+    const ticketCreated = await ticketService.createTicket(ticket);
+    res.status(constants.HTTP_STATUS_OK).json(ticketCreated);
+  } catch (error) {
+    console.log(error);
+    res.status(constants.HTTP_STATUS_BAD_REQUEST).json(error);
+  }
 };
 
 const configureClaimConditionsSchema = Joi.object<{
@@ -75,32 +84,32 @@ const configureClaimConditionsSchema = Joi.object<{
   }),
 });
 const configureClaimConditions = async (req: Request, res: Response) => {
-  // try {
-  //   const ticketId = req.params.ticketId;
-  //   const ticket = await ticketService.getTicketById(+ticketId);
-  //   const tokenId = ticket.tokenId;
-  //   const contract = await sdk.getContract(
-  //     process.env.CLUBNETWORK_CONTRACT_ADDRESS
-  //   );
-  //   const { maxClaimableSupply, price } =
-  //     await configureClaimConditionsSchema.validateAsync(req.body);
-  //   // Please set your price to 0.005 ETH or lower on testnet
-  //   const claimConditions = [
-  //     {
-  //       startTime: new Date(), // start the presale now
-  //       maxClaimableSupply, // limit how many mints for this presale
-  //       price, // presale price
-  //     },
-  //   ];
-  //   await contract.erc1155.claimConditions.set(tokenId, claimConditions);
-  //   ticket.quantity = maxClaimableSupply;
-  //   ticket.defaultPrice = price;
-  //   await ticketService.updateTicket(ticket);
-  //   res.status(constants.HTTP_STATUS_OK).json(ticket);
-  // } catch (error) {
-  //   console.log(error);
-  //   res.status(constants.HTTP_STATUS_BAD_REQUEST).json(error);
-  // }
+  try {
+    const ticketId = req.params.ticketId;
+    const ticket = await ticketService.getTicketById(+ticketId);
+    const tokenId = ticket.tokenId;
+    const contract = await thirdwebContract.sdk.getContract(
+      process.env.CLUBNETWORK_CONTRACT_ADDRESS
+    );
+    const { maxClaimableSupply, price } =
+      await configureClaimConditionsSchema.validateAsync(req.body);
+    // Please set your price to 0.005 ETH or lower on testnet
+    const claimConditions = [
+      {
+        startTime: new Date(), // start the presale now
+        maxClaimableSupply, // limit how many mints for this presale
+        price, // presale price
+      },
+    ];
+    await contract.erc1155.claimConditions.set(tokenId, claimConditions);
+    ticket.quantity = maxClaimableSupply;
+    ticket.defaultPrice = price;
+    await ticketService.updateTicket(ticket);
+    res.status(constants.HTTP_STATUS_OK).json(ticket);
+  } catch (error) {
+    console.log(error);
+    res.status(constants.HTTP_STATUS_BAD_REQUEST).json(error);
+  }
 };
 
 const createCheckoutLinkSchema = Joi.object<{
