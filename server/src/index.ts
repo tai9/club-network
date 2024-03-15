@@ -2,22 +2,22 @@ import cookieParser from "cookie-parser";
 import { config } from "dotenv";
 import express from "express";
 // import { getDbConnection } from "./configs/db.config";
-// import memberRouters from "./routers/member.router";
+import memberRouters from "./routers/member.router";
 import { authenticateToken } from "./middlewares/authentication";
 import publicRouters from "./routers/public.router";
 // import permissionRouters from "./routers/permission.router";
 // import roleRouters from "./routers/role.router";
-// import postRouters from "./routers/post.router";
+import postRouters from "./routers/post.router";
 // import commentRouters from "./routers/comment.router";
 // import reactionRouters from "./routers/reaction.router";
 // import activityRouters from "./routers/activity.router";
 // import badgeRouters from "./routers/badge.router";
-// import levelRouters from "./routers/level.router";
+import levelRouters from "./routers/level.router";
 // import meRouters from "./routers/me.router";
 import { createServer } from "node:http";
 import { initSocketServer } from "./configs/socket.config";
 // import notificationRouters from "./routers/notification.router";
-// import multer from "multer";
+import multer from "multer";
 // import csvParser from "csv-parser";
 // import fs from "fs";
 // import Papa from "papaparse";
@@ -33,8 +33,8 @@ const server = createServer(app);
 export const io = initSocketServer(server);
 
 // Set up multer for handling file uploads
-// const storage = multer.memoryStorage();
-// const upload = multer({ storage: storage });
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -57,9 +57,9 @@ app.use("/", publicRouters);
 // webhooks
 app.use("/webhook", webhookRouters);
 
-// app.use("/members", upload.single("file"), memberRouters);
-// app.use("/posts", postRouters);
-// app.use("/levels", levelRouters);
+app.use("/members", upload.single("file"), memberRouters);
+app.use("/posts", postRouters);
+app.use("/levels", levelRouters);
 
 // app.use("/me", authenticateToken, meRouters);
 // app.use("/permissions", authenticateToken, permissionRouters);
