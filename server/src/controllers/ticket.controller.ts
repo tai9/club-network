@@ -6,7 +6,7 @@ import { Request, Response } from "express";
 import { constants } from "http2";
 import Joi from "joi";
 // import { Sepolia } from "@thirdweb-dev/chains";
-// import { ThirdwebSDK } from "@thirdweb-dev/sdk";
+import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 
 const getTicketsSchema = Joi.object<IGetTicketsParams>({
   search: Joi.string().optional(),

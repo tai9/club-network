@@ -24,7 +24,6 @@ import multer from "multer";
 // import "./configs/redis.config";
 import ticketRouters from "./routers/ticket.router";
 import webhookRouters from "./routers/webhook.router";
-import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 
 config();
 
