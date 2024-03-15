@@ -693,7 +693,7 @@
     buffer-reverse "^1.0.1"
     treeify "^1.1.0"
 
-"@thirdweb-dev/sdk@^4.0.47":
+"@thirdweb-dev/sdk@^4":
   version "4.0.47"
   resolved "https://registry.yarnpkg.com/@thirdweb-dev/sdk/-/sdk-4.0.47.tgz#5f2c4776c34cb5152beb28bae00500192dd2f91e"
   integrity sha512-W7Mbfn450coGqGS9DlnfS7BOBwuJvuJpO3CfBVhqCyxktuW6X4I7OXExVUIRqM+pUdWXtevKbPzjerZZh68tVA==
