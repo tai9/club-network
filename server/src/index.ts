@@ -22,7 +22,7 @@ import multer from "multer";
 // import fs from "fs";
 // import Papa from "papaparse";
 // import "./configs/redis.config";
-import ticketRouters from "./routers/ticket.router";
+// import ticketRouters from "./routers/ticket.router";
 import webhookRouters from "./routers/webhook.router";
 
 config();
@@ -70,7 +70,7 @@ app.use("/activities", authenticateToken, activityRouters);
 app.use("/badges", authenticateToken, badgeRouters);
 app.use("/notifications", authenticateToken, notificationRouters);
 
-app.use("/tickets", upload.single("file"), authenticateToken, ticketRouters);
+// app.use("/tickets", upload.single("file"), authenticateToken, ticketRouters);
 
 // connect DB
 // getDbConnection();
