@@ -1,4 +1,4 @@
-import thirdwebContract from "@/configs/contract.config";
+// import thirdwebContract from "@/configs/contract.config";
 import { Member, Ticket } from "@/entities";
 import ticketService from "@/services/ticket.service";
 import { IGetTicketsParams } from "@/types/Ticket";
@@ -6,8 +6,8 @@ import { Request, Response } from "express";
 import { constants } from "http2";
 import Joi from "joi";
 import sharp from "sharp";
-// import { Sepolia } from "@thirdweb-dev/chains";
-// import { ThirdwebSDK } from "@thirdweb-dev/sdk";
+import { Sepolia } from "@thirdweb-dev/chains";
+import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 
 const getTicketsSchema = Joi.object<IGetTicketsParams>({
   search: Joi.string().optional(),
@@ -34,14 +34,14 @@ const create = async (req: Request, res: Response) => {
   try {
     const member = (req as any)?.member as Member;
     const fileBuffer = await sharp(req.file.buffer).toBuffer();
-    // const sdk = ThirdwebSDK.fromPrivateKey(
-    //   process.env.WALLET_PRIVATE_KEY,
-    //   Sepolia,
-    //   {
-    //     secretKey: process.env.CONTRACT_SECRET_KEY,
-    //   }
-    // );
-    const contract = await thirdwebContract.sdk.getContract(
+    const sdk = ThirdwebSDK.fromPrivateKey(
+      process.env.WALLET_PRIVATE_KEY,
+      Sepolia,
+      {
+        secretKey: process.env.CONTRACT_SECRET_KEY,
+      }
+    );
+    const contract = await sdk.getContract(
       process.env.CLUBNETWORK_CONTRACT_ADDRESS
     );
     const { name, description } = await createTicketSchema.validateAsync(
@@ -88,7 +88,14 @@ const configureClaimConditions = async (req: Request, res: Response) => {
     const ticketId = req.params.ticketId;
     const ticket = await ticketService.getTicketById(+ticketId);
     const tokenId = ticket.tokenId;
-    const contract = await thirdwebContract.sdk.getContract(
+    const sdk = ThirdwebSDK.fromPrivateKey(
+      process.env.WALLET_PRIVATE_KEY,
+      Sepolia,
+      {
+        secretKey: process.env.CONTRACT_SECRET_KEY,
+      }
+    );
+    const contract = await sdk.getContract(
       process.env.CLUBNETWORK_CONTRACT_ADDRESS
     );
     const { maxClaimableSupply, price } =
