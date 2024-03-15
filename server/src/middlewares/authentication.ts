@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 
 import jwt from "jsonwebtoken";
 import memberService from "@/services/member.service";
-import { getToken } from "next-auth/jwt";
+// import { getToken } from "next-auth/jwt";
 
 const secret = process.env.TOKEN_SECRET || "";
 
@@ -34,17 +34,17 @@ export const authenticateToken = async (
   }
 
   // Next Auth
-  const token = await getToken({ req, secret });
-  if (token) {
-    const member = await memberService.getMemberByEmail(token.email);
-    if (!member || member.role === null) {
-      return res.status(constants.HTTP_STATUS_FORBIDDEN).json({
-        message: "Access Denied",
-      });
-    }
-    (req as any).member = member;
-    return next();
-  }
+  // const token = await getToken({ req, secret });
+  // if (token) {
+  //   const member = await memberService.getMemberByEmail(token.email);
+  //   if (!member || member.role === null) {
+  //     return res.status(constants.HTTP_STATUS_FORBIDDEN).json({
+  //       message: "Access Denied",
+  //     });
+  //   }
+  //   (req as any).member = member;
+  //   return next();
+  // }
 
   return res.status(constants.HTTP_STATUS_UNAUTHORIZED).json({
     message: "Unauthorized",
