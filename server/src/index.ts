@@ -22,7 +22,6 @@ import multer from "multer";
 // import fs from "fs";
 // import Papa from "papaparse";
 // import "./configs/redis.config";
-import "./configs/contract.config";
 import ticketRouters from "./routers/ticket.router";
 import webhookRouters from "./routers/webhook.router";
 
