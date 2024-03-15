@@ -14,8 +14,8 @@ import publicRouters from "./routers/public.router";
 // import badgeRouters from "./routers/badge.router";
 // import levelRouters from "./routers/level.router";
 // import meRouters from "./routers/me.router";
-// import { createServer } from "node:http";
-// import { initSocketServer } from "./configs/socket.config";
+import { createServer } from "node:http";
+import { initSocketServer } from "./configs/socket.config";
 // import notificationRouters from "./routers/notification.router";
 // import multer from "multer";
 // import csvParser from "csv-parser";
@@ -29,8 +29,8 @@ config();
 
 const app = express();
 const PORT = process.env.PORT || 8000;
-// const server = createServer(app);
-// export const io = initSocketServer(server);
+const server = createServer(app);
+export const io = initSocketServer(server);
 
 // Set up multer for handling file uploads
 // const storage = multer.memoryStorage();
