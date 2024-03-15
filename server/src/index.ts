@@ -1,7 +1,7 @@
 import cookieParser from "cookie-parser";
 import { config } from "dotenv";
 import express from "express";
-// import { getDbConnection } from "./configs/db.config";
+import { getDbConnection } from "./configs/db.config";
 import memberRouters from "./routers/member.router";
 import { authenticateToken } from "./middlewares/authentication";
 import publicRouters from "./routers/public.router";
@@ -22,7 +22,7 @@ import multer from "multer";
 // import fs from "fs";
 // import Papa from "papaparse";
 // import "./configs/redis.config";
-// import ticketRouters from "./routers/ticket.router";
+import ticketRouters from "./routers/ticket.router";
 import webhookRouters from "./routers/webhook.router";
 
 config();
@@ -73,7 +73,7 @@ app.use("/notifications", authenticateToken, notificationRouters);
 // app.use("/tickets", upload.single("file"), authenticateToken, ticketRouters);
 
 // connect DB
-// getDbConnection();
+getDbConnection();
 
 app.listen(PORT, () => {
   console.log(`Server listening on port http://localhost:${PORT}`);
