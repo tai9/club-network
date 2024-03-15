@@ -1,5 +1,5 @@
-import { sdk } from "@/configs/contract.config";
-import { Member, Ticket } from "@/entities";
+// import { sdk } from "@/configs/contract.config";
+// import { Member, Ticket } from "@/entities";
 import ticketService from "@/services/ticket.service";
 import { IGetTicketsParams } from "@/types/Ticket";
 import { Request, Response } from "express";
@@ -75,37 +75,32 @@ const configureClaimConditionsSchema = Joi.object<{
   }),
 });
 const configureClaimConditions = async (req: Request, res: Response) => {
-  try {
-    const ticketId = req.params.ticketId;
-    const ticket = await ticketService.getTicketById(+ticketId);
-    const tokenId = ticket.tokenId;
-
-    const contract = await sdk.getContract(
-      process.env.CLUBNETWORK_CONTRACT_ADDRESS
-    );
-
-    const { maxClaimableSupply, price } =
-      await configureClaimConditionsSchema.validateAsync(req.body);
-
-    // Please set your price to 0.005 ETH or lower on testnet
-    const claimConditions = [
-      {
-        startTime: new Date(), // start the presale now
-        maxClaimableSupply, // limit how many mints for this presale
-        price, // presale price
-      },
-    ];
-    await contract.erc1155.claimConditions.set(tokenId, claimConditions);
-
-    ticket.quantity = maxClaimableSupply;
-    ticket.defaultPrice = price;
-
-    await ticketService.updateTicket(ticket);
-    res.status(constants.HTTP_STATUS_OK).json(ticket);
-  } catch (error) {
-    console.log(error);
-    res.status(constants.HTTP_STATUS_BAD_REQUEST).json(error);
-  }
+  // try {
+  //   const ticketId = req.params.ticketId;
+  //   const ticket = await ticketService.getTicketById(+ticketId);
+  //   const tokenId = ticket.tokenId;
+  //   const contract = await sdk.getContract(
+  //     process.env.CLUBNETWORK_CONTRACT_ADDRESS
+  //   );
+  //   const { maxClaimableSupply, price } =
+  //     await configureClaimConditionsSchema.validateAsync(req.body);
+  //   // Please set your price to 0.005 ETH or lower on testnet
+  //   const claimConditions = [
+  //     {
+  //       startTime: new Date(), // start the presale now
+  //       maxClaimableSupply, // limit how many mints for this presale
+  //       price, // presale price
+  //     },
+  //   ];
+  //   await contract.erc1155.claimConditions.set(tokenId, claimConditions);
+  //   ticket.quantity = maxClaimableSupply;
+  //   ticket.defaultPrice = price;
+  //   await ticketService.updateTicket(ticket);
+  //   res.status(constants.HTTP_STATUS_OK).json(ticket);
+  // } catch (error) {
+  //   console.log(error);
+  //   res.status(constants.HTTP_STATUS_BAD_REQUEST).json(error);
+  // }
 };
 
 const createCheckoutLinkSchema = Joi.object<{
