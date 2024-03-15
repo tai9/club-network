@@ -3,8 +3,8 @@ import { config } from "dotenv";
 import express from "express";
 // import { getDbConnection } from "./configs/db.config";
 // import memberRouters from "./routers/member.router";
-// import { authenticateToken } from "./middlewares/authentication";
-// import publicRouters from "./routers/public.router";
+import { authenticateToken } from "./middlewares/authentication";
+import publicRouters from "./routers/public.router";
 // import permissionRouters from "./routers/permission.router";
 // import roleRouters from "./routers/role.router";
 // import postRouters from "./routers/post.router";
@@ -23,7 +23,7 @@ import express from "express";
 // import Papa from "papaparse";
 // import "./configs/redis.config";
 // import ticketRouters from "./routers/ticket.router";
-// import webhookRouters from "./routers/webhook.router";
+import webhookRouters from "./routers/webhook.router";
 
 config();
 
@@ -48,14 +48,14 @@ app.use("/ping", (req, res) => {
   res.send("ok");
 });
 
-// app.use("/auth-ping", authenticateToken, (req, res) => {
-//   res.send("auth ok");
-// });
+app.use("/auth-ping", authenticateToken, (req, res) => {
+  res.send("auth ok");
+});
 
-// app.use("/", publicRouters);
+app.use("/", publicRouters);
 
 // webhooks
-// app.use("/webhook", webhookRouters);
+app.use("/webhook", webhookRouters);
 
 // app.use("/members", upload.single("file"), memberRouters);
 // app.use("/posts", postRouters);
