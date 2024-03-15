@@ -16,11 +16,11 @@
     "watch": [
       "src"
     ],
-    "exec": "node -r tsconfig-paths/register -r ts-node/register ./src/index.ts",
+    "exec": "node -r tsconfig-paths/register -r ts-node/register",
     "ext": "ts, js"
   },
   "scripts": {
-    "dev": "nodemon",
+    "dev": "nodemon ./src/index.ts",
     "build-ts": "tsc",
     "build": "yarn run build-ts",
     "start": "nodemon dist/index.js",
