@@ -24,7 +24,6 @@ import multer from "multer";
 // import "./configs/redis.config";
 import ticketRouters from "./routers/ticket.router";
 import webhookRouters from "./routers/webhook.router";
-import router from "./routers/router";
 
 config();
 
@@ -48,7 +47,6 @@ app.get("/", (req, res) => {
 app.use("/ping", (req, res) => {
   res.send("ok");
 });
-app.use("/", router);
 
 app.use("/auth-ping", authenticateToken, (req, res) => {
   res.send("auth ok");
