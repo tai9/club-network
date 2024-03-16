@@ -74,19 +74,23 @@ export class Ticket extends BaseEntity implements ITicket {
   })
   type: TicketType;
 
-  @ManyToOne(() => Member, (member) => member.id)
+  @ManyToOne(() => Member, {
+    eager: true,
+  })
   @JoinColumn({ name: "createdBy" })
   @Column({
-    type: "varchar",
+    type: "int",
     nullable: true,
   })
-  createdBy: IMember;
+  createdBy: Member;
 
-  @ManyToOne(() => Member, (member) => member.id)
+  @ManyToOne(() => Member, {
+    eager: true,
+  })
   @JoinColumn({ name: "owner" })
   @Column({
-    type: "varchar",
+    type: "int",
     nullable: true,
   })
-  owner: IMember;
+  owner: Member;
 }

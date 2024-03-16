@@ -8,9 +8,11 @@ import Joi from "joi";
 
 const getTicketsSchema = Joi.object<IGetTicketsParams>({
   search: Joi.string().optional(),
+  owner: Joi.string().optional(),
   order: Joi.array().items(Joi.string()).optional(),
   page: Joi.number().integer().min(1).max(100).default(1).optional(),
   limit: Joi.number().integer().min(1).max(100).default(20).optional(),
+  memberIds: Joi.array().items(Joi.number()).optional(),
 });
 const getAll = async (req: Request, res: Response) => {
   try {

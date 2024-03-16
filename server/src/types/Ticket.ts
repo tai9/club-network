@@ -35,4 +35,6 @@ export interface IGetTicketsParams {
   page?: number;
   limit?: number;
   search?: string;
+  owner?: string;
+  memberIds?: number[];
 }

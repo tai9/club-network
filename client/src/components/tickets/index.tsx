@@ -1,9 +1,9 @@
-import { useMember } from "@/hooks/useMember";
+import { useMember, useMembers } from "@/hooks/useMember";
 import { useTickets } from "@/hooks/useTickets";
 import { TableOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { IGetTicketsParams } from "@server/types/Ticket";
-import { App, Button, Empty, Flex, Input, Radio } from "antd";
-import React, { useEffect, useState } from "react";
+import { App, Button, Empty, Flex, Input, Radio, Select, Space } from "antd";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDebounce } from "use-debounce";
 import CreateModal from "./CreateModal";
 import ProfileCardSkeleton from "./ProfileCardSkeleton";
@@ -12,7 +12,9 @@ import TicketTable from "./TicketTable";
 import { ProfileList, ProfilesWrapper } from "./styled";
 
 const TicketPage = () => {
-  const [params, setParams] = useState<IGetTicketsParams>();
+  const [params, setParams] = useState<IGetTicketsParams>({
+    memberIds: [],
+  });
   const { data, isFetching } = useTickets(params);
   const { data: memberData } = useMember();
 
@@ -21,6 +23,15 @@ const TicketPage = () => {
 
   const [search, setSearch] = useState<string>();
   const [searchDebounced] = useDebounce(search, 1000);
+
+  const { data: members } = useMembers();
+  const memberOptions = useMemo(() => {
+    if (!members) return [];
+    return members.data.map((x) => ({
+      label: x.fullname || x.username,
+      value: x.id,
+    }));
+  }, [members]);
 
   useEffect(() => {
     setParams((prev) => ({
@@ -62,15 +73,28 @@ const TicketPage = () => {
       <div className="heading">All Tickets</div>
       <Flex gap={18} vertical>
         <Flex justify="space-between" align="center">
-          <div>
-            {memberData?.role?.name === "CN" && (
-              <Flex gap={12}>
-                <Button type="primary" onClick={() => setOpenCreate(true)}>
-                  + Create ticket
-                </Button>
-              </Flex>
-            )}
-          </div>
+          {memberData?.role?.name === "CN" && (
+            <Flex gap={12} align="center">
+              <Button type="primary" onClick={() => setOpenCreate(true)}>
+                + Create ticket
+              </Button>{" "}
+              <Button
+                type={
+                  params.memberIds?.includes(memberData.id)
+                    ? "primary"
+                    : "default"
+                }
+                onClick={() =>
+                  setParams((prev) => ({
+                    ...prev,
+                    memberIds: [memberData.id],
+                  }))
+                }
+              >
+                My tickets
+              </Button>
+            </Flex>
+          )}
           <Radio.Group
             size="large"
             value={layout}
@@ -84,15 +108,32 @@ const TicketPage = () => {
             </Radio.Button>
           </Radio.Group>
         </Flex>
-        <Input
-          placeholder="Search by name"
-          size="large"
-          allowClear
-          onChange={(e) => {
-            const value = e.currentTarget.value || undefined;
-            setSearch(value);
-          }}
-        />
+        <Space>
+          <Input
+            placeholder="Search by name"
+            size="large"
+            allowClear
+            onChange={(e) => {
+              const value = e.currentTarget.value || undefined;
+              setSearch(value);
+            }}
+          />
+          <Select
+            mode="multiple"
+            allowClear
+            style={{ minWidth: "250px" }}
+            placeholder="Please select owners"
+            onChange={(values) => {
+              setParams((prev) => ({
+                ...prev,
+                memberIds: values,
+              }));
+            }}
+            value={params.memberIds}
+            size="large"
+            options={memberOptions}
+          />
+        </Space>
         {layout === "grid" && renderProfileCardGrid()}
         {layout === "table" && (
           <TicketTable

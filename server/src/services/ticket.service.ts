@@ -1,8 +1,8 @@
 import { Ticket } from "@/entities";
-import { AppDataSource } from "../configs/db.config";
 import { IGetTicketsParams } from "@/types/Ticket";
-import { ILike } from "typeorm";
 import axios from "axios";
+import { ILike, In } from "typeorm";
+import { AppDataSource } from "../configs/db.config";
 
 const ticketRepository = AppDataSource.getRepository(Ticket);
 
@@ -20,7 +20,12 @@ const getTickets = async (queries: IGetTicketsParams) => {
     }
 
     if (queries.search) {
-      where["name"] = ILike(`%${queries.search.toLowerCase()}%`);
+      const searchCondition = ILike(`%${queries.search.toLowerCase()}%`);
+      where["name"] = ILike(searchCondition);
+    }
+
+    if (!!queries.memberIds?.length) {
+      where["owner"] = In(queries.memberIds);
     }
 
     const [data, count] = await ticketRepository.findAndCount({
