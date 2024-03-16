@@ -1,7 +1,7 @@
 import { Ticket } from "@/entities";
 import { AppDataSource } from "../configs/db.config";
 import { IGetTicketsParams } from "@/types/Ticket";
-import { Like } from "typeorm";
+import { ILike } from "typeorm";
 import axios from "axios";
 
 const ticketRepository = AppDataSource.getRepository(Ticket);
@@ -20,7 +20,7 @@ const getTickets = async (queries: IGetTicketsParams) => {
     }
 
     if (queries.search) {
-      where["content"] = Like(`%${queries.search}%`);
+      where["name"] = ILike(`%${queries.search.toLowerCase()}%`);
     }
 
     const [data, count] = await ticketRepository.findAndCount({

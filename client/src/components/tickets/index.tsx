@@ -85,7 +85,7 @@ const TicketPage = () => {
           </Radio.Group>
         </Flex>
         <Input
-          placeholder="Search by username, fullname, email"
+          placeholder="Search by name"
           size="large"
           allowClear
           onChange={(e) => {
