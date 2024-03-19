@@ -35,7 +35,3 @@ To learn more about thirdweb, take a look at the following resources:
 - [thirdweb Portal](https://docs.thirdweb.com) - check our guides and development resources.
 
 You can check out [the thirdweb GitHub organization](https://github.com/thirdweb-dev) - your feedback and contributions are welcome!
-
-## Join our Discord!
-
-For any questions, suggestions, join our discord at [https://discord.gg/thirdweb](https://discord.gg/thirdweb).
